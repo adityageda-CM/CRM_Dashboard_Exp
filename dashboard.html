@@ -616,11 +616,10 @@ function buildCohortRows(anchor){
 }
 function cohortMatrix(){
   const anchorEl=document.getElementById('cohortAnchor');
-  // Auto-sync anchor to selected period if user hasn't manually changed it
+  // Always sync anchor to selected period — tab switches always reset
   const periodAnchor=PERIOD_TO_DATE[cur]||'2026-08-13';
-  if(anchorEl&&!anchorEl.dataset.manuallySet) anchorEl.value=periodAnchor;
-  const anchor=(anchorEl&&anchorEl.value)||periodAnchor;
-  return buildCohortHTML(anchor);
+  if(anchorEl) anchorEl.value=periodAnchor;
+  return buildCohortHTML(periodAnchor);
 }
 function renderCohortMatrix(){
   // Called when anchor date changes — re-renders just the tbody
@@ -636,7 +635,10 @@ function buildCohortNote(anchor){
   const d0=fmtDateLabel(anchor);
   const d1=fmtDateLabel(addDays(anchor,-1));
   const d2=fmtDateLabel(addDays(anchor,-2));
-  return d0+" cohort's P2 goes out on "+fmtDateLabel(addDays(anchor,1))+". "+d1+" cohort's P2 (col 2) = data from "+d0+". "+d2+" P1 is approximated.";
+  const hasD0=DATE_TO_PERIOD[anchor]?'✓':'no data';
+  const hasD1=DATE_TO_PERIOD[addDays(anchor,-1)]?'✓':'no data';
+  const hasD2=DATE_TO_PERIOD[addDays(anchor,-2)]?'✓':'no data';
+  return 'Data loaded: '+d0+' ('+hasD0+'), '+d1+' ('+hasD1+'), '+d2+' ('+hasD2+'). Data available for 13/12/11 Aug only. Use Re-pull for other dates.';
 }
 function buildCohortBody(anchor){
   // Row 0: anchor date entrants (got P1)
