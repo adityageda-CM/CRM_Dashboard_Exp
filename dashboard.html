@@ -195,7 +195,7 @@ table.slot tbody tr:hover{background:var(--p2)}table.slot tr:last-child td{borde
 <div class="section">
   <div class="sec-head"><div><div class="sec-title">4 — Channel efficiency</div><div class="sec-sub">Unique people click → view → checkout → booked. Changes with period.</div></div><span class="sec-tag" id="t4">Last 7 days</span></div>
   <div class="insight info" style="margin-bottom:14px"><b>Why does Sent &gt; Unique people?</b> Section 1 shows <em>new entrants that day</em> (their P1). Section 4 shows <em>all messages sent that day</em> across all active cohorts — P1 to yesterday's entrants, P2 to the day-before's, FP to those from 3 days ago. They're different counts by design. <b>Where is the drop-off?</b> Of 1,934 all-time push clickers, only 486 viewed a city page (25%) and almost nobody started checkout. City-view → checkout is the product gap.</div>
-  <div class="tbl-card"><div class="tbl-scroll"><table class="eff"><thead><tr><th>Channel</th><th style="text-align:right">Sent</th><th style="text-align:right">Clickers</th><th style="text-align:right">Viewed city</th><th style="text-align:right">View rate</th><th style="text-align:right">Checkout started</th><th style="text-align:right">Booked</th><th style="text-align:right">Book rate</th></tr></thead><tbody id="effBody"></tbody></table></div></div>
+  <div class="tbl-card"><div class="tbl-scroll"><table class="eff"><thead><tr><th>Channel</th><th style="text-align:right">Total msgs<br><span style="font-weight:400;font-size:9px">P1+P2+FP</span></th><th style="text-align:right">Clickers</th><th style="text-align:right">Viewed city</th><th style="text-align:right">View rate</th><th style="text-align:right">Checkout started</th><th style="text-align:right">Booked</th><th style="text-align:right">Book rate</th></tr></thead><tbody id="effBody"></tbody></table></div></div>
 </div>
 <hr class="divider">
 <div class="section">
@@ -247,7 +247,7 @@ const pct=(n,d)=>(n===null||n===undefined||!d)?'—':(100*n/d).toFixed(1)+'%';
 const D={
   today:{lbl:"Today (13 Aug, in progress)",
     people:312,heldout:8,msgs:1182,complete:false,
-    tp:{p1:[493,252,8],p2:[352,178,7],wa:[241,119,5],fp:[96,45,1]},
+    tp:{p1:[312,163,8],p2:[352,178,7],wa:[241,119,5],fp:[96,45,1]},
     push:{click:null,view:null,init:null,book:null,book_ios:null},
     wa:{click:null,view:null,init:null,book:null},
     em:{sent:null,seen:null,click:null,view:null,book:null}},
@@ -562,6 +562,13 @@ const DATE_TO_PERIOD={
   '2026-08-12':'yesterday',
   '2026-08-11':'aug11',
 };
+const PERIOD_TO_DATE={
+  'today':     '2026-08-13',
+  'yesterday': '2026-08-12',
+  'week':      '2026-08-13',
+  'alltime':   '2026-08-13',
+  'aug11':     '2026-08-11',
+};
 // Adds days to a YYYY-MM-DD string
 function addDays(dateStr,n){
   const d=new Date(dateStr+'T00:00:00Z');
@@ -606,7 +613,10 @@ function buildCohortRows(anchor){
 }
 function cohortMatrix(){
   const anchorEl=document.getElementById('cohortAnchor');
-  const anchor=(anchorEl&&anchorEl.value)||'2026-08-13';
+  // Auto-sync anchor to selected period if user hasn't manually changed it
+  const periodAnchor=PERIOD_TO_DATE[cur]||'2026-08-13';
+  if(anchorEl&&!anchorEl.dataset.manuallySet) anchorEl.value=periodAnchor;
+  const anchor=(anchorEl&&anchorEl.value)||periodAnchor;
   return buildCohortHTML(anchor);
 }
 function renderCohortMatrix(){
@@ -641,7 +651,7 @@ function buildCohortBody(anchor){
   // Row 0 — anchor entrants
   const r0p1=pd0?pd0.tp.p1:null;
   html+=`<tr>
-    <td><strong>${fmtDateLabel(d0)}</strong><br><span style="font-size:10px;color:var(--ink4)">${d0===DATE_TO_PERIOD[d0]?'today':'anchor date'} entrants</span></td>
+    <td><strong>${fmtDateLabel(d0)}</strong><br><span style="font-size:10px;color:var(--ink4)">${DATE_TO_PERIOD[d0]?DATE_TO_PERIOD[d0]+"'s entrants":'entrants'}</span></td>
     ${r0p1?cohortCell(r0p1[0],r0p1[1],r0p1[2],null):cohortCell(null,null,null,null)}
     <td class="na" style="font-size:11px">~${fmtDateLabel(addDays(d0,1))}</td>
     <td class="na" style="font-size:11px">~${fmtDateLabel(addDays(d0,1))}</td>
@@ -683,7 +693,7 @@ function buildCohortHTML(anchor){
     <div class="cohort-label" style="margin-bottom:0">3-day cohort view — each row = a separate entry-date group</div>
     <div style="display:flex;align-items:center;gap:6px">
       <span style="font-family:var(--mono);font-size:10px;color:var(--ink4)">Anchor:</span>
-      <input type="date" value="${anchor}" id="cohortAnchor" oninput="renderCohortMatrix()" style="font-family:var(--mono);font-size:10.5px;padding:4px 8px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink)">
+      <input type="date" value="${anchor}" id="cohortAnchor" oninput="this.dataset.manuallySet='1';renderCohortMatrix()" style="font-family:var(--mono);font-size:10.5px;padding:4px 8px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink)">
       <button onclick="cohortRefresh()" style="font-family:var(--mono);font-size:10px;font-weight:700;padding:4px 10px;background:var(--blue);color:#fff;border:none;border-radius:6px;cursor:pointer">Re-pull →</button>
     </div>
   </div>
@@ -844,6 +854,7 @@ document.getElementById('tabs').addEventListener('click',e=>{
   if(!e.target.classList.contains('ptab')) return;
   document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));
   e.target.classList.add('active');cur=e.target.dataset.p;cityExpanded=false;
+  const ca2=document.getElementById('cohortAnchor');if(ca2) delete ca2.dataset.manuallySet;
   renderAll();rAB();
 });
 renderAll();rAB();rEff();rSlots();
