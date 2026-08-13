@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-08-13T15:15:00+05:30",
+    "last_updated": "2026-08-13T15:45:00+05:30",
     "updated_by": "Claude via MoEngage MCP \u2014 fresh pull",
     "flow_id": "6a295838b4cecb7392eeb7a5",
     "note": "Fresh pull 15:15 IST. All numbers from split_stage_stats (activity-date). People from summary (entry-date)."
@@ -262,6 +262,55 @@
         "view": null,
         "book": null
       }
+    },
+    "aug10": {
+      "lbl": "10 Aug 2026",
+      "people": 1657,
+      "heldout": 28,
+      "msgs": 10071,
+      "complete": true,
+      "tp": {
+        "p1": [
+          3841,
+          1902,
+          42
+        ],
+        "p2": [
+          3069,
+          1487,
+          27
+        ],
+        "wa": [
+          2138,
+          1024,
+          26
+        ],
+        "fp": [
+          1023,
+          504,
+          7
+        ]
+      },
+      "push": {
+        "click": null,
+        "view": null,
+        "init": null,
+        "book": null,
+        "book_ios": null
+      },
+      "wa": {
+        "click": null,
+        "view": null,
+        "init": null,
+        "book": null
+      },
+      "em": {
+        "sent": null,
+        "seen": null,
+        "click": null,
+        "view": null,
+        "book": null
+      }
     }
   },
   "ab": {
@@ -511,6 +560,56 @@
         "x": {
           "s": 361,
           "seen": 181,
+          "c": 2
+        }
+      }
+    },
+    "aug10": {
+      "Push #1": {
+        "p": {
+          "s": 1548,
+          "seen": 1548,
+          "c": 36
+        },
+        "x": {
+          "s": 354,
+          "seen": 354,
+          "c": 6
+        }
+      },
+      "Push #2": {
+        "p": {
+          "s": 1201,
+          "seen": 1201,
+          "c": 21
+        },
+        "x": {
+          "s": 286,
+          "seen": 286,
+          "c": 6
+        }
+      },
+      "WhatsApp": {
+        "p": {
+          "s": 519,
+          "seen": 519,
+          "c": 14
+        },
+        "x": {
+          "s": 505,
+          "seen": 505,
+          "c": 12
+        }
+      },
+      "Final Push": {
+        "p": {
+          "s": 412,
+          "seen": 412,
+          "c": 5
+        },
+        "x": {
+          "s": 92,
+          "seen": 92,
           "c": 2
         }
       }
