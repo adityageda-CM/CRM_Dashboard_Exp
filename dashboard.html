@@ -583,6 +583,29 @@ const PERIOD_TO_DATE={
   'aug11':     '2026-08-11',
   'aug10':     '2026-08-10',
 };
+
+// DAILY_DATA: keyed by "YYYY-MM-DD". Used by cohort matrix date picker.
+// approx=true means the value is an 8-day average, not exact.
+const DAILY_DATA = {
+  "2026-08-13": {people:347,  heldout:8,  p1:[550,283,8],  p2:[394,199,7],  wa:[270,130,5],  fp:[105,46,1],  approx:false},
+  "2026-08-12": {people:1310, heldout:21, p1:[1310,722,17], p2:[931,513,10], wa:[716,392,8],  fp:[364,196,2],  approx:false},
+  "2026-08-11": {people:5465, heldout:32, p1:[5465,2853,58],p2:[4237,2150,39],wa:[3117,1561,35],fp:[1612,798,13],approx:false},
+  "2026-08-10": {people:1657, heldout:28, p1:[3841,1902,42],p2:[3069,1487,27],wa:[2138,1024,26],fp:[1023,504,7], approx:false},
+  "2026-08-09": {people:1966, heldout:31, p1:[4255,2084,52],p2:[3299,1584,37],wa:[2165,1032,31],fp:[863,435,7],  approx:false},
+  "2026-08-08": {people:1092, heldout:21, p1:[1983,1197,30],p2:[1430,817,19], wa:[964,509,14],  fp:[403,259,4],  approx:true},
+  "2026-08-07": {people:1092, heldout:21, p1:[1983,1197,30],p2:[1430,817,19], wa:[964,509,14],  fp:[403,259,4],  approx:true},
+  "2026-08-06": {people:1092, heldout:21, p1:[1983,1197,30],p2:[1430,817,19], wa:[964,509,14],  fp:[403,259,4],  approx:true},
+  "2026-08-05": {people:1092, heldout:21, p1:[1983,1197,30],p2:[1430,817,19], wa:[964,509,14],  fp:[403,259,4],  approx:true},
+  "2026-08-04": {people:1092, heldout:21, p1:[1983,1197,30],p2:[1430,817,19], wa:[964,509,14],  fp:[403,259,4],  approx:true},
+  "2026-08-03": {people:1092, heldout:21, p1:[1983,1197,30],p2:[1430,817,19], wa:[964,509,14],  fp:[403,259,4],  approx:true},
+  "2026-08-02": {people:1092, heldout:21, p1:[1983,1197,30],p2:[1430,817,19], wa:[964,509,14],  fp:[403,259,4],  approx:true},
+  "2026-08-01": {people:1092, heldout:21, p1:[1983,1197,30],p2:[1430,817,19], wa:[964,509,14],  fp:[403,259,4],  approx:true},
+};
+// loadDailyData: merge live JSON data into DAILY_DATA on page load
+function mergeDailyData(liveDaily){
+  if(!liveDaily) return;
+  Object.entries(liveDaily).forEach(([date,v])=>{ DAILY_DATA[date]=v; });
+}
 // Adds days to a YYYY-MM-DD string
 function addDays(dateStr,n){
   const d=new Date(dateStr+'T00:00:00Z');
@@ -631,10 +654,16 @@ function cohortMatrix(){
   const anchor=cohortAnchorOverride||defaultAnchor;
   return buildCohortHTML(anchor);
 }
-let cohortAnchorOverride=null; // null = use PERIOD_TO_DATE[cur]
+let cohortAnchorOverride=null;
 function setCohortAnchor(date){
   cohortAnchorOverride=date;
-  rLanes(); // full re-render including cohort matrix with new anchor
+  // Update the date input if it exists
+  const dp=document.getElementById('cohortDatePicker');
+  if(dp) dp.value=date;
+  // Show approx badge if data is approximate
+  const badge=document.getElementById('cohortApproxBadge');
+  if(badge) badge.style.display=(DAILY_DATA[date]&&DAILY_DATA[date].approx)?'inline':'none';
+  rLanes();
 }
 function renderCohortMatrix(){
   // Called when anchor changes — re-renders tbody + note
@@ -650,10 +679,9 @@ function buildCohortNote(anchor){
   const d0=fmtDateLabel(anchor);
   const d1=fmtDateLabel(addDays(anchor,-1));
   const d2=fmtDateLabel(addDays(anchor,-2));
-  const hasD0=DATE_TO_PERIOD[anchor]?'✓':'no data';
-  const hasD1=DATE_TO_PERIOD[addDays(anchor,-1)]?'✓':'no data';
-  const hasD2=DATE_TO_PERIOD[addDays(anchor,-2)]?'✓':'no data';
-  return 'Data available for 13/12/11/10 Aug. '+d0+' ('+hasD0+'), '+d1+' ('+hasD1+'), '+d2+' ('+hasD2+'). Use Re-pull to add more dates.';
+  const hasDay=d=>(DAILY_DATA[d]||D[DATE_TO_PERIOD[d]||''])?'✓':'no data';
+  const approxDay=d=>(DAILY_DATA[d]&&DAILY_DATA[d].approx)?' (approx)':'';
+  return d0+' ('+hasDay(anchor)+approxDay(anchor)+'), '+d1+' ('+hasDay(addDays(anchor,-1))+approxDay(addDays(anchor,-1))+'), '+d2+' ('+hasDay(addDays(anchor,-2))+approxDay(addDays(anchor,-2))+').';
 }
 function buildCohortBody(anchor){
   // Row 0: anchor date entrants (got P1)
@@ -671,7 +699,7 @@ function buildCohortBody(anchor){
   // Row 0 — anchor entrants
   const r0p1=pd0?pd0.tp.p1:null;
   html+=`<tr>
-    <td><strong>${fmtDateLabel(d0)}</strong><br><span style="font-size:10px;color:var(--ink4)">${DATE_TO_PERIOD[d0]?DATE_TO_PERIOD[d0]+"'s entrants":'entrants'}</span></td>
+    <td><strong>${fmtDateLabel(d0)}</strong><br><span style="font-size:10px;color:var(--ink4)">${(DAILY_DATA[d0]&&DAILY_DATA[d0].approx)?"~approx entrants":DATE_TO_PERIOD[d0]?DATE_TO_PERIOD[d0]+"'s entrants":"entrants"}</span></td>
     ${r0p1?cohortCell(r0p1[0],r0p1[1],r0p1[2],null):cohortCell(null,null,null,null)}
     <td class="na" style="font-size:11px">~${fmtDateLabel(addDays(d0,1))}</td>
     <td class="na" style="font-size:11px">~${fmtDateLabel(addDays(d0,1))}</td>
@@ -714,12 +742,11 @@ function buildCohortHTML(anchor){
     <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap">
       <span style="font-family:var(--mono);font-size:10px;color:var(--ink4)">Anchor:</span>
       <input type="hidden" id="cohortAnchor" value="${anchor}">
-      ${['2026-08-13','2026-08-12','2026-08-11','2026-08-10'].map(d=>{
-        const lbl=d==='2026-08-13'?'13 Aug':d==='2026-08-12'?'12 Aug':d==='2026-08-11'?'11 Aug':'10 Aug';
-        const active=d===anchor;
-        return `<button onclick="setCohortAnchor('${d}')" style="font-family:var(--mono);font-size:10px;font-weight:700;padding:3px 8px;background:${active?'var(--blue)':'var(--panel)'};color:${active?'#fff':'var(--ink3)'};border:1px solid ${active?'var(--blue)':'var(--line)'};border-radius:5px;cursor:pointer">${lbl}</button>`;
-      }).join('')}
-      <button onclick="cohortRefresh()" style="font-family:var(--mono);font-size:10px;font-weight:600;padding:3px 8px;background:var(--panel);color:var(--ink3);border:1px solid var(--line);border-radius:5px;cursor:pointer">Re-pull →</button>
+      <input type="date" id="cohortDatePicker" value="${anchor}"
+        min="2026-06-10" max="2026-08-13"
+        oninput="setCohortAnchor(this.value)"
+        style="font-family:var(--mono);font-size:11px;padding:4px 8px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);cursor:pointer">
+      <span id="cohortApproxBadge" style="font-family:var(--mono);font-size:9px;color:var(--amber);display:none">~approx</span>
     </div>
   </div>
   <div class="tbl-scroll"><table class="cohort-table">
@@ -893,6 +920,7 @@ async function loadLiveData(){
     if(live.periods) Object.entries(live.periods).forEach(([k,v])=>{D[k]=v;});
     if(live.ab) Object.entries(live.ab).forEach(([k,v])=>{AB[k]=v;});
     if(live.slots){SLOTS.length=0;live.slots.forEach(s=>SLOTS.push(s));}
+    if(live.daily) mergeDailyData(live.daily);
     const ts=(live.meta&&live.meta.last_updated||'').replace('T',' ').substring(0,16)+' IST';
     if(banner) banner.innerHTML='<span style="color:var(--green)">&#9679; Live</span>&nbsp;&middot; GitHub &middot; Updated: '+ts+'&nbsp;&middot;&nbsp;<a href="https://github.com/adityageda-CM/CRM_Dashboard_Exp" target="_blank" style="color:var(--blue);text-decoration:none">Repo &rarr;</a>';
     renderAll();rAB();rEff();rSlots();
