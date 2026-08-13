@@ -858,7 +858,7 @@ document.getElementById('tabs').addEventListener('click',e=>{
   document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));
   e.target.classList.add('active');cur=e.target.dataset.p;cityExpanded=false;
   const ca2=document.getElementById('cohortAnchor');if(ca2) delete ca2.dataset.manuallySet;
-  renderAll();rAB();
+  renderAll();rAB();rEff();
 });
 renderAll();rAB();rEff();rSlots();
 async function loadLiveData(){
