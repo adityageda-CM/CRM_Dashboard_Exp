@@ -249,7 +249,7 @@ const fmt=n=>(n===null||n===undefined)?'—':Math.round(n).toLocaleString('en-IN
 const pct=(n,d)=>(n===null||n===undefined||!d)?'—':(100*n/d).toFixed(1)+'%';
 const D={
   today:{lbl:"Today (13 Aug, in progress)",
-    people:312,heldout:8,msgs:1182,complete:false,
+    people:312,heldout:8,msgs:1001,complete:false,
     tp:{p1:[312,163,8],p2:[352,178,7],wa:[241,119,5],fp:[96,45,1]},
     push:{click:null,view:null,init:null,book:null,book_ios:null},
     wa:{click:null,view:null,init:null,book:null},
@@ -549,7 +549,7 @@ function rKPI(){
     <div class="kpi a"><div class="kpi-lbl">Total bookings${d.complete?'':' (partial)'}</div><div class="kpi-val">${totalBook===null?'—':totalBook}</div><div class="kpi-note">${bookNote}</div></div>`;
   document.getElementById('overviewNote').innerHTML=d.complete
     ?`<div class="insight good">All-time: <b>${fmt(d.people)}</b> people entered, received up to 4 messages over 4 days, produced <b>${totalBook} bookings</b>. <b>${fmt(d.heldout)}</b> held-out as control.</div>`
-    :`<div class="insight note"><b>Why msgs &gt; people?</b> Total messages counts all touchpoints sent today across every active cohort — P1 to today's new entrants, P2 to yesterday's cohort, FP to 3-days-ago cohort. Unique people = only today's new P1 entrants. Different numbers by design.</div>`;
+    :`<div class="insight note"><b>Why msgs &gt; people?</b> Push+WA messages = all touchpoints sent across every cohort active in this window (P1 to new entrants, P2/FP to earlier cohorts). Unique people = only new P1 entrants this period. Email (separate flow) not included here.</div>`;
 }
 function tpRow(name,arr){
   if(!arr||arr[0]===null) return `<tr><td>${name}</td><td colspan="3" style="text-align:center;color:var(--ink4);font-size:11px">In progress</td></tr>`;
@@ -735,7 +735,7 @@ function rLanes(){
     <div class="tbl-scroll"><table class="tp-table"><thead><tr><th>Touchpoint</th><th style="text-align:right">Sent</th><th style="text-align:right">Seen %</th><th style="text-align:right">Clicked</th></tr></thead><tbody>${tpRow('Push #1',d.tp.p1)}${tpRow('Push #2',d.tp.p2)}${tpRow('Final Push',d.tp.fp)}</tbody></table></div>
     ${cohortMatrix()}
     <div class="outcomes">${ocBox('Unique clickers',j.click,'all 3 push touches')}${ocBox('Viewed city',j.view,pct(j.view,j.click)+' of clickers')}${ocBox('Checkout started',j.init,j.click?pct(j.init,j.click)+' of clickers':'—','init')}${ocBox('Booked',j.book,pct(j.book,j.click)+' of clickers','book')}</div>
-  </div><div class="lane-foot">Sent/Seen/Clicked = message counts. Clickers/Viewed/Booked = unique people via moe_f_pid. BOOKING_INIT near-zero — drop-off is city-view → checkout entry, not at payment.</div></div>`;
+  </div><div class="lane-foot">Push+WA = this location flow. Email = sibling flow (different audience, always-on). Sent = total messages across all active cohorts that day. Clickers/Viewed/Booked = unique people.</div></div>`;
   html+=`<div class="lane lane-wa"><div class="lane-header">
     <div class="lh-cell"><div class="lh-lbl">Channel</div><div class="lh-val">WhatsApp</div><div class="lh-sub">1 touchpoint · +24h 30min</div></div>
     <div class="lh-cell"><div class="lh-lbl">Sent</div><div class="lh-val">${fmt(d.tp.wa[0])}</div><div class="lh-sub">&nbsp;</div></div>
