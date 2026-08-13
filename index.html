@@ -181,7 +181,7 @@ table.slot tbody tr:hover{background:var(--p2)}table.slot tr:last-child td{borde
   <div class="sec-head">
   <div>
     <div class="sec-title">3 — A/B test: personalised vs simple</div>
-    <div class="sec-sub">80/20 split on every push touchpoint. CTR = clicks ÷ impressions (seen). Impressions ≠ S2 "Sent" — S2 counts unique people, S3 counts all impressions across active cohorts that day.</div>
+    <div class="sec-sub">80/20 split on every push touchpoint. CTR = clicks ÷ impressions (seen). Sample size shown below each CTR.</div>
   </div>
   <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
     <span class="sec-tag" id="t3" style="background:var(--blue-l);color:var(--blue-d);border-color:#bfdbfe">All time</span>
@@ -189,7 +189,7 @@ table.slot tbody tr:hover{background:var(--p2)}table.slot tr:last-child td{borde
   </div>
 </div>
   <div class="insight warn" style="margin-bottom:14px" id="abFinding"><b>Finding (All time):</b> Simple copy wins CTR on Push #1 (3.07% vs 2.32%), WhatsApp (3.12% vs 2.54%), and Final Push (2.27% vs 1.37%). <b>Exception:</b> Push #2 in last 7 days — Personalised wins (2.18% vs 2.00%). Consistent pattern across 65 days.</div>
-  <div class="tbl-card"><div class="tbl-scroll"><table class="ab"><thead><tr><th>Touchpoint</th><th style="text-align:right">Personalised<br><span style="font-weight:400;font-size:9px">impressions</span></th><th style="text-align:right">Personalised<br><span style="font-weight:400;font-size:9px">CTR</span></th><th style="text-align:right">Simple<br><span style="font-weight:400;font-size:9px">impressions</span></th><th style="text-align:right">Simple<br><span style="font-weight:400;font-size:9px">CTR</span></th><th style="text-align:right">Gap</th><th style="text-align:center">Winner</th></tr></thead><tbody id="abBody"></tbody></table></div></div>
+  <div class="tbl-card"><div class="tbl-scroll"><table class="ab"><thead><tr><th>Touchpoint</th><th style="text-align:right">Personalised<br><span style="font-weight:400;font-size:9px">CTR</span></th><th style="text-align:right">Simple<br><span style="font-weight:400;font-size:9px">CTR</span></th><th style="text-align:right">Gap</th><th style="text-align:center">Winner</th></tr></thead><tbody id="abBody"></tbody></table></div></div>
 </div>
 <hr class="divider">
 <div class="section">
@@ -787,7 +787,7 @@ function rAB(){
   let noteRow=''; // all periods now have real data
   const rows=Object.entries(data).map(([stage,v])=>{
     const pc=100*v.p.c/v.p.seen,sc=100*v.x.c/v.x.seen,gap=sc-pc,winn=sc>pc;
-    return `<tr><td>${stage}</td><td>${fmt(v.p.s)}</td><td class="${winn?'lose':'win'}">${pc.toFixed(2)}%</td><td>${fmt(v.x.s)}</td><td class="${winn?'win':'lose'}">${sc.toFixed(2)}%</td><td style="color:${gap>0?'var(--green)':'var(--red)'}">${gap>0?'+':''}${gap.toFixed(2)}pp</td><td style="text-align:center"><span class="badge ${winn?'b-gr':'b-am'}">${winn?'Simple':'Personalised'}</span></td></tr>`;
+    return `<tr><td>${stage}</td><td class="${winn?'lose':'win'}" style="text-align:right;font-weight:700">${pc.toFixed(2)}%<div style="font-size:9.5px;color:var(--ink4);font-weight:400">${fmt(v.p.seen)} seen</div></td><td class="${winn?'win':'lose'}" style="text-align:right;font-weight:700">${sc.toFixed(2)}%<div style="font-size:9.5px;color:var(--ink4);font-weight:400">${fmt(v.x.seen)} seen</div></td><td style="color:${gap>0?'var(--green)':'var(--red)'}">${gap>0?'+':''}${gap.toFixed(2)}pp</td><td style="text-align:center"><span class="badge ${winn?'b-gr':'b-am'}">${winn?'Simple':'Personalised'}</span></td></tr>`;
   }).join('');
   document.getElementById('abBody').innerHTML=noteRow+rows;
 }
