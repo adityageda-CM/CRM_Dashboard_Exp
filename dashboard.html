@@ -241,7 +241,7 @@ function switchPeriod(p){
   const btn=document.querySelector('[data-p="'+p+'"]');
   if(btn) btn.classList.add('active');
   cur=p;cityExpanded=false;cohortAnchorOverride=null;
-  renderAll();rAB();rEff();
+  renderAll();rAB();rEff();rSlots();
 }
 const fmt=n=>(n===null||n===undefined)?'—':Math.round(n).toLocaleString('en-IN');
 const pct=(n,d)=>(n===null||n===undefined||!d)?'—':(100*n/d).toFixed(1)+'%';
@@ -916,7 +916,7 @@ document.getElementById('tabs').addEventListener('click',e=>{
   document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));
   e.target.classList.add('active');cur=e.target.dataset.p;cityExpanded=false;
   cohortAnchorOverride=null;
-  renderAll();rAB();rEff();
+  renderAll();rAB();rEff();rSlots();
 });
 renderAll();rAB();rEff();rSlots();
 async function loadLiveData(){
