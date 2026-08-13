@@ -1,0 +1,630 @@
+{
+  "meta": {
+    "last_updated": "2026-08-13T13:30:00+05:30",
+    "updated_by": "Claude via MoEngage MCP",
+    "flow_id": "6a295838b4cecb7392eeb7a5"
+  },
+  "periods": {
+    "today": {
+      "lbl": "Today (13 Aug, in progress)",
+      "people": 133,
+      "heldout": null,
+      "msgs": 711,
+      "complete": false,
+      "tp": {
+        "p1": [
+          286,
+          156,
+          3
+        ],
+        "p2": [
+          211,
+          110,
+          3
+        ],
+        "wa": [
+          148,
+          80,
+          2
+        ],
+        "fp": [
+          66,
+          31,
+          1
+        ]
+      },
+      "push": {
+        "click": null,
+        "view": null,
+        "init": null,
+        "book": null,
+        "book_ios": null
+      },
+      "wa": {
+        "click": null,
+        "view": null,
+        "init": null,
+        "book": null
+      },
+      "em": {
+        "sent": null,
+        "seen": null,
+        "click": null,
+        "view": null,
+        "book": null
+      }
+    },
+    "yesterday": {
+      "lbl": "Yesterday (12 Aug 2026)",
+      "people": 1310,
+      "heldout": 21,
+      "msgs": 3321,
+      "complete": false,
+      "tp": {
+        "p1": [
+          1310,
+          722,
+          17
+        ],
+        "p2": [
+          931,
+          513,
+          10
+        ],
+        "wa": [
+          716,
+          392,
+          8
+        ],
+        "fp": [
+          364,
+          196,
+          2
+        ]
+      },
+      "push": {
+        "click": 29,
+        "view": 11,
+        "init": 0,
+        "book": 0,
+        "book_ios": 0
+      },
+      "wa": {
+        "click": 8,
+        "view": 0,
+        "init": 0,
+        "book": 0
+      },
+      "em": {
+        "sent": 588,
+        "seen": 390,
+        "click": 3,
+        "view": null,
+        "book": null
+      }
+    },
+    "week": {
+      "lbl": "Last 7 days (7-13 Aug 2026)",
+      "people": 23491,
+      "heldout": 135,
+      "msgs": 58822,
+      "complete": false,
+      "tp": {
+        "p1": [
+          23491,
+          12897,
+          306
+        ],
+        "p2": [
+          17644,
+          9417,
+          209
+        ],
+        "wa": [
+          12126,
+          6312,
+          169
+        ],
+        "fp": [
+          5561,
+          3110,
+          48
+        ]
+      },
+      "push": {
+        "click": 154,
+        "view": 41,
+        "init": null,
+        "book": 1,
+        "book_ios": null
+      },
+      "wa": {
+        "click": 95,
+        "view": 7,
+        "init": null,
+        "book": 0
+      },
+      "em": {
+        "sent": 6682,
+        "seen": 4429,
+        "click": 65,
+        "view": 16,
+        "book": 1
+      }
+    },
+    "alltime": {
+      "lbl": "All time (since 10 Jun 2026, 65 days)",
+      "people": 40440,
+      "heldout": 256,
+      "msgs": 97028,
+      "complete": true,
+      "tp": {
+        "p1": [
+          40440,
+          23851,
+          587
+        ],
+        "p2": [
+          28953,
+          16119,
+          367
+        ],
+        "wa": [
+          19545,
+          10111,
+          288
+        ],
+        "fp": [
+          8090,
+          4863,
+          77
+        ]
+      },
+      "push": {
+        "click": 1934,
+        "view": 486,
+        "init": 2,
+        "book": 13,
+        "book_ios": 10
+      },
+      "push_android": {
+        "click": 814,
+        "view": 227,
+        "init": 0,
+        "book": 13
+      },
+      "push_ios": {
+        "click": 1120,
+        "view": 259,
+        "init": 2,
+        "book": 10
+      },
+      "wa": {
+        "click": 799,
+        "view": 54,
+        "init": 0,
+        "book": 3
+      },
+      "em": {
+        "sent": 30642,
+        "seen": 20840,
+        "click": 1785,
+        "view": 739,
+        "book": 31
+      }
+    },
+    "aug11": {
+      "lbl": "11 Aug 2026 (custom pull - verified live)",
+      "people": 5465,
+      "heldout": 32,
+      "msgs": 14431,
+      "complete": true,
+      "tp": {
+        "p1": [
+          5465,
+          2853,
+          58
+        ],
+        "p2": [
+          4237,
+          2150,
+          39
+        ],
+        "wa": [
+          3117,
+          1561,
+          35
+        ],
+        "fp": [
+          1612,
+          798,
+          13
+        ]
+      },
+      "push": {
+        "click": 1,
+        "view": 1,
+        "init": 0,
+        "book": 0,
+        "book_ios": 0
+      },
+      "wa": {
+        "click": 35,
+        "view": null,
+        "init": null,
+        "book": 0
+      },
+      "em": {
+        "sent": null,
+        "seen": null,
+        "click": null,
+        "view": null,
+        "book": null
+      }
+    }
+  },
+  "ab": {
+    "alltime": {
+      "Push #1": {
+        "p": {
+          "s": 32778,
+          "seen": 19322,
+          "c": 448
+        },
+        "x": {
+          "s": 7662,
+          "seen": 4529,
+          "c": 139
+        }
+      },
+      "Push #2": {
+        "p": {
+          "s": 22948,
+          "seen": 12776,
+          "c": 282
+        },
+        "x": {
+          "s": 6005,
+          "seen": 3343,
+          "c": 85
+        }
+      },
+      "WhatsApp": {
+        "p": {
+          "s": 9224,
+          "seen": 4799,
+          "c": 122
+        },
+        "x": {
+          "s": 10321,
+          "seen": 5312,
+          "c": 166
+        }
+      },
+      "Final Push": {
+        "p": {
+          "s": 6202,
+          "seen": 3716,
+          "c": 51
+        },
+        "x": {
+          "s": 1888,
+          "seen": 1147,
+          "c": 26
+        }
+      }
+    },
+    "week": {
+      "Push #1": {
+        "p": {
+          "s": 18298,
+          "seen": 9764,
+          "c": 223
+        },
+        "x": {
+          "s": 4384,
+          "seen": 2337,
+          "c": 57
+        }
+      },
+      "Push #2": {
+        "p": {
+          "s": 13619,
+          "seen": 7160,
+          "c": 156
+        },
+        "x": {
+          "s": 3412,
+          "seen": 1697,
+          "c": 34
+        }
+      },
+      "WhatsApp": {
+        "p": {
+          "s": 5624,
+          "seen": 2838,
+          "c": 69
+        },
+        "x": {
+          "s": 6064,
+          "seen": 3104,
+          "c": 88
+        }
+      },
+      "Final Push": {
+        "p": {
+          "s": 4194,
+          "seen": 2245,
+          "c": 31
+        },
+        "x": {
+          "s": 1154,
+          "seen": 620,
+          "c": 11
+        }
+      }
+    },
+    "yesterday": {
+      "Push #1": {
+        "p": {
+          "s": 1370,
+          "seen": 1370,
+          "c": 31
+        },
+        "x": {
+          "s": 342,
+          "seen": 342,
+          "c": 6
+        }
+      },
+      "Push #2": {
+        "p": {
+          "s": 975,
+          "seen": 975,
+          "c": 23
+        },
+        "x": {
+          "s": 233,
+          "seen": 233,
+          "c": 4
+        }
+      },
+      "WhatsApp": {
+        "p": {
+          "s": 388,
+          "seen": 388,
+          "c": 12
+        },
+        "x": {
+          "s": 494,
+          "seen": 494,
+          "c": 10
+        }
+      },
+      "Final Push": {
+        "p": {
+          "s": 294,
+          "seen": 294,
+          "c": 5
+        },
+        "x": {
+          "s": 116,
+          "seen": 116,
+          "c": 1
+        }
+      }
+    },
+    "today": {
+      "Push #1": {
+        "p": {
+          "s": 347,
+          "seen": 347,
+          "c": 9
+        },
+        "x": {
+          "s": 168,
+          "seen": 168,
+          "c": 1
+        }
+      },
+      "Push #2": {
+        "p": {
+          "s": 245,
+          "seen": 245,
+          "c": 7
+        },
+        "x": {
+          "s": 63,
+          "seen": 63,
+          "c": 3
+        }
+      },
+      "WhatsApp": {
+        "p": {
+          "s": 90,
+          "seen": 90,
+          "c": 1
+        },
+        "x": {
+          "s": 124,
+          "seen": 124,
+          "c": 7
+        }
+      },
+      "Final Push": {
+        "p": {
+          "s": 54,
+          "seen": 54,
+          "c": 0
+        },
+        "x": {
+          "s": 32,
+          "seen": 32,
+          "c": 1
+        }
+      }
+    },
+    "aug11": {
+      "Push #1": {
+        "p": {
+          "s": 4407,
+          "seen": 2317,
+          "c": 50
+        },
+        "x": {
+          "s": 1058,
+          "seen": 536,
+          "c": 8
+        }
+      },
+      "Push #2": {
+        "p": {
+          "s": 3367,
+          "seen": 1684,
+          "c": 32
+        },
+        "x": {
+          "s": 870,
+          "seen": 466,
+          "c": 7
+        }
+      },
+      "WhatsApp": {
+        "p": {
+          "s": 1498,
+          "seen": 727,
+          "c": 19
+        },
+        "x": {
+          "s": 1619,
+          "seen": 813,
+          "c": 16
+        }
+      },
+      "Final Push": {
+        "p": {
+          "s": 1251,
+          "seen": 617,
+          "c": 11
+        },
+        "x": {
+          "s": 361,
+          "seen": 181,
+          "c": 2
+        }
+      }
+    }
+  },
+  "slots": [
+    {
+      "date": "31 Jul 2026",
+      "cohort": "TINA (travel-intent, not yet activated)",
+      "msg": "Rs.1,000 off international experiences",
+      "sent": 211172,
+      "seen": 139190,
+      "click": 709,
+      "ctr": 0.51,
+      "book": 3,
+      "latest": true
+    },
+    {
+      "date": "30 Jul 2026",
+      "cohort": "TINA small proposition test",
+      "msg": "Rs.1,000 off international experiences",
+      "sent": 1184,
+      "seen": 874,
+      "click": 8,
+      "ctr": 0.91,
+      "book": null,
+      "latest": false
+    },
+    {
+      "date": "25 Jul 2026",
+      "cohort": "Broad travel-active (60d)",
+      "msg": "Rs.500 off skydiving, snorkelling, cruises",
+      "sent": 84463,
+      "seen": 66284,
+      "click": 395,
+      "ctr": 0.6,
+      "book": null,
+      "latest": false
+    },
+    {
+      "date": "25 Jul 2026",
+      "cohort": "Targeted cut of above",
+      "msg": "Rs.500 off skydiving, snorkelling, cruises",
+      "sent": 3796,
+      "seen": 2747,
+      "click": 19,
+      "ctr": 0.68,
+      "book": null,
+      "latest": false
+    },
+    {
+      "date": "18 Jul 2026",
+      "cohort": "Searched flights/stays 60d, not India",
+      "msg": "Beyond flights and hotels - cruises, snorkelling, scuba",
+      "sent": 171044,
+      "seen": 122292,
+      "click": 878,
+      "ctr": 0.72,
+      "book": null,
+      "latest": false
+    },
+    {
+      "date": "18 Jul 2026",
+      "cohort": "Smaller cut of above",
+      "msg": "Beyond flights and hotels - cruises, snorkelling, scuba",
+      "sent": 16903,
+      "seen": 10515,
+      "click": 85,
+      "ctr": 0.81,
+      "book": null,
+      "latest": false
+    },
+    {
+      "date": "27 Jun 2026",
+      "cohort": "International intent (45d)",
+      "msg": "Book Universal Studios, Eiffel Tower, Burj Khalifa 20% back",
+      "sent": 373321,
+      "seen": 199816,
+      "click": 1195,
+      "ctr": 0.6,
+      "book": null,
+      "latest": false
+    },
+    {
+      "date": "27 Jun 2026",
+      "cohort": "Targeted cut of above",
+      "msg": "Landmarks offer 20% back",
+      "sent": 36932,
+      "seen": 18956,
+      "click": 224,
+      "ctr": 1.18,
+      "book": null,
+      "latest": false
+    },
+    {
+      "date": "21 Jun 2026",
+      "cohort": "Broad travel-active, not India",
+      "msg": "International Experiences discovery push",
+      "sent": 74315,
+      "seen": 37219,
+      "click": 416,
+      "ctr": 1.13,
+      "book": null,
+      "latest": false
+    },
+    {
+      "date": "21 Jun 2026",
+      "cohort": "Targeted cut of above",
+      "msg": "International Experiences discovery push",
+      "sent": 15080,
+      "seen": 7023,
+      "click": 34,
+      "ctr": 0.5,
+      "book": null,
+      "latest": false
+    }
+  ]
+}
