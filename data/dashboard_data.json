@@ -1,8 +1,9 @@
 {
   "meta": {
-    "last_updated": "2026-08-13T14:30:00+05:30",
+    "last_updated": "2026-08-13T14:35:00+05:30",
     "updated_by": "Claude via MoEngage MCP \u2014 fresh pull",
-    "flow_id": "6a295838b4cecb7392eeb7a5"
+    "flow_id": "6a295838b4cecb7392eeb7a5",
+    "note": "tp.p1[0] corrected to 312 (summary trip_started). msgs=1001 (p1+p2+fp+wa)."
   },
   "periods": {
     "today": {
@@ -13,8 +14,8 @@
       "complete": false,
       "tp": {
         "p1": [
-          493,
-          252,
+          312,
+          163,
           8
         ],
         "p2": [
