@@ -688,7 +688,15 @@ function buildCohortBody(anchor){
   // Row 1: anchor-1 entrants (got P1 + today's P2/WA)
   // Row 2: anchor-2 entrants (got P1 + yesterday's P2/WA + today's FP)
   const d0=anchor, d1=addDays(anchor,-1), d2=addDays(anchor,-2);
-  const lookupDay=date=>DAILY_DATA[date]||D[DATE_TO_PERIOD[date]||'']||null;
+  const lookupDay=date=>{
+    const dd=DAILY_DATA[date];
+    if(dd){
+      // DAILY_DATA uses {p1,p2,wa,fp} — normalize to {tp:{p1,p2,wa,fp}} to match D object
+      if(!dd.tp) return {...dd, tp:{p1:dd.p1,p2:dd.p2,wa:dd.wa,fp:dd.fp}};
+      return dd;
+    }
+    return D[DATE_TO_PERIOD[date]||'']||null;
+  };
   const pd0=lookupDay(d0);
   const pd1=lookupDay(d1);
   const pdAnchor=lookupDay(anchor);
