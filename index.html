@@ -688,10 +688,11 @@ function buildCohortBody(anchor){
   // Row 1: anchor-1 entrants (got P1 + today's P2/WA)
   // Row 2: anchor-2 entrants (got P1 + yesterday's P2/WA + today's FP)
   const d0=anchor, d1=addDays(anchor,-1), d2=addDays(anchor,-2);
-  const pd0=D[DATE_TO_PERIOD[d0]||'']||null;
-  const pd1=D[DATE_TO_PERIOD[d1]||'']||null;
-  const pdAnchor=D[DATE_TO_PERIOD[anchor]||'']||null;  // for P2/WA that went to d1
-  const pdAnch1=D[DATE_TO_PERIOD[addDays(anchor,-1)]||'']||null; // for P2/WA that went to d2
+  const lookupDay=date=>DAILY_DATA[date]||D[DATE_TO_PERIOD[date]||'']||null;
+  const pd0=lookupDay(d0);
+  const pd1=lookupDay(d1);
+  const pdAnchor=lookupDay(anchor);
+  const pdAnch1=lookupDay(addDays(anchor,-1));
   const hasData=key=>DATE_TO_PERIOD[key]&&D[DATE_TO_PERIOD[key]];
   // Status badges
   const badges=['<span class="badge b-bl">P1 sent</span>','<span class="badge b-am">P1+P2+WA sent</span>','<span class="badge b-gr">All 4 sent</span>'];
