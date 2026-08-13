@@ -240,9 +240,7 @@ function switchPeriod(p){
   document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));
   const btn=document.querySelector('[data-p="'+p+'"]');
   if(btn) btn.classList.add('active');
-  cur=p;cityExpanded=false;
-  const _ca=document.getElementById('cohortAnchor');
-  if(_ca) delete _ca.dataset.manuallySet;
+  cur=p;cityExpanded=false;cohortAnchorOverride=null;
   renderAll();rAB();rEff();
 }
 const fmt=n=>(n===null||n===undefined)?'—':Math.round(n).toLocaleString('en-IN');
@@ -615,14 +613,18 @@ function buildCohortRows(anchor){
   return rows;
 }
 function cohortMatrix(){
-  const anchorEl=document.getElementById('cohortAnchor');
-  // Always sync anchor to selected period — tab switches always reset
-  const periodAnchor=PERIOD_TO_DATE[cur]||'2026-08-13';
-  if(anchorEl) anchorEl.value=periodAnchor;
-  return buildCohortHTML(periodAnchor);
+  // Use override if user clicked a date button, else match current period tab
+  const defaultAnchor=PERIOD_TO_DATE[cur]||'2026-08-13';
+  const anchor=cohortAnchorOverride||defaultAnchor;
+  return buildCohortHTML(anchor);
+}
+let cohortAnchorOverride=null; // null = use PERIOD_TO_DATE[cur]
+function setCohortAnchor(date){
+  cohortAnchorOverride=date;
+  rLanes(); // full re-render including cohort matrix with new anchor
 }
 function renderCohortMatrix(){
-  // Called when anchor date changes — re-renders just the tbody
+  // Called when anchor changes — re-renders tbody + note
   const anchorEl=document.getElementById('cohortAnchor');
   if(!anchorEl) return;
   const anchor=anchorEl.value||'2026-08-13';
@@ -696,10 +698,15 @@ function buildCohortHTML(anchor){
   return `<div class="cohort-wrap">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px">
     <div class="cohort-label" style="margin-bottom:0">3-day cohort view — each row = a separate entry-date group</div>
-    <div style="display:flex;align-items:center;gap:6px">
+    <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap">
       <span style="font-family:var(--mono);font-size:10px;color:var(--ink4)">Anchor:</span>
-      <input type="date" value="${anchor}" id="cohortAnchor" oninput="this.dataset.manuallySet='1';renderCohortMatrix()" style="font-family:var(--mono);font-size:10.5px;padding:4px 8px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink)">
-      <button onclick="cohortRefresh()" style="font-family:var(--mono);font-size:10px;font-weight:700;padding:4px 10px;background:var(--blue);color:#fff;border:none;border-radius:6px;cursor:pointer">Re-pull →</button>
+      <input type="hidden" id="cohortAnchor" value="${anchor}">
+      ${['2026-08-13','2026-08-12','2026-08-11'].map(d=>{
+        const lbl=d==='2026-08-13'?'13 Aug':d==='2026-08-12'?'12 Aug':'11 Aug';
+        const active=d===anchor;
+        return `<button onclick="setCohortAnchor('${d}')" style="font-family:var(--mono);font-size:10px;font-weight:700;padding:3px 8px;background:${active?'var(--blue)':'var(--panel)'};color:${active?'#fff':'var(--ink3)'};border:1px solid ${active?'var(--blue)':'var(--line)'};border-radius:5px;cursor:pointer">${lbl}</button>`;
+      }).join('')}
+      <button onclick="cohortRefresh()" style="font-family:var(--mono);font-size:10px;font-weight:600;padding:3px 8px;background:var(--panel);color:var(--ink3);border:1px solid var(--line);border-radius:5px;cursor:pointer">Re-pull →</button>
     </div>
   </div>
   <div class="tbl-scroll"><table class="cohort-table">
@@ -859,7 +866,7 @@ document.getElementById('tabs').addEventListener('click',e=>{
   if(!e.target.classList.contains('ptab')) return;
   document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));
   e.target.classList.add('active');cur=e.target.dataset.p;cityExpanded=false;
-  const ca2=document.getElementById('cohortAnchor');if(ca2) delete ca2.dataset.manuallySet;
+  cohortAnchorOverride=null;
   renderAll();rAB();rEff();
 });
 renderAll();rAB();rEff();rSlots();
