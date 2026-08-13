@@ -305,10 +305,10 @@ const AB={
     "Final Push":{p:{s:294, seen:294, c:5}, x:{s:116,seen:116,c:1}}
   },
   today:{
-    "Push #1":   {p:{s:240,seen:240,c:6},x:{s:43, seen:43, c:2}},
-    "Push #2":   {p:{s:155,seen:155,c:6},x:{s:44, seen:44, c:1}},
-    "WhatsApp":  {p:{s:52, seen:52, c:0},x:{s:78, seen:78, c:5}},
-    "Final Push":{p:{s:33, seen:33, c:1},x:{s:13, seen:13, c:0}}
+    "Push #1":   {p:{s:452,seen:240,c:6},x:{s:98, seen:43, c:2}},
+    "Push #2":   {p:{s:296,seen:155,c:6},x:{s:98, seen:44, c:1}},
+    "WhatsApp":  {p:{s:107,seen:52, c:0},x:{s:163,seen:78, c:5}},
+    "Final Push":{p:{s:82, seen:33, c:1},x:{s:23, seen:13, c:0}}
   },
 };
 const EFF=[
@@ -562,6 +562,7 @@ const DATE_TO_PERIOD={
   '2026-08-13':'today',
   '2026-08-12':'yesterday',
   '2026-08-11':'aug11',
+  '2026-08-10':'aug10',
 };
 const PERIOD_TO_DATE={
   'today':     '2026-08-13',
@@ -569,6 +570,7 @@ const PERIOD_TO_DATE={
   'week':      '2026-08-13',
   'alltime':   '2026-08-13',
   'aug11':     '2026-08-11',
+  'aug10':     '2026-08-10',
 };
 // Adds days to a YYYY-MM-DD string
 function addDays(dateStr,n){
@@ -640,7 +642,7 @@ function buildCohortNote(anchor){
   const hasD0=DATE_TO_PERIOD[anchor]?'✓':'no data';
   const hasD1=DATE_TO_PERIOD[addDays(anchor,-1)]?'✓':'no data';
   const hasD2=DATE_TO_PERIOD[addDays(anchor,-2)]?'✓':'no data';
-  return 'Data loaded: '+d0+' ('+hasD0+'), '+d1+' ('+hasD1+'), '+d2+' ('+hasD2+'). Data available for 13/12/11 Aug only. Use Re-pull for other dates.';
+  return 'Data available for 13/12/11/10 Aug. '+d0+' ('+hasD0+'), '+d1+' ('+hasD1+'), '+d2+' ('+hasD2+'). Use Re-pull to add more dates.';
 }
 function buildCohortBody(anchor){
   // Row 0: anchor date entrants (got P1)
@@ -701,8 +703,8 @@ function buildCohortHTML(anchor){
     <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap">
       <span style="font-family:var(--mono);font-size:10px;color:var(--ink4)">Anchor:</span>
       <input type="hidden" id="cohortAnchor" value="${anchor}">
-      ${['2026-08-13','2026-08-12','2026-08-11'].map(d=>{
-        const lbl=d==='2026-08-13'?'13 Aug':d==='2026-08-12'?'12 Aug':'11 Aug';
+      ${['2026-08-13','2026-08-12','2026-08-11','2026-08-10'].map(d=>{
+        const lbl=d==='2026-08-13'?'13 Aug':d==='2026-08-12'?'12 Aug':d==='2026-08-11'?'11 Aug':'10 Aug';
         const active=d===anchor;
         return `<button onclick="setCohortAnchor('${d}')" style="font-family:var(--mono);font-size:10px;font-weight:700;padding:3px 8px;background:${active?'var(--blue)':'var(--panel)'};color:${active?'#fff':'var(--ink3)'};border:1px solid ${active?'var(--blue)':'var(--line)'};border-radius:5px;cursor:pointer">${lbl}</button>`;
       }).join('')}
