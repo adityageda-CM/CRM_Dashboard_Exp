@@ -545,7 +545,7 @@ function rKPI(){
   document.getElementById('kpis').innerHTML=`
     <div class="kpi"><div class="kpi-lbl">Unique people</div><div class="kpi-val">${fmt(d.people)}</div><div class="kpi-note">Push #1 = 1 per person</div></div>
     <div class="kpi"><div class="kpi-lbl">Held-out control</div><div class="kpi-val">${fmt(d.heldout)}</div><div class="kpi-note">received nothing</div></div>
-    <div class="kpi g"><div class="kpi-lbl">Total messages</div><div class="kpi-val">${fmt(d.msgs)}</div><div class="kpi-note">all 4 touchpoints</div></div>
+    <div class="kpi g"><div class="kpi-lbl">Push + WA messages</div><div class="kpi-val">${fmt((d.tp.p1[0]||0)+(d.tp.p2[0]||0)+(d.tp.fp[0]||0)+(d.tp.wa[0]||0))}</div><div class="kpi-note">P1+P2+FP+WA · email is separate</div></div>
     <div class="kpi a"><div class="kpi-lbl">Total bookings${d.complete?'':' (partial)'}</div><div class="kpi-val">${totalBook===null?'—':totalBook}</div><div class="kpi-note">${bookNote}</div></div>`;
   document.getElementById('overviewNote').innerHTML=d.complete
     ?`<div class="insight good">All-time: <b>${fmt(d.people)}</b> people entered, received up to 4 messages over 4 days, produced <b>${totalBook} bookings</b>. <b>${fmt(d.heldout)}</b> held-out as control.</div>`
