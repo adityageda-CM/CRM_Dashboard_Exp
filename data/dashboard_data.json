@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-08-13T14:15:00+05:30",
+    "last_updated": "2026-08-13T14:30:00+05:30",
     "updated_by": "Claude via MoEngage MCP \u2014 fresh pull",
     "flow_id": "6a295838b4cecb7392eeb7a5"
   },
@@ -9,7 +9,7 @@
       "lbl": "Today (13 Aug, in progress)",
       "people": 312,
       "heldout": 8,
-      "msgs": 1182,
+      "msgs": 1001,
       "complete": false,
       "tp": {
         "p1": [
