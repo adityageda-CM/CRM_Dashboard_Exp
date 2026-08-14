@@ -1713,13 +1713,33 @@ s16TodayOrders();
 function sweepV9Tables() {
   const teaTab = document.getElementById('tab-tea');
   if (!teaTab) return;
-  teaTab.querySelectorAll('table').forEach(tbl => {
-    // Skip tables that already have the collapsible tfoot (already processed)
-    if (tbl.querySelector('tfoot.tbl-expand-foot')) return;
+  teaTab.querySelectorAll('table').forEach(function(tbl) {
+    if (tbl.querySelector('tfoot.tbl-exp-ft')) return;
     const tbody = tbl.querySelector('tbody');
     if (!tbody) return;
     const rows = tbody.querySelectorAll('tr');
-    if (rows.length > 7) makeCollapsible(tbl, 7);
+    if (rows.length > 7) {
+      tbl.classList.add('tbl-col', 'col');
+      const cols = (tbl.querySelector('thead tr') || {cells:{length:1}}).cells.length;
+      const tf = document.createElement('tfoot');
+      tf.className = 'tbl-exp-ft';
+      const btn = document.createElement('button');
+      btn.className = 'tbl-exp-btn';
+      btn.textContent = '\u25bc Show all ' + rows.length + ' rows';
+      btn.onclick = function() {
+        tbl.classList.toggle('col');
+        btn.textContent = tbl.classList.contains('col')
+          ? '\u25bc Show all ' + rows.length + ' rows'
+          : '\u25b2 Show less';
+      };
+      const td = document.createElement('td');
+      td.colSpan = cols;
+      td.appendChild(btn);
+      const tr = document.createElement('tr');
+      tr.appendChild(td);
+      tf.appendChild(tr);
+      tbl.appendChild(tf);
+    }
   });
 }
 
@@ -1730,24 +1750,7 @@ setTimeout(sweepV9Tables, 500);
 
 
 
-function sweepV9Tables() {
-  const tt = document.getElementById('tab-tea');
-  if (!tt) return;
-  tt.querySelectorAll('table').forEach(tbl => {
-    if (tbl.querySelector('tfoot.tbl-exp-ft')) return;
-    const tb = tbl.querySelector('tbody');
-    if (!tb) return;
-    const rows = tb.querySelectorAll('tr');
-    if (rows.length > 7) {
-      tbl.classList.add('tbl-col');
-      tbl.classList.add('col');
-      const cols = tbl.querySelector('thead tr') ? tbl.querySelector('thead tr').cells.length : (rows[0]?rows[0].cells.length:1);
-      const tf = document.createElement('tfoot');
-      tf.className = 'tbl-exp-ft';
-      tf.innerHTML = '<tr><td colspan="'+cols+'"><button class="tbl-exp-btn" onclick="var t=this.closest('table');t.classList.toggle('col');this.textContent=t.classList.contains('col')?'▼ Show all '+rows.length+' rows':'▲ Show less'">▼ Show all '+rows.length+' rows</button></td></tr>';
-      tbl.appendChild(tf);
-    }
-  });
+
 }
 setTimeout(sweepV9Tables, 500);
 
