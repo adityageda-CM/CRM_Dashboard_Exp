@@ -281,7 +281,7 @@ canvas{max-height:160px}
     <span class="badge in">LIVE</span>
     <code style="font-size:11px;background:var(--s1);padding:1px 5px;border-radius:3px">percept_event_agg</code>
     <code style="font-size:11px;background:var(--s1);padding:1px 5px;border-radius:3px">rds_main.scapiadb.orders</code>
-    <span style="font-size:11px;color:var(--t2)">· COHORT Oct 2025 → Aug 11 · Orders to Aug 14</span>
+    <span style="font-size:11px;color:var(--t2)">· COHORT Oct 2025 → Aug 11 (last complete funnel day — 1-day lag) · Orders to Aug 14 (live)</span>
     <span style="flex:1"></span>
     <span style="font-size:11px;color:var(--t2)">Date controls filter all metrics</span>
   </div>
@@ -1328,8 +1328,8 @@ const MIN_DATE = ALL_DATES.reduce((a,b)=>a<b?a:b);
 const MAX_DATE = ALL_DATES.reduce((a,b)=>a>b?a:b);
 
 const PRESETS = [
-  {id:'today', label:'Today (Aug 11 · last date with full funnel data)'},
-  {id:'yesterday', label:'Yesterday (Aug 10 · last complete day)'},
+  {id:'today', label:'Aug 11 (last complete funnel day)'},
+  {id:'yesterday', label:'Aug 10'},
   {id:'7d', label:'Last 7 days'},
   {id:'30d', label:'Last 30 days'},
   {id:'90d', label:'Last 90 days'},
@@ -1341,7 +1341,7 @@ const PRESETS = [
 ];
 const sel = document.getElementById('rangePreset');
 PRESETS.forEach(p=>{ const o=document.createElement('option'); o.value=p.id; o.textContent=p.label; sel.appendChild(o); });
-sel.value='yesterday'; // Default: yesterday = Aug 10 (last complete data day)
+sel.value='today'; // Default: yesterday = Aug 10 (last complete data day)
 
 function presetToRange(id){
   const max = parseISO(MAX_DATE);
