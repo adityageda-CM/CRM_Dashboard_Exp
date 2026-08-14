@@ -1375,294 +1375,103 @@ initCollapsibleTables();
 <!-- ══════════════════════════════════════════════
      SECTION 16 · SCAPIA LIVE TEA FUNNEL TRACKER
      Source: Experiences (TEA) Funnel dashboard
-     Live from Databricks · fetched 14/8/2026 1:48pm
+     Live from Databricks · fetched 14 Aug 2026
 ══════════════════════════════════════════════ -->
 <div class="card" id="live-tracker">
-  <h2>16 · Scapia live TEA funnel tracker — fetched 14 Aug 2026, 1:48 pm</h2>
-  <div class="note">
-    Live from Databricks · <code>simple.crud.percept_event_agg</code> + <code>rds_main.scapiadb.orders</code> (product_category = 'EXPERIENCE') · distinct-user metrics are per-day unique counts.
-    <strong>Bookers</strong> = distinct users who completed ≥1 booking. <strong>Bookings</strong> = total booking count (some users book multiple). 
-    <span style="color:var(--warn)">⚠ This section uses fresher data than the rest of this dashboard — Aug 12 and Aug 13 numbers here are final/settled, whereas the COHORT funnel in sections 1–5 above is frozen at Aug 11 due to the percept_event_agg 1-day batch lag.</span>
+  <h2>16 · Scapia live TEA funnel tracker</h2>
+  <div class="note" style="margin-bottom:12px">
+    Source: Experiences (TEA) Funnel dashboard · <code>simple.crud.percept_event_agg</code> + <code>rds_main.scapiadb.orders</code> · fetched 14 Aug 2026, 1:48 pm ·
+    <strong>Bookers</strong> = distinct users with ≥1 booking. <strong>Bookings</strong> = total order count.
+    This section uses fresher data than sections 1–14 (Aug 12–13 included here; COHORT table lags by 1–2 days).
   </div>
 
-  <!-- ── Yesterday KPIs ── -->
-  <h3>16a · Yesterday — 2026-08-13 · vs mean of prior 7 days</h3>
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0">
-    <div style="background:var(--head-bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px">
-      <div style="font-size:10px;color:var(--muted);margin-bottom:3px">Scapia Visitors</div>
-      <div style="font-size:20px;font-weight:600">1,04,555</div>
-      <div style="font-size:10px;color:var(--bad)">▼ 9.7% · 7d avg 1,15,824</div>
-    </div>
-    <div style="background:var(--head-bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px">
-      <div style="font-size:10px;color:var(--muted);margin-bottom:3px">TEA Visitors</div>
-      <div style="font-size:20px;font-weight:600">1,813</div>
-      <div style="font-size:10px;color:var(--bad)">▼ 7.0% · 7d avg 1,948</div>
-    </div>
-    <div style="background:var(--head-bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px">
-      <div style="font-size:10px;color:var(--muted);margin-bottom:3px">PDP Viewers</div>
-      <div style="font-size:20px;font-weight:600">683</div>
-      <div style="font-size:10px;color:var(--bad)">▼ 5.8% · 7d avg 725</div>
-    </div>
-    <div style="background:var(--head-bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px">
-      <div style="font-size:10px;color:var(--muted);margin-bottom:3px">Bookers / Bookings</div>
-      <div style="font-size:20px;font-weight:600">25 / 25</div>
-      <div style="font-size:10px;color:var(--bad)">▼ 15.9% · 7d avg 30</div>
-    </div>
-    <div style="background:var(--head-bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px">
-      <div style="font-size:10px;color:var(--muted);margin-bottom:3px">GMV</div>
-      <div style="font-size:20px;font-weight:600">₹4.76 L</div>
-      <div style="font-size:10px;color:var(--bad)">▼ 8.4% · 7d avg ₹5.20 L</div>
-    </div>
-    <div style="background:var(--head-bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px">
-      <div style="font-size:10px;color:var(--muted);margin-bottom:3px">AOV</div>
-      <div style="font-size:20px;font-weight:600">₹19,059</div>
-      <div style="font-size:10px;color:var(--good)">▲ 35.9% · 7d avg ₹14,028</div>
-    </div>
-    <div style="background:var(--head-bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px">
-      <div style="font-size:10px;color:var(--muted);margin-bottom:3px">% PDP Viewers</div>
-      <div style="font-size:20px;font-weight:600">0.65%</div>
-      <div style="font-size:10px;color:var(--good)">▲ 4.4% · 7d avg 0.63%</div>
-    </div>
-    <div style="background:var(--head-bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px">
-      <div style="font-size:10px;color:var(--muted);margin-bottom:3px">% Conversion (PDP→Book)</div>
-      <div style="font-size:20px;font-weight:600">3.66%</div>
-      <div style="font-size:10px;color:var(--bad)">▼ 11.2% · 7d avg 4.12%</div>
-    </div>
+  <!-- Period picker -->
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;align-items:center">
+    <span style="font-size:11px;color:var(--muted);margin-right:4px">Period:</span>
+    <button class="linklike s16-period-btn active" data-period="yesterday" onclick="s16SetPeriod(this)">Yesterday (Aug 13)</button>
+    <button class="linklike s16-period-btn" data-period="wtd" onclick="s16SetPeriod(this)">This week (Aug 10–13)</button>
+    <button class="linklike s16-period-btn" data-period="mtd" onclick="s16SetPeriod(this)">Month to date (Aug 1–13)</button>
+    <button class="linklike s16-period-btn" data-period="lm_same" onclick="s16SetPeriod(this)">Jul 1–13 (same days LM)</button>
+    <button class="linklike s16-period-btn" data-period="lm_full" onclick="s16SetPeriod(this)">July 2026 (full month)</button>
+    <button class="linklike s16-period-btn" data-period="all" onclick="s16SetPeriod(this)">All 15 days</button>
   </div>
 
-  <!-- ── Period summaries ── -->
-  <h3>16b · Period summaries</h3>
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin:10px 0 16px">
-    <div style="background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 12px">
-      <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">This week (WTD) · Aug 10–13</div>
-      <div style="font-size:18px;font-weight:700;color:var(--text-1)">₹19.12 L</div>
-      <div style="font-size:11px;color:var(--text-2);margin-top:2px">118 bookings · AOV ₹16,202</div>
-      <div style="font-size:10px;color:var(--muted);margin-top:4px">Avg 1,878 TEA visitors/day · 0.63% PDP · 3.55% CVR</div>
-    </div>
-    <div style="background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 12px">
-      <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Month to date · Aug 1–13</div>
-      <div style="font-size:18px;font-weight:700;color:var(--text-1)">₹54.93 L</div>
-      <div style="font-size:11px;color:var(--text-2);margin-top:2px">424 bookings · AOV ₹12,956</div>
-      <div style="font-size:10px;color:var(--muted);margin-top:4px">Avg 1,896 TEA visitors/day · 0.62% PDP · 3.94% CVR</div>
-    </div>
-    <div style="background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 12px">
-      <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Jul 1–13 (same days LM)</div>
-      <div style="font-size:18px;font-weight:700;color:var(--text-1)">₹24.68 L</div>
-      <div style="font-size:11px;color:var(--text-2);margin-top:2px">193 bookings · AOV ₹12,786</div>
-      <div style="font-size:10px;color:var(--muted);margin-top:4px">Avg 1,739 visitors/day · 0.55% PDP · 2.21% CVR</div>
-    </div>
-    <div style="background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 12px">
-      <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">July 2026 (full month)</div>
-      <div style="font-size:18px;font-weight:700;color:var(--text-1)">₹76.47 L</div>
-      <div style="font-size:11px;color:var(--text-2);margin-top:2px">641 bookings · AOV ₹11,929</div>
-      <div style="font-size:10px;color:var(--muted);margin-top:4px">Avg 1,733 visitors/day · 0.55% PDP · 2.99% CVR</div>
-    </div>
-  </div>
-  <div class="flag good">
-    MoM lift (Aug 1–13 vs Jul 1–13): GMV <strong>+122.5%</strong> (₹54.93L vs ₹24.68L) · Bookings <strong>+119.7%</strong> (424 vs 193) · CVR <strong>+78.3%</strong> (3.94% vs 2.21%) · TEA Visitors +9.0% (1,896 vs 1,739). August is tracking at more than 2× July on the same 13-day window.
-  </div>
+  <!-- KPI cards -->
+  <div id="s16-kpis"></div>
 
-  <!-- ── Week on week table ── -->
-  <h3>16c · Week-on-week · last 4 completed weeks</h3>
-  <table data-collapsible="5">
-    <thead><tr>
-      <th>Metric</th><th>13–19 Jul</th><th>20–26 Jul</th><th>27 Jul–2 Aug</th><th>3–9 Aug</th><th>WoW Δ</th>
-    </tr></thead>
-    <tbody>
-      <tr><td>Scapia Visitors</td><td class="num">1,01,101</td><td class="num">1,10,231</td><td class="num">1,11,861</td><td class="num">1,14,840</td><td class="num delta-up">▲ 2.7%</td></tr>
-      <tr><td>TEA Visitors</td><td class="num">1,676</td><td class="num">1,764</td><td class="num">1,789</td><td class="num">1,900</td><td class="num delta-up">▲ 6.2%</td></tr>
-      <tr><td>PDP Viewers</td><td class="num">580</td><td class="num">603</td><td class="num">624</td><td class="num">697</td><td class="num delta-up">▲ 11.7%</td></tr>
-      <tr><td>Bookers (daily avg)</td><td class="num">15</td><td class="num">23</td><td class="num">26</td><td class="num">28</td><td class="num delta-up">▲ 8.2%</td></tr>
-      <tr><td>Bookings (daily avg)</td><td class="num">17</td><td class="num">28</td><td class="num">32</td><td class="num">34</td><td class="num delta-up">▲ 6.3%</td></tr>
-      <tr><td>GMV (daily avg)</td><td class="num">₹2.15 L</td><td class="num">₹2.92 L</td><td class="num">₹3.80 L</td><td class="num">₹4.18 L</td><td class="num delta-up">▲ 9.9%</td></tr>
-      <tr><td>AOV</td><td class="num">₹13,271</td><td class="num">₹10,592</td><td class="num">₹11,989</td><td class="num">₹11,676</td><td class="num delta-down">▼ 2.6%</td></tr>
-      <tr><td>% PDP Viewers</td><td class="num">0.57%</td><td class="num">0.55%</td><td class="num">0.56%</td><td class="num">0.61%</td><td class="num delta-up">▲ 8.5%</td></tr>
-      <tr><td>% Conversion (PDP→Book)</td><td class="num">2.67%</td><td class="num">3.73%</td><td class="num">4.23%</td><td class="num">4.08%</td><td class="num delta-down">▼ 3.4%</td></tr>
-    </tbody>
-  </table>
-  <div class="note">All weekly metrics = mean of daily values for that Mon–Sun week. GMV and Bookings are daily averages (not totals) for comparability. WoW Δ = 3–9 Aug vs 27 Jul–2 Aug.</div>
-
-  <!-- ── Daily breakdown ── -->
-  <h3>16d · Daily breakdown — last 15 days (most recent first)</h3>
+  <!-- Daily funnel table -->
+  <h3 style="margin:14px 0 6px" id="s16-daily-title">Daily breakdown</h3>
   <div style="overflow-x:auto">
-  <table data-collapsible="5" id="s16-daily-table">
-    <thead><tr>
-      <th>Date</th><th>Scapia Visitors</th><th>TEA Visitors</th><th>PDP Viewers</th><th>Bookers</th><th>Bookings</th><th>GMV</th><th>AOV</th><th>% PDP</th><th>% CVR</th>
-    </tr></thead>
-    <tbody>
-      <tr><td>2026-08-13</td><td class="num">1,04,555</td><td class="num">1,813</td><td class="num">683</td><td class="num">25</td><td class="num">25</td><td class="num">₹4.76 L</td><td class="num">₹19,059</td><td class="num">0.65%</td><td class="num">3.66%</td></tr>
-      <tr style="background:#e9f7e9"><td>2026-08-12</td><td class="num">1,14,744</td><td class="num">1,945</td><td class="num">745</td><td class="num" style="font-weight:700;color:#0ca30c">34</td><td class="num" style="font-weight:700;color:#0ca30c">42</td><td class="num" style="font-weight:700">₹9.04 L</td><td class="num">₹21,535</td><td class="num">0.65%</td><td class="num" style="font-weight:700;color:#0ca30c">4.56%</td></tr>
-      <tr><td>2026-08-11</td><td class="num">1,15,517</td><td class="num">1,870</td><td class="num">712</td><td class="num">23</td><td class="num">29</td><td class="num">₹2.11 L</td><td class="num">₹7,260</td><td class="num">0.62%</td><td class="num">3.23%</td></tr>
-      <tr><td>2026-08-10</td><td class="num">1,15,992</td><td class="num">1,884</td><td class="num">694</td><td class="num">19</td><td class="num">22</td><td class="num">₹3.20 L</td><td class="num">₹14,563</td><td class="num">0.60%</td><td class="num">2.74%</td></tr>
-      <tr style="background:#e9f7e9"><td>2026-08-09</td><td class="num">1,17,480</td><td class="num">2,177</td><td class="num">825</td><td class="num" style="color:#0ca30c;font-weight:700">39</td><td class="num" style="color:#0ca30c;font-weight:700">49</td><td class="num" style="font-weight:700">₹8.35 L</td><td class="num">₹17,035</td><td class="num">0.70%</td><td class="num" style="color:#0ca30c;font-weight:700">4.73%</td></tr>
-      <tr><td>2026-08-08</td><td class="num">1,20,040</td><td class="num">2,111</td><td class="num">798</td><td class="num">27</td><td class="num">31</td><td class="num">₹4.16 L</td><td class="num">₹13,413</td><td class="num">0.66%</td><td class="num">3.38%</td></tr>
-      <tr><td>2026-08-07</td><td class="num">1,15,700</td><td class="num">1,855</td><td class="num">678</td><td class="num">26</td><td class="num">29</td><td class="num">₹2.86 L</td><td class="num">₹9,869</td><td class="num">0.59%</td><td class="num">3.83%</td></tr>
-      <tr style="background:#e9f7e9"><td>2026-08-06</td><td class="num">1,11,295</td><td class="num">1,797</td><td class="num">626</td><td class="num" style="color:#0ca30c;font-weight:700">40</td><td class="num" style="color:#0ca30c;font-weight:700">46</td><td class="num" style="font-weight:700">₹6.68 L</td><td class="num">₹14,523</td><td class="num">0.56%</td><td class="num" style="color:#0ca30c;font-weight:700">6.39%</td></tr>
-      <tr><td>2026-08-05</td><td class="num">1,14,003</td><td class="num">1,849</td><td class="num">660</td><td class="num">32</td><td class="num">40</td><td class="num">₹3.62 L</td><td class="num">₹9,054</td><td class="num">0.58%</td><td class="num">4.85%</td></tr>
-      <tr><td>2026-08-04</td><td class="num">1,12,550</td><td class="num">1,812</td><td class="num">641</td><td class="num">16</td><td class="num">19</td><td class="num">₹1.52 L</td><td class="num">₹8,023</td><td class="num">0.57%</td><td class="num">2.50%</td></tr>
-      <tr><td>2026-08-03</td><td class="num">1,12,809</td><td class="num">1,699</td><td class="num">653</td><td class="num">19</td><td class="num">21</td><td class="num">₹2.06 L</td><td class="num">₹9,816</td><td class="num">0.58%</td><td class="num">2.91%</td></tr>
-      <tr><td>2026-08-02</td><td class="num">1,11,975</td><td class="num">1,909</td><td class="num">753</td><td class="num">32</td><td class="num">37</td><td class="num">₹3.23 L</td><td class="num">₹8,724</td><td class="num">0.67%</td><td class="num">4.25%</td></tr>
-      <tr><td>2026-08-01</td><td class="num">1,22,285</td><td class="num">1,933</td><td class="num">701</td><td class="num">29</td><td class="num">34</td><td class="num">₹3.33 L</td><td class="num">₹9,793</td><td class="num">0.57%</td><td class="num">4.14%</td></tr>
-      <tr><td>2026-07-31</td><td class="num">1,26,526</td><td class="num">2,206</td><td class="num">638</td><td class="num">19</td><td class="num">21</td><td class="num">₹2.07 L</td><td class="num">₹9,879</td><td class="num">0.50%</td><td class="num">2.98%</td></tr>
-      <tr><td>2026-07-30</td><td class="num">1,09,686</td><td class="num">1,643</td><td class="num">560</td><td class="num">25</td><td class="num">32</td><td class="num">₹2.57 L</td><td class="num">₹8,016</td><td class="num">0.51%</td><td class="num">4.46%</td></tr>
-    </tbody>
-  </table>
+    <table id="s16-daily-tbl" data-collapsible="5">
+      <thead><tr>
+        <th>Date</th>
+        <th>Scapia Visitors</th>
+        <th>TEA Visitors</th>
+        <th>PDP Viewers</th>
+        <th>Bookers</th>
+        <th>Bookings</th>
+        <th>GMV</th>
+        <th>AOV</th>
+        <th>% PDP</th>
+        <th>% CVR (PDP→Book)</th>
+      </tr></thead>
+      <tbody id="s16-daily-body"></tbody>
+    </table>
   </div>
-  <div class="note">Green rows = days with ≥34 bookings. Bookers = distinct users; Bookings = total order count. Aug 12 data here is final/settled (fetched Aug 14 1:48pm). Note: Aug 12 in COHORT sections 1–5 shows 0 entering users because percept_event_agg batches lag 1 day from the query time.</div>
+  <div class="note" id="s16-daily-note"></div>
 
-  <!-- ── Merch impressions ── -->
-  <h3>16e · Experiences merch — impressions &amp; clicks (last 15 days)</h3>
-  <div class="note" style="margin-bottom:8px">Impressions on all pages <em>except</em> the Experiences home (Scapia Home, Coins, Travel Home). Impression users &amp; impressions are ×2.5 sampling-adjusted estimates; clicks are actual. CTR = click users ÷ impression users.</div>
+  <!-- Merch impressions table -->
+  <h3 style="margin:14px 0 6px">Merch widget impressions &amp; clicks</h3>
+  <div class="note" style="margin-bottom:6px">TEA widgets on all pages except Experiences home. Impression users/counts are ×2.5 sampling-adjusted estimates; clicks are exact.</div>
   <div style="overflow-x:auto">
-  <table data-collapsible="5">
-    <thead><tr>
-      <th>Date</th><th>Impr Users (est)</th><th>Impressions (est)</th><th>Click Users</th><th>Clicks</th><th>CTR</th>
-    </tr></thead>
-    <tbody>
-      <tr><td>2026-08-13</td><td class="num">18,232</td><td class="num">42,110</td><td class="num">652</td><td class="num">805</td><td class="num">3.58%</td></tr>
-      <tr><td>2026-08-12</td><td class="num">22,615</td><td class="num">49,632</td><td class="num">753</td><td class="num">907</td><td class="num">3.33%</td></tr>
-      <tr><td>2026-08-11</td><td class="num">21,940</td><td class="num">49,317</td><td class="num">695</td><td class="num">849</td><td class="num">3.17%</td></tr>
-      <tr><td>2026-08-10</td><td class="num">21,370</td><td class="num">48,812</td><td class="num">669</td><td class="num">826</td><td class="num">3.13%</td></tr>
-      <tr><td>2026-08-09</td><td class="num">22,675</td><td class="num">52,390</td><td class="num">797</td><td class="num">977</td><td class="num">3.51%</td></tr>
-      <tr><td>2026-08-08</td><td class="num">22,640</td><td class="num">52,650</td><td class="num">794</td><td class="num">987</td><td class="num">3.51%</td></tr>
-      <tr><td>2026-08-07</td><td class="num">21,452</td><td class="num">47,525</td><td class="num">684</td><td class="num">836</td><td class="num">3.19%</td></tr>
-      <tr><td>2026-08-06</td><td class="num">20,242</td><td class="num">45,412</td><td class="num">668</td><td class="num">806</td><td class="num">3.30%</td></tr>
-      <tr><td>2026-08-05</td><td class="num">20,272</td><td class="num">45,507</td><td class="num">713</td><td class="num">861</td><td class="num">3.52%</td></tr>
-      <tr><td>2026-08-04</td><td class="num">19,375</td><td class="num">44,967</td><td class="num">665</td><td class="num">829</td><td class="num">3.43%</td></tr>
-      <tr><td>2026-08-03</td><td class="num">20,905</td><td class="num">46,037</td><td class="num">659</td><td class="num">804</td><td class="num">3.15%</td></tr>
-      <tr><td>2026-08-02</td><td class="num">22,250</td><td class="num">51,520</td><td class="num">758</td><td class="num">934</td><td class="num">3.41%</td></tr>
-      <tr><td>2026-08-01</td><td class="num">21,905</td><td class="num">48,882</td><td class="num">708</td><td class="num">866</td><td class="num">3.23%</td></tr>
-      <tr><td>2026-07-31</td><td class="num">28,080</td><td class="num">57,065</td><td class="num">674</td><td class="num">835</td><td class="num">2.40%</td></tr>
-      <tr><td>2026-07-30</td><td class="num">18,912</td><td class="num">39,357</td><td class="num">559</td><td class="num">688</td><td class="num">2.96%</td></tr>
-    </tbody>
-  </table>
+    <table id="s16-merch-tbl" data-collapsible="5">
+      <thead><tr>
+        <th>Date</th>
+        <th>Impr Users (est)</th>
+        <th>Impressions (est)</th>
+        <th>Click Users</th>
+        <th>Clicks</th>
+        <th>CTR</th>
+      </tr></thead>
+      <tbody id="s16-merch-body"></tbody>
+    </table>
   </div>
 
-  <!-- ── By page ── -->
-  <h3>16f · Merch impressions by page — Aug 10–13</h3>
-  <table data-collapsible="5">
-    <thead><tr><th>Date</th><th>Page</th><th>Impr Users</th><th>Click Users</th><th>Clicks</th><th>CTR</th></tr></thead>
-    <tbody>
-      <tr><td>2026-08-13</td><td>SCAPIA_HOME</td><td class="num">13,767</td><td class="num">373</td><td class="num">481</td><td class="num">2.71%</td></tr>
-      <tr><td>2026-08-13</td><td>COINS_PAGE</td><td class="num">5,245</td><td class="num">236</td><td class="num">262</td><td class="num">4.50%</td></tr>
-      <tr><td>2026-08-13</td><td>TRAVEL_HOME</td><td class="num">707</td><td class="num">24</td><td class="num">30</td><td class="num">3.39%</td></tr>
-      <tr><td>2026-08-13</td><td>CARDS_HOME</td><td class="num">217</td><td class="num">31</td><td class="num">32</td><td class="num" style="color:#0ca30c;font-weight:600">14.29%</td></tr>
-      <tr><td>2026-08-12</td><td>SCAPIA_HOME</td><td class="num">17,612</td><td class="num">469</td><td class="num">590</td><td class="num">2.66%</td></tr>
-      <tr><td>2026-08-12</td><td>COINS_PAGE</td><td class="num">6,097</td><td class="num">235</td><td class="num">257</td><td class="num">3.85%</td></tr>
-      <tr><td>2026-08-12</td><td>TRAVEL_HOME</td><td class="num">832</td><td class="num">36</td><td class="num">41</td><td class="num">4.33%</td></tr>
-      <tr><td>2026-08-12</td><td>CARDS_HOME</td><td class="num">247</td><td class="num">18</td><td class="num">19</td><td class="num" style="color:#0ca30c;font-weight:600">7.29%</td></tr>
-      <tr><td>2026-08-11</td><td>SCAPIA_HOME</td><td class="num">16,760</td><td class="num">389</td><td class="num">512</td><td class="num">2.32%</td></tr>
-      <tr><td>2026-08-11</td><td>COINS_PAGE</td><td class="num">6,340</td><td class="num">244</td><td class="num">261</td><td class="num">3.85%</td></tr>
-      <tr><td>2026-08-11</td><td>TRAVEL_HOME</td><td class="num">787</td><td class="num">39</td><td class="num">42</td><td class="num">4.96%</td></tr>
-      <tr><td>2026-08-11</td><td>CARDS_HOME</td><td class="num">257</td><td class="num">30</td><td class="num">32</td><td class="num" style="color:#0ca30c;font-weight:600">11.67%</td></tr>
-      <tr><td>2026-08-10</td><td>SCAPIA_HOME</td><td class="num">16,227</td><td class="num">380</td><td class="num">493</td><td class="num">2.34%</td></tr>
-    </tbody>
-  </table>
-  <div class="note">CARDS_HOME has dramatically higher CTR (7–14%) vs SCAPIA_HOME (2.3–2.7%). Coins page 3.8–4.5%. This suggests intent context matters significantly — card users and coins users engage with Experiences more than generic home visitors.</div>
-
-  <!-- ── Top products yesterday ── -->
-  <h3>16g · Products bought — 2026-08-13 (24 products)</h3>
-  <table data-collapsible="5">
-    <thead><tr><th>Product</th><th>ID</th><th>Country</th><th>Avg Price</th><th>Qty</th><th>GMV</th></tr></thead>
-    <tbody>
-      <tr><td>Brussels: Atomium Entry + Design Museum</td><td class="num">10527</td><td>Belgium</td><td class="num">₹2,178</td><td class="num">2</td><td class="num">₹4,355</td></tr>
-      <tr><td>From Vik: Katla Ice Cave Small-Group Tour</td><td class="num">15376</td><td>Iceland</td><td class="num">₹1,27,757</td><td class="num">1</td><td class="num">₹1.28 L</td></tr>
-      <tr><td>Swiss Travel Pass: All-in-One Rail/Bus/Boat</td><td class="num">8643</td><td>Switzerland</td><td class="num">₹86,026</td><td class="num">1</td><td class="num">₹86,026</td></tr>
-      <tr><td>Dubai: Skydive at The Palm</td><td class="num">15791</td><td>UAE</td><td class="num">₹59,681</td><td class="num">1</td><td class="num">₹59,681</td></tr>
-      <tr><td>Universal Studios Hollywood Express Pass</td><td class="num">2045</td><td>USA</td><td class="num">₹45,605</td><td class="num">1</td><td class="num">₹45,605</td></tr>
-      <tr><td>From Melbourne: Penguin Parade, Koalas &amp; Roos</td><td class="num">23945</td><td>Australia</td><td class="num">₹20,320</td><td class="num">1</td><td class="num">₹20,320</td></tr>
-      <tr><td>Taliya Day Cruise — Lan Ha Bay</td><td class="num">12608</td><td>Vietnam</td><td class="num">₹17,898</td><td class="num">1</td><td class="num">₹17,898</td></tr>
-      <tr><td>Chicago: Flyover Flying Theatre</td><td class="num">5616</td><td>USA</td><td class="num">₹15,701</td><td class="num">1</td><td class="num">₹15,701</td></tr>
-      <tr><td>Sparty: Late-Night Spa Party Szechenyi</td><td class="num">2957</td><td>Hungary</td><td class="num">₹13,748</td><td class="num">1</td><td class="num">₹13,748</td></tr>
-      <tr><td>Singapore Cable Car + Wings of Time combo</td><td class="num">141</td><td>Singapore</td><td class="num">₹12,719</td><td class="num">1</td><td class="num">₹12,719</td></tr>
-      <tr><td>Night Safari Tickets with Tram Ride</td><td class="num">57</td><td>Singapore</td><td class="num">₹11,923</td><td class="num">1</td><td class="num">₹11,923</td></tr>
-      <tr><td>Universal Studios Singapore Entry</td><td class="num">22090</td><td>Singapore</td><td class="num">₹11,371</td><td class="num">1</td><td class="num">₹11,371</td></tr>
-      <tr><td>Colosseum, Roman Forum &amp; Palatine + Video</td><td class="num">25564</td><td>Italy</td><td class="num">₹9,301</td><td class="num">1</td><td class="num">₹9,301</td></tr>
-      <tr><td>Symphony of the Sea Show + Dinner (Vietnam)</td><td class="num">28204</td><td>Vietnam</td><td class="num">₹8,078</td><td class="num">1</td><td class="num">₹8,078</td></tr>
-      <tr><td>Bangkok: Jurassic World Experience Ticket</td><td class="num">20824</td><td>Thailand</td><td class="num">₹7,332</td><td class="num">1</td><td class="num">₹7,332</td></tr>
-    </tbody>
-  </table>
-
-  <!-- ── Top products MTD ── -->
-  <h3>16h · Products bought — Aug 1–13 MTD (229 distinct products)</h3>
-  <table data-collapsible="5">
-    <thead><tr><th>Product</th><th>ID</th><th>Country</th><th>Avg Price</th><th>Qty</th><th>GMV</th></tr></thead>
-    <tbody>
-      <tr><td>Universal Studios Singapore Entry</td><td class="num">22090</td><td>Singapore</td><td class="num">₹15,173</td><td class="num" style="font-weight:700">23</td><td class="num" style="font-weight:700">₹3.49 L</td></tr>
-      <tr><td>Tickets to Frigate D. Fernando II e Glória</td><td class="num">3648</td><td>Portugal</td><td class="num">₹692</td><td class="num">11</td><td class="num">₹7,613</td></tr>
-      <tr><td>Dubai: Burj Khalifa Levels 124 &amp; 125</td><td class="num">21938</td><td>UAE</td><td class="num">₹8,901</td><td class="num">10</td><td class="num">₹89,006</td></tr>
-      <tr><td>Swiss Travel Pass</td><td class="num">8643</td><td>Switzerland</td><td class="num">₹62,240</td><td class="num">9</td><td class="num">₹5.60 L</td></tr>
-      <tr><td>Singapore: Gardens by the Bay Entry</td><td class="num">21726</td><td>Singapore</td><td class="num">₹10,699</td><td class="num">9</td><td class="num">₹96,293</td></tr>
-      <tr><td>Lindt Home of Chocolate Museum</td><td class="num">27161</td><td>Switzerland</td><td class="num">₹4,271</td><td class="num">8</td><td class="num">₹34,167</td></tr>
-      <tr><td>Singapore Flyer Entry</td><td class="num">21728</td><td>Singapore</td><td class="num">₹7,385</td><td class="num">7</td><td class="num">₹51,694</td></tr>
-      <tr><td>ArtScience Museum Exhibition</td><td class="num">95</td><td>Singapore</td><td class="num">₹6,794</td><td class="num">7</td><td class="num">₹47,555</td></tr>
-      <tr><td>Marina Bay Sands SkyPark</td><td class="num">26097</td><td>Singapore</td><td class="num">₹6,552</td><td class="num">7</td><td class="num">₹45,864</td></tr>
-      <tr><td>Skyline Luge Sentosa</td><td class="num">17574</td><td>Singapore</td><td class="num">₹5,707</td><td class="num">7</td><td class="num">₹39,950</td></tr>
-      <tr><td>Genting Highlands Awana SkyWay Cable Car</td><td class="num">22332</td><td>Malaysia</td><td class="num">₹794</td><td class="num">7</td><td class="num">₹5,560</td></tr>
-      <tr><td>Dubai: Skydive at The Palm</td><td class="num">15791</td><td>UAE</td><td class="num">₹95,371</td><td class="num">5</td><td class="num">₹4.77 L</td></tr>
-      <tr><td>USS + Express Pass (save 4 hrs)</td><td class="num">87</td><td>Singapore</td><td class="num">₹33,494</td><td class="num">5</td><td class="num">₹1.67 L</td></tr>
-      <tr><td>Mandai Wildlife Multi-Attraction Pass</td><td class="num">86</td><td>Singapore</td><td class="num">₹24,378</td><td class="num">5</td><td class="num">₹1.22 L</td></tr>
-      <tr><td>Langkawi SkyBridge with Cable Car</td><td class="num">602</td><td>Malaysia</td><td class="num">₹5,887</td><td class="num">5</td><td class="num">₹29,436</td></tr>
-    </tbody>
-  </table>
-  <div class="note">Singapore dominates MTD products — 6 of top 15 products are Singapore attractions. Swiss Travel Pass disproportionate GMV (₹5.60L from 9 bookings, avg ₹62k). Dubai Skydive highest single-product GMV contributor (₹4.77L from 5 bookings, avg ₹95k).</div>
-
-  <!-- ── Countries MTD ── -->
-  <h3>16i · Bookings by country — Aug 1–13 MTD (38 countries)</h3>
+  <!-- Merch by page -->
+  <h3 style="margin:14px 0 6px">Merch by page — Aug 10–13</h3>
   <div style="overflow-x:auto">
-  <table data-collapsible="5">
-    <thead><tr><th>Country</th><th>Bookings</th><th>Share</th><th>GMV</th><th>AOV</th></tr></thead>
-    <tbody>
-      <tr><td>Singapore</td><td class="num" style="font-weight:700">105</td><td class="num">24.8%</td><td class="num" style="font-weight:700">₹12.84 L</td><td class="num">₹12,228</td></tr>
-      <tr><td>United Arab Emirates</td><td class="num">40</td><td class="num">9.4%</td><td class="num">₹7.82 L</td><td class="num" style="color:var(--good);font-weight:600">₹19,562</td></tr>
-      <tr><td>Malaysia</td><td class="num">31</td><td class="num">7.3%</td><td class="num">₹1.49 L</td><td class="num">₹4,795</td></tr>
-      <tr><td>Switzerland</td><td class="num">28</td><td class="num">6.6%</td><td class="num">₹10.30 L</td><td class="num" style="color:var(--good);font-weight:600">₹36,776</td></tr>
-      <tr><td>Thailand</td><td class="num">24</td><td class="num">5.7%</td><td class="num">₹2.05 L</td><td class="num">₹8,550</td></tr>
-      <tr><td>Vietnam</td><td class="num">20</td><td class="num">4.7%</td><td class="num">₹2.53 L</td><td class="num">₹12,645</td></tr>
-      <tr><td>United States</td><td class="num">19</td><td class="num">4.5%</td><td class="num">₹2.15 L</td><td class="num">₹11,330</td></tr>
-      <tr><td>Japan</td><td class="num">19</td><td class="num">4.5%</td><td class="num">₹1.54 L</td><td class="num">₹8,124</td></tr>
-      <tr><td>United Kingdom</td><td class="num">17</td><td class="num">4.0%</td><td class="num">₹2.08 L</td><td class="num">₹12,226</td></tr>
-      <tr><td>France</td><td class="num">15</td><td class="num">3.5%</td><td class="num">₹2.18 L</td><td class="num">₹14,558</td></tr>
-      <tr><td>Indonesia</td><td class="num">15</td><td class="num">3.5%</td><td class="num">₹75,019</td><td class="num">₹5,001</td></tr>
-      <tr><td>Portugal</td><td class="num">12</td><td class="num">2.8%</td><td class="num">₹13,692</td><td class="num">₹1,141</td></tr>
-      <tr><td>Türkiye</td><td class="num">9</td><td class="num">2.1%</td><td class="num">₹1.10 L</td><td class="num">₹12,254</td></tr>
-      <tr><td>Australia</td><td class="num">8</td><td class="num">1.9%</td><td class="num">₹1.46 L</td><td class="num">₹18,272</td></tr>
-      <tr><td>Spain</td><td class="num">7</td><td class="num">1.7%</td><td class="num">₹67,378</td><td class="num">₹9,625</td></tr>
-      <tr><td>Other (23 countries)</td><td class="num">56</td><td class="num">13.2%</td><td class="num">~₹5 L</td><td class="num">—</td></tr>
-    </tbody>
-    <tfoot><tr><td><strong>Total (top 15 + other)</strong></td><td class="num"><strong>424</strong></td><td class="num"><strong>100%</strong></td><td class="num"><strong>₹54.93 L</strong></td><td class="num"><strong>₹12,956</strong></td></tr></tfoot>
-  </table>
+    <table id="s16-page-tbl" data-collapsible="5">
+      <thead><tr><th>Date</th><th>Page</th><th>Impr Users</th><th>Click Users</th><th>Clicks</th><th>CTR</th></tr></thead>
+      <tbody id="s16-page-body"></tbody>
+    </table>
   </div>
-  <div class="note" style="margin-top:6px">Switzerland: highest AOV ₹36,776 (Swiss Travel Pass avg ₹62k). UAE: ₹19,562 AOV. Portugal: low AOV ₹1,141 (Frigate Museum ticket ₹692). 38 countries total, 16 shown + aggregated other.</div>
+  <div class="note">CARDS_HOME has 7–14% CTR vs SCAPIA_HOME at 2.3–2.7%. Intent context matters — card users engage more.</div>
 
-<h3>16j · Conversion funnel — 2026-08-13 (yesterday)</h3>
-  <div style="max-width:600px">
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-      <div style="width:8px;height:8px;border-radius:2px;background:#2a78d6"></div>
-      <span style="font-size:11px;flex:1">Scapia Visitors (Home tab opens)</span>
-      <span style="font-size:13px;font-weight:600">1,04,555</span>
-      <span style="font-size:10px;color:var(--muted);width:80px;text-align:right">100% · entry</span>
-    </div>
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-      <div style="width:8px;height:8px;border-radius:2px;background:#2a78d6"></div>
-      <span style="font-size:11px;flex:1">TEA Visitors (any TEA surface)</span>
-      <span style="font-size:13px;font-weight:600">1,813</span>
-      <span style="font-size:10px;color:var(--muted);width:80px;text-align:right">1.73% · ▼7.0%</span>
-    </div>
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-      <div style="width:8px;height:8px;border-radius:2px;background:#2a78d6"></div>
-      <span style="font-size:11px;flex:1">PDP Viewers (opened a product page)</span>
-      <span style="font-size:13px;font-weight:600">683</span>
-      <span style="font-size:10px;color:var(--muted);width:80px;text-align:right">37.67% of TEA</span>
-    </div>
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-      <div style="width:8px;height:8px;border-radius:2px;background:#0ca30c"></div>
-      <span style="font-size:11px;flex:1"><strong>Bookers (completed booking)</strong></span>
-      <span style="font-size:13px;font-weight:700;color:#0ca30c">25</span>
-      <span style="font-size:10px;color:var(--muted);width:80px;text-align:right"><strong>3.66%</strong> of PDP</span>
-    </div>
+
+  <!-- WoW table -->
+  <h3 style="margin:14px 0 6px">Week-on-week comparison — last 4 completed weeks (daily averages)</h3>
+  <div style="overflow-x:auto" id="s16-wow-wrap"></div>
+
+  <!-- Top products table -->
+  <h3 style="margin:14px 0 6px" id="s16-prod-title">Top products bought</h3>
+  <div style="overflow-x:auto">
+    <table id="s16-prod-tbl" data-collapsible="5">
+      <thead><tr><th>Product</th><th>ID</th><th>Country</th><th>Avg Price</th><th>Qty</th><th>GMV</th></tr></thead>
+      <tbody id="s16-prod-body"></tbody>
+    </table>
   </div>
+
+  <!-- Countries table -->
+  <h3 style="margin:14px 0 6px" id="s16-country-title">Bookings by country</h3>
+  <div style="overflow-x:auto">
+    <table id="s16-country-tbl" data-collapsible="5">
+      <thead><tr><th>Country</th><th>Bookings</th><th>Share</th><th>GMV</th><th>AOV</th></tr></thead>
+      <tbody id="s16-country-body"></tbody>
+    </table>
+  </div>
+  <div class="note" id="s16-country-note"></div>
 </div>
+
 
 
 </div>
@@ -1992,6 +1801,396 @@ function initCollapsibleTables() {
 
 /* ── INIT ── */
 buildDayBar(); renderDay(); buildSrc(); buildSys(); buildCities(); buildSlot(); buildChart();
+
+
+/* ═══════════════════════════════════════════════════════════════
+   SECTION 16 — LIVE TEA FUNNEL TRACKER
+   Data from Experiences (TEA) Funnel dashboard
+   Databricks: simple.crud.percept_event_agg + rds_main.scapiadb.orders
+   Fetched: 14 Aug 2026, 1:48 pm
+═══════════════════════════════════════════════════════════════ */
+
+// ── Daily funnel data ─────────────────────────────────────────
+const S16_DAILY = [
+  {d:'2026-08-13',sv:104555,tv:1813,pdp:683, bkrs:25,bkgs:25,gmv:476000, aov:19059,ppct:0.65,cvr:3.66},
+  {d:'2026-08-12',sv:114744,tv:1945,pdp:745, bkrs:34,bkgs:42,gmv:904000, aov:21535,ppct:0.65,cvr:4.56},
+  {d:'2026-08-11',sv:115517,tv:1870,pdp:712, bkrs:23,bkgs:29,gmv:211000, aov:7260, ppct:0.62,cvr:3.23},
+  {d:'2026-08-10',sv:115992,tv:1884,pdp:694, bkrs:19,bkgs:22,gmv:320000, aov:14563,ppct:0.60,cvr:2.74},
+  {d:'2026-08-09',sv:117480,tv:2177,pdp:825, bkrs:39,bkgs:49,gmv:835000, aov:17035,ppct:0.70,cvr:4.73},
+  {d:'2026-08-08',sv:120040,tv:2111,pdp:798, bkrs:27,bkgs:31,gmv:416000, aov:13413,ppct:0.66,cvr:3.38},
+  {d:'2026-08-07',sv:115700,tv:1855,pdp:678, bkrs:26,bkgs:29,gmv:286000, aov:9869, ppct:0.59,cvr:3.83},
+  {d:'2026-08-06',sv:111295,tv:1797,pdp:626, bkrs:40,bkgs:46,gmv:668000, aov:14523,ppct:0.56,cvr:6.39},
+  {d:'2026-08-05',sv:114003,tv:1849,pdp:660, bkrs:32,bkgs:40,gmv:362000, aov:9054, ppct:0.58,cvr:4.85},
+  {d:'2026-08-04',sv:112550,tv:1812,pdp:641, bkrs:16,bkgs:19,gmv:152000, aov:8023, ppct:0.57,cvr:2.50},
+  {d:'2026-08-03',sv:112809,tv:1699,pdp:653, bkrs:19,bkgs:21,gmv:206000, aov:9816, ppct:0.58,cvr:2.91},
+  {d:'2026-08-02',sv:111975,tv:1909,pdp:753, bkrs:32,bkgs:37,gmv:323000, aov:8724, ppct:0.67,cvr:4.25},
+  {d:'2026-08-01',sv:122285,tv:1933,pdp:701, bkrs:29,bkgs:34,gmv:333000, aov:9793, ppct:0.57,cvr:4.14},
+  {d:'2026-07-31',sv:126526,tv:2206,pdp:638, bkrs:19,bkgs:21,gmv:207000, aov:9879, ppct:0.50,cvr:2.98},
+  {d:'2026-07-30',sv:109686,tv:1643,pdp:560, bkrs:25,bkgs:32,gmv:257000, aov:8016, ppct:0.51,cvr:4.46},
+];
+
+// 7-day avg (prior 7 days before Aug 13 = Aug 6–12)
+const S16_7D_AVG = {sv:115825,tv:1948,pdp:725,bkrs:30,bkgs:35,gmv:520000,aov:14028,ppct:0.63,cvr:4.12};
+
+// WoW weekly data (Mon–Sun averages)
+const S16_WOW = [
+  {w:'13–19 Jul', sv:101101,tv:1676,pdp:580,bkrs:15,bkgs:17,gmv:215000,aov:13271,ppct:0.57,cvr:2.67},
+  {w:'20–26 Jul', sv:110231,tv:1764,pdp:603,bkrs:23,bkgs:28,gmv:292000,aov:10592,ppct:0.55,cvr:3.73},
+  {w:'27 Jul–2 Aug',sv:111861,tv:1789,pdp:624,bkrs:26,bkgs:32,gmv:380000,aov:11989,ppct:0.56,cvr:4.23},
+  {w:'3–9 Aug',   sv:114840,tv:1900,pdp:697,bkrs:28,bkgs:34,gmv:418000,aov:11676,ppct:0.61,cvr:4.08},
+];
+
+// ── Merch impressions data ────────────────────────────────────
+const S16_MERCH = [
+  {d:'2026-08-13',iu:18232,impr:42110,cu:652,cl:805,ctr:3.58},
+  {d:'2026-08-12',iu:22615,impr:49632,cu:753,cl:907,ctr:3.33},
+  {d:'2026-08-11',iu:21940,impr:49317,cu:695,cl:849,ctr:3.17},
+  {d:'2026-08-10',iu:21370,impr:48812,cu:669,cl:826,ctr:3.13},
+  {d:'2026-08-09',iu:22675,impr:52390,cu:797,cl:977,ctr:3.51},
+  {d:'2026-08-08',iu:22640,impr:52650,cu:794,cl:987,ctr:3.51},
+  {d:'2026-08-07',iu:21452,impr:47525,cu:684,cl:836,ctr:3.19},
+  {d:'2026-08-06',iu:20242,impr:45412,cu:668,cl:806,ctr:3.30},
+  {d:'2026-08-05',iu:20272,impr:45507,cu:713,cl:861,ctr:3.52},
+  {d:'2026-08-04',iu:19375,impr:44967,cu:665,cl:829,ctr:3.43},
+  {d:'2026-08-03',iu:20905,impr:46037,cu:659,cl:804,ctr:3.15},
+  {d:'2026-08-02',iu:22250,impr:51520,cu:758,cl:934,ctr:3.41},
+  {d:'2026-08-01',iu:21905,impr:48882,cu:708,cl:866,ctr:3.23},
+  {d:'2026-07-31',iu:28080,impr:57065,cu:674,cl:835,ctr:2.40},
+  {d:'2026-07-30',iu:18912,impr:39357,cu:559,cl:688,ctr:2.96},
+];
+
+// ── Merch by page (Aug 10–13 only) ───────────────────────────
+const S16_MERCH_PAGE = [
+  {d:'2026-08-13',page:'SCAPIA_HOME', iu:13767,cu:373,cl:481,ctr:2.71},
+  {d:'2026-08-13',page:'COINS_PAGE',  iu:5245, cu:236,cl:262,ctr:4.50},
+  {d:'2026-08-13',page:'TRAVEL_HOME', iu:707,  cu:24, cl:30, ctr:3.39},
+  {d:'2026-08-13',page:'CARDS_HOME',  iu:217,  cu:31, cl:32, ctr:14.29},
+  {d:'2026-08-12',page:'SCAPIA_HOME', iu:17612,cu:469,cl:590,ctr:2.66},
+  {d:'2026-08-12',page:'COINS_PAGE',  iu:6097, cu:235,cl:257,ctr:3.85},
+  {d:'2026-08-12',page:'TRAVEL_HOME', iu:832,  cu:36, cl:41, ctr:4.33},
+  {d:'2026-08-12',page:'CARDS_HOME',  iu:247,  cu:18, cl:19, ctr:7.29},
+  {d:'2026-08-11',page:'SCAPIA_HOME', iu:16760,cu:389,cl:512,ctr:2.32},
+  {d:'2026-08-11',page:'COINS_PAGE',  iu:6340, cu:244,cl:261,ctr:3.85},
+  {d:'2026-08-11',page:'TRAVEL_HOME', iu:787,  cu:39, cl:42, ctr:4.96},
+  {d:'2026-08-11',page:'CARDS_HOME',  iu:257,  cu:30, cl:32, ctr:11.67},
+  {d:'2026-08-10',page:'SCAPIA_HOME', iu:16227,cu:380,cl:493,ctr:2.34},
+  {d:'2026-08-10',page:'COINS_PAGE',  iu:6128, cu:250,cl:277,ctr:4.08},
+  {d:'2026-08-10',page:'TRAVEL_HOME', iu:742,  cu:28, cl:35, ctr:3.77},
+];
+
+// ── Products and countries per period ────────────────────────
+const S16_PRODUCTS = {
+  yesterday: [
+    {n:'Brussels: Atomium Entry + Design Museum',id:10527,country:'Belgium',avg:2178,qty:2,gmv:4355},
+    {n:'From Vik: Katla Ice Cave Small-Group Tour',id:15376,country:'Iceland',avg:127757,qty:1,gmv:127757},
+    {n:'Swiss Travel Pass: All-in-One Rail/Bus/Boat',id:8643,country:'Switzerland',avg:86026,qty:1,gmv:86026},
+    {n:'Dubai: Skydive at The Palm',id:15791,country:'UAE',avg:59681,qty:1,gmv:59681},
+    {n:'Universal Studios Hollywood Express Pass',id:2045,country:'USA',avg:45605,qty:1,gmv:45605},
+    {n:'From Melbourne: Penguin Parade, Koalas & Roos',id:23945,country:'Australia',avg:20320,qty:1,gmv:20320},
+    {n:'Taliya Day Cruise — Lan Ha Bay',id:12608,country:'Vietnam',avg:17898,qty:1,gmv:17898},
+    {n:'Chicago: Flyover Flying Theatre',id:5616,country:'USA',avg:15701,qty:1,gmv:15701},
+    {n:'Sparty: Late-Night Spa Party Szechenyi',id:2957,country:'Hungary',avg:13748,qty:1,gmv:13748},
+    {n:'Singapore Cable Car + Wings of Time combo',id:141,country:'Singapore',avg:12719,qty:1,gmv:12719},
+    {n:'Night Safari Tickets with Tram Ride',id:57,country:'Singapore',avg:11923,qty:1,gmv:11923},
+    {n:'Universal Studios Singapore Entry',id:22090,country:'Singapore',avg:11371,qty:1,gmv:11371},
+    {n:'Colosseum, Roman Forum & Palatine',id:25564,country:'Italy',avg:9301,qty:1,gmv:9301},
+    {n:'Symphony of the Sea Show + Dinner',id:28204,country:'Vietnam',avg:8078,qty:1,gmv:8078},
+    {n:'Bangkok: Jurassic World Experience',id:20824,country:'Thailand',avg:7332,qty:1,gmv:7332},
+  ],
+  mtd: [
+    {n:'Universal Studios Singapore Entry',id:22090,country:'Singapore',avg:15173,qty:23,gmv:349000},
+    {n:'Tickets to Frigate D. Fernando II e Glória',id:3648,country:'Portugal',avg:692,qty:11,gmv:7613},
+    {n:'Dubai: Burj Khalifa Levels 124 & 125',id:21938,country:'UAE',avg:8901,qty:10,gmv:89006},
+    {n:'Swiss Travel Pass',id:8643,country:'Switzerland',avg:62240,qty:9,gmv:560000},
+    {n:'Singapore: Gardens by the Bay Entry',id:21726,country:'Singapore',avg:10699,qty:9,gmv:96293},
+    {n:'Lindt Home of Chocolate Museum',id:27161,country:'Switzerland',avg:4271,qty:8,gmv:34167},
+    {n:'Singapore Flyer Entry',id:21728,country:'Singapore',avg:7385,qty:7,gmv:51694},
+    {n:'ArtScience Museum Exhibition',id:95,country:'Singapore',avg:6794,qty:7,gmv:47555},
+    {n:'Marina Bay Sands SkyPark',id:26097,country:'Singapore',avg:6552,qty:7,gmv:45864},
+    {n:'Skyline Luge Sentosa',id:17574,country:'Singapore',avg:5707,qty:7,gmv:39950},
+    {n:'Genting Highlands Awana SkyWay',id:22332,country:'Malaysia',avg:794,qty:7,gmv:5560},
+    {n:'Dubai: Skydive at The Palm',id:15791,country:'UAE',avg:95371,qty:5,gmv:477000},
+    {n:'USS + Express Pass (save 4 hrs)',id:87,country:'Singapore',avg:33494,qty:5,gmv:167000},
+    {n:'Mandai Wildlife Multi-Attraction Pass',id:86,country:'Singapore',avg:24378,qty:5,gmv:122000},
+    {n:'Langkawi SkyBridge with Cable Car',id:602,country:'Malaysia',avg:5887,qty:5,gmv:29436},
+  ],
+  lm_full: [
+    {n:'Universal Studios Singapore Entry',id:22090,country:'Singapore',avg:14733,qty:53,gmv:781000},
+    {n:'Swiss Travel Pass',id:8643,country:'Switzerland',avg:79170,qty:18,gmv:1425000},
+    {n:'Singapore: Gardens by the Bay Entry',id:21726,country:'Singapore',avg:10158,qty:15,gmv:152000},
+    {n:'London: The London Eye Entry Ticket',id:23676,country:'UK',avg:11230,qty:13,gmv:146000},
+    {n:'ArtScience Museum Exhibition',id:95,country:'Singapore',avg:3443,qty:13,gmv:44757},
+    {n:'Dubai: Burj Khalifa Levels 124 & 125',id:21938,country:'UAE',avg:8627,qty:11,gmv:94902},
+    {n:'1-Day Ticket to Disneyland® Paris',id:830,country:'France',avg:17255,qty:10,gmv:173000},
+    {n:'Dubai: Museum of the Future',id:21975,country:'UAE',avg:6506,qty:10,gmv:65064},
+    {n:'Singapore Flyer Entry',id:21728,country:'Singapore',avg:9528,qty:9,gmv:85749},
+    {n:'Gardens by the Bay: Cloud Forest + Flower Dome',id:51,country:'Singapore',avg:9513,qty:8,gmv:76104},
+    {n:'Kuala Lumpur: Aquaria KLCC',id:23180,country:'Malaysia',avg:5323,qty:8,gmv:42587},
+    {n:'Tickets to Frigate D. Fernando II e Glória',id:3648,country:'Portugal',avg:763,qty:8,gmv:6104},
+    {n:'Mandai Wildlife Multi-Attraction Pass',id:86,country:'Singapore',avg:14379,qty:7,gmv:101000},
+    {n:'Hanoi: Ninh Binh & Trang An Tour',id:12384,country:'Vietnam',avg:11123,qty:7,gmv:77860},
+    {n:'London: Tower of London + Crown Jewels',id:23490,country:'UK',avg:9994,qty:7,gmv:69955},
+  ],
+};
+S16_PRODUCTS.wtd = S16_PRODUCTS.mtd;
+S16_PRODUCTS.lm_same = S16_PRODUCTS.lm_full;
+S16_PRODUCTS.all = S16_PRODUCTS.mtd;
+
+const S16_COUNTRIES = {
+  mtd: [
+    {c:'Singapore',bkgs:105,share:24.8,gmv:1284000,aov:12228},
+    {c:'United Arab Emirates',bkgs:40,share:9.4,gmv:782000,aov:19562},
+    {c:'Malaysia',bkgs:31,share:7.3,gmv:149000,aov:4795},
+    {c:'Switzerland',bkgs:28,share:6.6,gmv:1030000,aov:36776},
+    {c:'Thailand',bkgs:24,share:5.7,gmv:205000,aov:8550},
+    {c:'Vietnam',bkgs:20,share:4.7,gmv:253000,aov:12645},
+    {c:'United States',bkgs:19,share:4.5,gmv:215000,aov:11330},
+    {c:'Japan',bkgs:19,share:4.5,gmv:154000,aov:8124},
+    {c:'United Kingdom',bkgs:17,share:4.0,gmv:208000,aov:12226},
+    {c:'France',bkgs:15,share:3.5,gmv:218000,aov:14558},
+    {c:'Indonesia',bkgs:15,share:3.5,gmv:75019,aov:5001},
+    {c:'Portugal',bkgs:12,share:2.8,gmv:13692,aov:1141},
+    {c:'Türkiye',bkgs:9,share:2.1,gmv:110000,aov:12254},
+    {c:'Australia',bkgs:8,share:1.9,gmv:146000,aov:18272},
+    {c:'Spain',bkgs:7,share:1.7,gmv:67378,aov:9625},
+  ],
+  lm_full: [
+    {c:'Singapore',bkgs:152,share:23.7,gmv:1565000,aov:10298},
+    {c:'United Kingdom',bkgs:58,share:9.0,gmv:691000,aov:11915},
+    {c:'United Arab Emirates',bkgs:54,share:8.4,gmv:422000,aov:7807},
+    {c:'Thailand',bkgs:49,share:7.6,gmv:419000,aov:8553},
+    {c:'United States',bkgs:41,share:6.4,gmv:541000,aov:13194},
+    {c:'Malaysia',bkgs:39,share:6.1,gmv:214000,aov:5483},
+    {c:'Vietnam',bkgs:33,share:5.1,gmv:280000,aov:8486},
+    {c:'France',bkgs:32,share:5.0,gmv:406000,aov:12687},
+    {c:'Switzerland',bkgs:29,share:4.5,gmv:1711000,aov:58994},
+    {c:'Netherlands',bkgs:19,share:3.0,gmv:83651,aov:4403},
+    {c:'Japan',bkgs:16,share:2.5,gmv:78399,aov:4900},
+    {c:'Indonesia',bkgs:15,share:2.3,gmv:67887,aov:4526},
+    {c:'Australia',bkgs:12,share:1.9,gmv:148000,aov:12367},
+    {c:'Spain',bkgs:10,share:1.6,gmv:48641,aov:4864},
+    {c:'Portugal',bkgs:9,share:1.4,gmv:12314,aov:1368},
+  ],
+};
+S16_COUNTRIES.yesterday = S16_COUNTRIES.mtd;
+S16_COUNTRIES.wtd = S16_COUNTRIES.mtd;
+S16_COUNTRIES.lm_same = S16_COUNTRIES.lm_full;
+S16_COUNTRIES.all = S16_COUNTRIES.mtd;
+
+// ── Period definitions ─────────────────────────────────────────
+const S16_PERIODS = {
+  yesterday: {label:'Yesterday (Aug 13)',      dates:['2026-08-13'],
+    kpis:{sv:104555,tv:1813,pdp:683,bkrs:25,bkgs:25,gmv:476000,aov:19059,ppct:0.65,cvr:3.66},
+    prev_label:'7d avg', prev:{bkrs:30,bkgs:35,gmv:520000,cvr:4.12},
+    prodLabel:'24 distinct products', ctryLabel:'38 countries'},
+  wtd:       {label:'This week (Aug 10–13)',   dates:['2026-08-10','2026-08-11','2026-08-12','2026-08-13'],
+    kpis:{sv:null,tv:1878,pdp:null,bkrs:null,bkgs:118,gmv:1912000,aov:16202,ppct:0.63,cvr:3.55},
+    prev_label:'prev week avg', prev:{bkrs:26,bkgs:32,gmv:380000,cvr:4.23},
+    prodLabel:'top MTD products', ctryLabel:'MTD countries'},
+  mtd:       {label:'Month to date (Aug 1–13)',dates:null,
+    kpis:{sv:null,tv:1896,pdp:null,bkrs:null,bkgs:424,gmv:5493000,aov:12956,ppct:0.62,cvr:3.94},
+    prev_label:'Jul 1–13',prev:{bkrs:null,bkgs:193,gmv:2468000,cvr:2.21},
+    prodLabel:'229 distinct products', ctryLabel:'38 countries'},
+  lm_same:   {label:'Jul 1–13 (same days LM)',dates:null,
+    kpis:{sv:null,tv:1739,pdp:null,bkrs:null,bkgs:193,gmv:2468000,aov:12786,ppct:0.55,cvr:2.21},
+    prev_label:'Aug 1–13', prev:{bkrs:null,bkgs:424,gmv:5493000,cvr:3.94},
+    prodLabel:'top July products', ctryLabel:'July countries'},
+  lm_full:   {label:'July 2026 (full month)', dates:null,
+    kpis:{sv:null,tv:1733,pdp:null,bkrs:null,bkgs:641,gmv:7647000,aov:11929,ppct:0.55,cvr:2.99},
+    prev_label:'Aug MTD', prev:{bkrs:null,bkgs:424,gmv:5493000,cvr:3.94},
+    prodLabel:'316 distinct products', ctryLabel:'43 countries'},
+  all:       {label:'All 15 days (Jul 30–Aug 13)',dates:null,
+    kpis:{sv:null,tv:null,pdp:null,bkrs:null,bkgs:null,gmv:null,aov:null,ppct:null,cvr:null},
+    prev_label:null,prev:null,
+    prodLabel:'top MTD products', ctryLabel:'MTD countries'},
+};
+
+// ── Helpers ────────────────────────────────────────────────────
+const s16N = v => v == null ? '—' : typeof v === 'number' ? v.toLocaleString('en-IN') : v;
+const s16R = v => v == null ? '—' : '₹' + v.toLocaleString('en-IN');
+const s16Pct = v => v == null ? '—' : v.toFixed(2) + '%';
+const s16RL = v => {  // format in lakhs
+  if(v == null) return '—';
+  if(v >= 100000) return '₹' + (v/100000).toFixed(2) + ' L';
+  return '₹' + v.toLocaleString('en-IN');
+};
+const s16Delta = (cur, prev) => {
+  if(cur == null || prev == null || prev === 0) return '';
+  const d = ((cur-prev)/prev*100).toFixed(1);
+  const cls = d >= 0 ? 'delta-up' : 'delta-down';
+  return ` <span class="${cls}">${d >= 0 ? '▲' : '▼'} ${Math.abs(d)}%</span>`;
+};
+
+let s16CurrentPeriod = 'yesterday';
+
+function s16SetPeriod(btn) {
+  document.querySelectorAll('.s16-period-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  s16CurrentPeriod = btn.dataset.period;
+  renderSection16();
+}
+
+function renderSection16() {
+  const period = S16_PERIODS[s16CurrentPeriod];
+  const prev = period.prev;
+
+  // ── KPI cards ─────────────────────────────────────────────
+  const k = period.kpis;
+  const kpiDefs = [
+    {label:'TEA Visitors / day', val:k.tv, prevVal:prev?prev.tv:null, fmt:s16N},
+    {label:'Bookings',           val:k.bkgs,prevVal:prev?prev.bkgs:null,fmt:s16N},
+    {label:'GMV',                val:k.gmv, prevVal:prev?prev.gmv:null, fmt:s16RL},
+    {label:'AOV',                val:k.aov, prevVal:null,               fmt:s16R},
+    {label:'% PDP Viewers',      val:k.ppct,prevVal:null,               fmt:s16Pct},
+    {label:'% Conversion',       val:k.cvr, prevVal:prev?prev.cvr:null, fmt:s16Pct},
+  ];
+  const kpiHtml = `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px">` +
+    kpiDefs.map(kd => {
+      const delta = kd.prevVal != null ? s16Delta(kd.val, kd.prevVal) : '';
+      const prevLabel = kd.prevVal != null ? `<div style="font-size:9px;color:var(--muted)">${period.prev_label}: ${kd.fmt(kd.prevVal)}</div>` : '';
+      return `<div style="background:var(--head-bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:3px">${kd.label}</div>
+        <div style="font-size:20px;font-weight:700;font-variant-numeric:tabular-nums">${kd.fmt(kd.val)}${delta}</div>
+        ${prevLabel}
+      </div>`;
+    }).join('') + '</div>';
+  document.getElementById('s16-kpis').innerHTML = kpiHtml;
+
+  // ── Daily table ────────────────────────────────────────────
+  const dailyRows = period.dates
+    ? S16_DAILY.filter(r => period.dates.includes(r.d))
+    : [...S16_DAILY];
+
+  document.getElementById('s16-daily-title').textContent =
+    'Daily breakdown — ' + period.label;
+  document.getElementById('s16-daily-body').innerHTML = dailyRows.map(r => {
+    const highlight = r.bkgs >= 40 ? ' style="background:var(--good);background:rgba(11,122,57,.07)"' : '';
+    return `<tr${highlight}>
+      <td>${r.d}</td>
+      <td class="num">${s16N(r.sv)}</td>
+      <td class="num">${s16N(r.tv)}</td>
+      <td class="num">${s16N(r.pdp)}</td>
+      <td class="num"${r.bkrs>=30?' style="color:var(--good);font-weight:700"':''}>${s16N(r.bkrs)}</td>
+      <td class="num"${r.bkgs>=40?' style="color:var(--good);font-weight:700"':''}>${s16N(r.bkgs)}</td>
+      <td class="num">${s16RL(r.gmv)}</td>
+      <td class="num">${s16R(r.aov)}</td>
+      <td class="num">${s16Pct(r.ppct)}</td>
+      <td class="num"${r.cvr>=5?' style="color:var(--good);font-weight:700"':''}>${s16Pct(r.cvr)}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('s16-daily-note').textContent =
+    'Bookers = distinct users. Bookings = total orders. Aug 12–13 from settled live data (fetched Aug 14). Sections 1–14 have COHORT data to Aug 11 due to percept_event_agg 1-day lag.';
+  const dt = document.getElementById('s16-daily-tbl');
+  if(dt) { dt.classList.remove('collapsed'); makeCollapsible(dt, 5); }
+
+  // ── Merch table ────────────────────────────────────────────
+  const merchRows = period.dates
+    ? S16_MERCH.filter(r => period.dates.includes(r.d))
+    : [...S16_MERCH];
+  document.getElementById('s16-merch-body').innerHTML = merchRows.map(r =>
+    `<tr>
+      <td>${r.d}</td>
+      <td class="num">${s16N(r.iu)}</td>
+      <td class="num">${s16N(r.impr)}</td>
+      <td class="num">${s16N(r.cu)}</td>
+      <td class="num">${s16N(r.cl)}</td>
+      <td class="num">${r.ctr.toFixed(2)}%</td>
+    </tr>`
+  ).join('');
+  const mt = document.getElementById('s16-merch-tbl');
+  if(mt) { mt.classList.remove('collapsed'); makeCollapsible(mt, 5); }
+
+  // ── Page table ─────────────────────────────────────────────
+  const pageRows = period.dates
+    ? S16_MERCH_PAGE.filter(r => period.dates.includes(r.d))
+    : [...S16_MERCH_PAGE];
+  document.getElementById('s16-page-body').innerHTML = pageRows.map(r =>
+    `<tr>
+      <td>${r.d}</td>
+      <td>${r.page}</td>
+      <td class="num">${s16N(r.iu)}</td>
+      <td class="num">${s16N(r.cu)}</td>
+      <td class="num">${s16N(r.cl)}</td>
+      <td class="num"${r.ctr>=7?' style="color:var(--good);font-weight:700"':''}>${r.ctr.toFixed(2)}%</td>
+    </tr>`
+  ).join('');
+  const pt = document.getElementById('s16-page-tbl');
+  if(pt) { pt.classList.remove('collapsed'); makeCollapsible(pt, 5); }
+
+  // ── Products table ─────────────────────────────────────────
+  const prods = S16_PRODUCTS[s16CurrentPeriod] || S16_PRODUCTS.mtd;
+  document.getElementById('s16-prod-title').textContent =
+    'Top products — ' + period.label + ' (' + period.prodLabel + ')';
+  document.getElementById('s16-prod-body').innerHTML = prods.map(r =>
+    `<tr>
+      <td>${r.n}</td>
+      <td class="num">${r.id}</td>
+      <td>${r.country}</td>
+      <td class="num">${s16R(r.avg)}</td>
+      <td class="num"${r.qty>=10?' style="color:var(--good);font-weight:700"':''}>${r.qty}</td>
+      <td class="num">${s16RL(r.gmv)}</td>
+    </tr>`
+  ).join('');
+  const prt = document.getElementById('s16-prod-tbl');
+  if(prt) { prt.classList.remove('collapsed'); makeCollapsible(prt, 5); }
+
+  // ── Countries table ────────────────────────────────────────
+  const ctries = S16_COUNTRIES[s16CurrentPeriod] || S16_COUNTRIES.mtd;
+  document.getElementById('s16-country-title').textContent =
+    'Bookings by country — ' + period.label + ' (' + period.ctryLabel + ')';
+  document.getElementById('s16-country-body').innerHTML = ctries.map(r =>
+    `<tr>
+      <td>${r.c}</td>
+      <td class="num"${r.bkgs>=50?' style="font-weight:700"':''}>${r.bkgs}</td>
+      <td class="num">${r.share.toFixed(1)}%</td>
+      <td class="num">${s16RL(r.gmv)}</td>
+      <td class="num"${r.aov>=20000?' style="color:var(--good);font-weight:700"':''}>${s16R(r.aov)}</td>
+    </tr>`
+  ).join('');
+  const ct = document.getElementById('s16-country-tbl');
+  if(ct) { ct.classList.remove('collapsed'); makeCollapsible(ct, 5); }
+
+  document.getElementById('s16-country-note').textContent =
+    'Switzerland highest AOV ₹36,776 (Swiss Travel Pass avg ₹62k). UAE ₹19,562 AOV. Portugal low AOV ₹1,141 (Frigate Museum ticket ₹692).';
+}
+
+// WoW table — always static (doesn't filter by period)
+function renderS16WoW() {
+  const metrics = [
+    {label:'Scapia Visitors', key:'sv', fmt:s16N},
+    {label:'TEA Visitors',    key:'tv', fmt:s16N},
+    {label:'PDP Viewers',     key:'pdp',fmt:s16N},
+    {label:'Bookers / day',   key:'bkrs',fmt:s16N},
+    {label:'Bookings / day',  key:'bkgs',fmt:s16N},
+    {label:'GMV / day',       key:'gmv', fmt:s16RL},
+    {label:'AOV',             key:'aov', fmt:s16R},
+    {label:'% PDP Viewers',   key:'ppct',fmt:s16Pct},
+    {label:'% Conversion',    key:'cvr', fmt:s16Pct},
+  ];
+  const wowWrap = document.getElementById('s16-wow-wrap');
+  if(!wowWrap) return;
+  const last = S16_WOW[S16_WOW.length-1];
+  const prev = S16_WOW[S16_WOW.length-2];
+  let html = `<table data-collapsible="5"><thead><tr><th>Metric</th>`;
+  S16_WOW.forEach(w => html += `<th>${w.w}</th>`);
+  html += `<th>WoW Δ</th></tr></thead><tbody>`;
+  metrics.forEach(m => {
+    html += `<tr><td>${m.label}</td>`;
+    S16_WOW.forEach(w => html += `<td class="num">${m.fmt(w[m.key])}</td>`);
+    const delta = last[m.key] != null && prev[m.key] != null
+      ? s16Delta(last[m.key], prev[m.key]) : '';
+    html += `<td class="num">${delta}</td></tr>`;
+  });
+  html += '</tbody></table>';
+  wowWrap.innerHTML = html;
+  const t = wowWrap.querySelector('table');
+  if(t) makeCollapsible(t, 5);
+}
+
+// Init
+renderSection16();
+renderS16WoW();
+
 </script>
 </body>
 </html>
