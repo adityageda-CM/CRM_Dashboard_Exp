@@ -1372,104 +1372,101 @@ initCollapsibleTables();
 </div>
 
 
-<!-- ══════════════════════════════════════════════
-     SECTION 16 · SCAPIA LIVE TEA FUNNEL TRACKER
-     Source: Experiences (TEA) Funnel dashboard
-     Live from Databricks · fetched 14 Aug 2026
-══════════════════════════════════════════════ -->
+<!-- ══════════════════════════════════════════════════════
+     SECTION 16 · LIVE TEA FUNNEL TRACKER
+     Source: Databricks — rds_main.scapiadb.orders +
+     simple.crud.percept_event_agg
+     Queried live: 14 Aug 2026
+══════════════════════════════════════════════════════ -->
 <div class="card" id="live-tracker">
-  <h2>16 · Scapia live TEA funnel tracker</h2>
-  <div class="note" style="margin-bottom:12px">
-    Source: Experiences (TEA) Funnel dashboard · <code>simple.crud.percept_event_agg</code> + <code>rds_main.scapiadb.orders</code> · fetched 14 Aug 2026, 1:48 pm ·
-    <strong>Bookers</strong> = distinct users with ≥1 booking. <strong>Bookings</strong> = total order count.
-    This section uses fresher data than sections 1–14 (Aug 12–13 included here; COHORT table lags by 1–2 days).
+  <h2>16 · Live TEA funnel &amp; orders tracker</h2>
+  <div class="note" style="margin-bottom:10px">
+    <strong>Source:</strong> <code>rds_main.scapiadb.orders</code> (status=COMPLETE, product_category=EXPERIENCE) + <code>simple.crud.percept_event_agg</code> SUM(event_count). Queried live from Databricks, 14 Aug 2026. <strong>Bookers</strong> = distinct user_ids. <strong>Bookings</strong> = distinct order_ids. CVR = Bookings ÷ PDP views.
   </div>
 
   <!-- Period picker -->
-  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;align-items:center">
-    <span style="font-size:11px;color:var(--muted);margin-right:4px">Period:</span>
-    <button class="linklike s16-period-btn active" data-period="yesterday" onclick="s16SetPeriod(this)">Yesterday (Aug 13)</button>
-    <button class="linklike s16-period-btn" data-period="wtd" onclick="s16SetPeriod(this)">This week (Aug 10–13)</button>
-    <button class="linklike s16-period-btn" data-period="mtd" onclick="s16SetPeriod(this)">Month to date (Aug 1–13)</button>
-    <button class="linklike s16-period-btn" data-period="lm_same" onclick="s16SetPeriod(this)">Jul 1–13 (same days LM)</button>
-    <button class="linklike s16-period-btn" data-period="lm_full" onclick="s16SetPeriod(this)">July 2026 (full month)</button>
-    <button class="linklike s16-period-btn" data-period="all" onclick="s16SetPeriod(this)">All 15 days</button>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;align-items:center">
+    <span style="font-size:10px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.05em">Period</span>
+    <button class="dpill s16-btn" data-p="yesterday" onclick="s16SetPeriod(this)">Yesterday (Aug 13)</button>
+    <button class="dpill s16-btn" data-p="wtd"       onclick="s16SetPeriod(this)">This week (Aug 11–14)</button>
+    <button class="dpill s16-btn active" data-p="mtd" onclick="s16SetPeriod(this)">MTD (Aug 1–14)</button>
+    <button class="dpill s16-btn" data-p="lm_same"   onclick="s16SetPeriod(this)">Jul 1–14</button>
+    <button class="dpill s16-btn" data-p="lm_full"   onclick="s16SetPeriod(this)">July 2026</button>
+    <button class="dpill s16-btn" data-p="all"        onclick="s16SetPeriod(this)">All 45 days</button>
   </div>
 
-  <!-- KPI cards -->
+  <!-- KPI cards — filled by s16Render() -->
   <div id="s16-kpis"></div>
 
-  <!-- Daily funnel table -->
-  <h3 style="margin:14px 0 6px" id="s16-daily-title">Daily breakdown</h3>
+  <!-- Orders daily table -->
+  <h3 style="margin:14px 0 6px">Daily orders (DB ground truth)</h3>
   <div style="overflow-x:auto">
-    <table id="s16-daily-tbl" data-collapsible="5">
+    <table id="s16-orders-tbl" data-collapsible="7">
       <thead><tr>
         <th>Date</th>
-        <th>Scapia Visitors</th>
-        <th>TEA Visitors</th>
-        <th>PDP Viewers</th>
-        <th>Bookers</th>
         <th>Bookings</th>
+        <th>Bookers</th>
         <th>GMV</th>
         <th>AOV</th>
-        <th>% PDP</th>
-        <th>% CVR (PDP→Book)</th>
       </tr></thead>
-      <tbody id="s16-daily-body"></tbody>
+      <tbody id="s16-orders-body"></tbody>
     </table>
   </div>
-  <div class="note" id="s16-daily-note"></div>
 
-  <!-- Merch impressions table -->
-  <h3 style="margin:14px 0 6px">Merch widget impressions &amp; clicks</h3>
-  <div class="note" style="margin-bottom:6px">TEA widgets on all pages except Experiences home. Impression users/counts are ×2.5 sampling-adjusted estimates; clicks are exact.</div>
+  <!-- Funnel events daily table -->
+  <h3 style="margin:14px 0 6px">Daily funnel events (percept_event_agg)</h3>
   <div style="overflow-x:auto">
-    <table id="s16-merch-tbl" data-collapsible="5">
+    <table id="s16-funnel-tbl" data-collapsible="7">
       <thead><tr>
         <th>Date</th>
-        <th>Impr Users (est)</th>
-        <th>Impressions (est)</th>
-        <th>Click Users</th>
-        <th>Clicks</th>
-        <th>CTR</th>
+        <th>Module View</th>
+        <th>City View</th>
+        <th>PDP View</th>
+        <th>Checkout Start</th>
+        <th>Checkout Submit</th>
+        <th>CVR %</th>
       </tr></thead>
-      <tbody id="s16-merch-body"></tbody>
+      <tbody id="s16-funnel-body"></tbody>
     </table>
   </div>
 
-  <!-- Merch by page -->
-  <h3 style="margin:14px 0 6px">Merch by page — Aug 10–13</h3>
-  <div style="overflow-x:auto">
-    <table id="s16-page-tbl" data-collapsible="5">
-      <thead><tr><th>Date</th><th>Page</th><th>Impr Users</th><th>Click Users</th><th>Clicks</th><th>CTR</th></tr></thead>
-      <tbody id="s16-page-body"></tbody>
-    </table>
-  </div>
-  <div class="note">CARDS_HOME has 7–14% CTR vs SCAPIA_HOME at 2.3–2.7%. Intent context matters — card users engage more.</div>
-
-
-  <!-- WoW table -->
-  <h3 style="margin:14px 0 6px">Week-on-week comparison — last 4 completed weeks (daily averages)</h3>
+  <!-- WoW comparison table -->
+  <h3 style="margin:14px 0 6px">Week-on-week comparison (daily averages, computed from live data)</h3>
   <div style="overflow-x:auto" id="s16-wow-wrap"></div>
 
-  <!-- Top products table -->
-  <h3 style="margin:14px 0 6px" id="s16-prod-title">Top products bought</h3>
+  <!-- Top products (MTD, live DB) -->
+  <h3 style="margin:14px 0 6px">Top products by bookings — MTD Aug 1–14 (live DB)</h3>
   <div style="overflow-x:auto">
     <table id="s16-prod-tbl" data-collapsible="5">
-      <thead><tr><th>Product</th><th>ID</th><th>Country</th><th>Avg Price</th><th>Qty</th><th>GMV</th></tr></thead>
+      <thead><tr>
+        <th style="text-align:left">Product</th>
+        <th>ID</th>
+        <th style="text-align:left">City</th>
+        <th>Bookings</th>
+        <th>GMV</th>
+        <th>Avg Price</th>
+      </tr></thead>
       <tbody id="s16-prod-body"></tbody>
     </table>
   </div>
+  <div class="note">Swiss Travel Pass: 10 bookings at avg ₹66,766 — highest single-product GMV contributor (₹6.68L). USS Express Pass: ₹38,603 avg ticket.</div>
 
-  <!-- Countries table -->
-  <h3 style="margin:14px 0 6px" id="s16-country-title">Bookings by country</h3>
+  <!-- Top cities (MTD, live DB) -->
+  <h3 style="margin:14px 0 6px">Bookings by experience city — MTD Aug 1–14 (live DB)</h3>
   <div style="overflow-x:auto">
-    <table id="s16-country-tbl" data-collapsible="5">
-      <thead><tr><th>Country</th><th>Bookings</th><th>Share</th><th>GMV</th><th>AOV</th></tr></thead>
-      <tbody id="s16-country-body"></tbody>
+    <table id="s16-city-tbl" data-collapsible="7">
+      <thead><tr>
+        <th>#</th>
+        <th style="text-align:left">City</th>
+        <th>Bookings</th>
+        <th>Share</th>
+        <th>GMV</th>
+        <th>AOV</th>
+      </tr></thead>
+      <tbody id="s16-city-body"></tbody>
     </table>
   </div>
-  <div class="note" id="s16-country-note"></div>
+  <div class="note">Ennetbürgen (Swiss Travel Pass city) highest AOV at ₹66,766. Dubai ₹19,059. 20+ cities total in MTD data.</div>
 </div>
 
 
@@ -1811,385 +1808,344 @@ buildDayBar(); renderDay(); buildSrc(); buildSys(); buildCities(); buildSlot(); 
 ═══════════════════════════════════════════════════════════════ */
 
 // ── Daily funnel data ─────────────────────────────────────────
-const S16_DAILY = [
-  {d:'2026-08-13',sv:104555,tv:1813,pdp:683, bkrs:25,bkgs:25,gmv:476000, aov:19059,ppct:0.65,cvr:3.66},
-  {d:'2026-08-12',sv:114744,tv:1945,pdp:745, bkrs:34,bkgs:42,gmv:904000, aov:21535,ppct:0.65,cvr:4.56},
-  {d:'2026-08-11',sv:115517,tv:1870,pdp:712, bkrs:23,bkgs:29,gmv:211000, aov:7260, ppct:0.62,cvr:3.23},
-  {d:'2026-08-10',sv:115992,tv:1884,pdp:694, bkrs:19,bkgs:22,gmv:320000, aov:14563,ppct:0.60,cvr:2.74},
-  {d:'2026-08-09',sv:117480,tv:2177,pdp:825, bkrs:39,bkgs:49,gmv:835000, aov:17035,ppct:0.70,cvr:4.73},
-  {d:'2026-08-08',sv:120040,tv:2111,pdp:798, bkrs:27,bkgs:31,gmv:416000, aov:13413,ppct:0.66,cvr:3.38},
-  {d:'2026-08-07',sv:115700,tv:1855,pdp:678, bkrs:26,bkgs:29,gmv:286000, aov:9869, ppct:0.59,cvr:3.83},
-  {d:'2026-08-06',sv:111295,tv:1797,pdp:626, bkrs:40,bkgs:46,gmv:668000, aov:14523,ppct:0.56,cvr:6.39},
-  {d:'2026-08-05',sv:114003,tv:1849,pdp:660, bkrs:32,bkgs:40,gmv:362000, aov:9054, ppct:0.58,cvr:4.85},
-  {d:'2026-08-04',sv:112550,tv:1812,pdp:641, bkrs:16,bkgs:19,gmv:152000, aov:8023, ppct:0.57,cvr:2.50},
-  {d:'2026-08-03',sv:112809,tv:1699,pdp:653, bkrs:19,bkgs:21,gmv:206000, aov:9816, ppct:0.58,cvr:2.91},
-  {d:'2026-08-02',sv:111975,tv:1909,pdp:753, bkrs:32,bkgs:37,gmv:323000, aov:8724, ppct:0.67,cvr:4.25},
-  {d:'2026-08-01',sv:122285,tv:1933,pdp:701, bkrs:29,bkgs:34,gmv:333000, aov:9793, ppct:0.57,cvr:4.14},
-  {d:'2026-07-31',sv:126526,tv:2206,pdp:638, bkrs:19,bkgs:21,gmv:207000, aov:9879, ppct:0.50,cvr:2.98},
-  {d:'2026-07-30',sv:109686,tv:1643,pdp:560, bkrs:25,bkgs:32,gmv:257000, aov:8016, ppct:0.51,cvr:4.46},
+
+/* ═══════════════════════════════════════════════════════
+   SECTION 16 — LIVE TEA FUNNEL TRACKER
+   Source: Databricks (rds_main.scapiadb.orders +
+           simple.crud.percept_event_agg)
+   Queried: 14 Aug 2026, live session
+═══════════════════════════════════════════════════════ */
+
+// ── ORDERS: rds_main.scapiadb.orders, status=COMPLETE, product_category=EXPERIENCE
+// Columns: date, bookings, bookers, gmv_inr, aov
+const S16_ORDERS = [
+  {d:"2026-07-01",bkgs:12,bkrs:9, gmv:195585, aov:16299},
+  {d:"2026-07-02",bkgs:11,bkrs:11,gmv:90685,  aov:8244},
+  {d:"2026-07-03",bkgs:10,bkrs:10,gmv:109798, aov:10980},
+  {d:"2026-07-04",bkgs:9, bkrs:9, gmv:51892,  aov:5766},
+  {d:"2026-07-05",bkgs:19,bkrs:18,gmv:175583, aov:9241},
+  {d:"2026-07-06",bkgs:11,bkrs:11,gmv:147816, aov:13438},
+  {d:"2026-07-07",bkgs:18,bkrs:14,gmv:117775, aov:6543},
+  {d:"2026-07-08",bkgs:8, bkrs:7, gmv:181539, aov:22692},
+  {d:"2026-07-09",bkgs:19,bkrs:13,gmv:272204, aov:14327},
+  {d:"2026-07-10",bkgs:12,bkrs:11,gmv:327605, aov:27300},
+  {d:"2026-07-11",bkgs:15,bkrs:13,gmv:152304, aov:10154},
+  {d:"2026-07-12",bkgs:17,bkrs:11,gmv:210444, aov:12379},
+  {d:"2026-07-13",bkgs:14,bkrs:13,gmv:376291, aov:26878},
+  {d:"2026-07-14",bkgs:9, bkrs:9, gmv:95026,  aov:10558},
+  {d:"2026-07-15",bkgs:9, bkrs:9, gmv:65153,  aov:7239},
+  {d:"2026-07-16",bkgs:18,bkrs:16,gmv:180929, aov:10052},
+  {d:"2026-07-17",bkgs:20,bkrs:19,gmv:146377, aov:7319},
+  {d:"2026-07-18",bkgs:20,bkrs:17,gmv:225833, aov:11292},
+  {d:"2026-07-19",bkgs:19,bkrs:18,gmv:220599, aov:11610},
+  {d:"2026-07-20",bkgs:15,bkrs:13,gmv:179571, aov:11971},
+  {d:"2026-07-21",bkgs:28,bkrs:23,gmv:335951, aov:11998},
+  {d:"2026-07-22",bkgs:13,bkrs:13,gmv:161356, aov:12412},
+  {d:"2026-07-23",bkgs:31,bkrs:27,gmv:351955, aov:11353},
+  {d:"2026-07-24",bkgs:24,bkrs:18,gmv:179342, aov:7473},
+  {d:"2026-07-25",bkgs:38,bkrs:31,gmv:475074, aov:12502},
+  {d:"2026-07-26",bkgs:39,bkrs:30,gmv:306113, aov:7849},
+  {d:"2026-07-27",bkgs:25,bkrs:22,gmv:382482, aov:15299},
+  {d:"2026-07-28",bkgs:32,bkrs:23,gmv:529093, aov:16534},
+  {d:"2026-07-29",bkgs:34,bkrs:29,gmv:576841, aov:16966},
+  {d:"2026-07-30",bkgs:30,bkrs:24,gmv:242213, aov:8074},
+  {d:"2026-07-31",bkgs:19,bkrs:18,gmv:206331, aov:10860},
+  {d:"2026-08-01",bkgs:34,bkrs:29,gmv:332975, aov:9793},
+  {d:"2026-08-02",bkgs:34,bkrs:31,gmv:295869, aov:8702},
+  {d:"2026-08-03",bkgs:18,bkrs:16,gmv:193581, aov:10755},
+  {d:"2026-08-04",bkgs:15,bkrs:14,gmv:149689, aov:9979},
+  {d:"2026-08-05",bkgs:34,bkrs:28,gmv:324450, aov:9543},
+  {d:"2026-08-06",bkgs:41,bkrs:37,gmv:642883, aov:15680},
+  {d:"2026-08-07",bkgs:26,bkrs:24,gmv:260879, aov:10034},
+  {d:"2026-08-08",bkgs:31,bkrs:27,gmv:415795, aov:13413},
+  {d:"2026-08-09",bkgs:48,bkrs:38,gmv:818817, aov:17059},
+  {d:"2026-08-10",bkgs:22,bkrs:19,gmv:320396, aov:14563},
+  {d:"2026-08-11",bkgs:29,bkrs:23,gmv:210552, aov:7260},
+  {d:"2026-08-12",bkgs:39,bkrs:32,gmv:900555, aov:23091},
+  {d:"2026-08-13",bkgs:25,bkrs:25,gmv:476470, aov:19059},
+  {d:"2026-08-14",bkgs:15,bkrs:14,gmv:360486, aov:24032},
 ];
 
-// 7-day avg (prior 7 days before Aug 13 = Aug 6–12)
-const S16_7D_AVG = {sv:115825,tv:1948,pdp:725,bkrs:30,bkgs:35,gmv:520000,aov:14028,ppct:0.63,cvr:4.12};
-
-// WoW weekly data (Mon–Sun averages)
-const S16_WOW = [
-  {w:'13–19 Jul', sv:101101,tv:1676,pdp:580,bkrs:15,bkgs:17,gmv:215000,aov:13271,ppct:0.57,cvr:2.67},
-  {w:'20–26 Jul', sv:110231,tv:1764,pdp:603,bkrs:23,bkgs:28,gmv:292000,aov:10592,ppct:0.55,cvr:3.73},
-  {w:'27 Jul–2 Aug',sv:111861,tv:1789,pdp:624,bkrs:26,bkgs:32,gmv:380000,aov:11989,ppct:0.56,cvr:4.23},
-  {w:'3–9 Aug',   sv:114840,tv:1900,pdp:697,bkrs:28,bkgs:34,gmv:418000,aov:11676,ppct:0.61,cvr:4.08},
+// ── FUNNEL: simple.crud.percept_event_agg SUM(event_count)
+// Columns: date, module_view, city_view, pdp_view, checkout_start, checkout_submit
+const S16_FUNNEL = [
+  {d:"2026-07-01",mv:1391, cv:402,pdp:910, cs:91, csub:35},
+  {d:"2026-07-02",mv:1335, cv:395,pdp:922, cs:107,csub:33},
+  {d:"2026-07-03",mv:1313, cv:393,pdp:958, cs:109,csub:22},
+  {d:"2026-07-04",mv:1424, cv:359,pdp:1198,cs:104,csub:33},
+  {d:"2026-07-05",mv:2573, cv:498,pdp:1333,cs:140,csub:24},
+  {d:"2026-07-06",mv:1421, cv:405,pdp:1270,cs:124,csub:31},
+  {d:"2026-07-07",mv:1237, cv:342,pdp:1095,cs:123,csub:33},
+  {d:"2026-07-08",mv:1361, cv:310,pdp:1267,cs:111,csub:18},
+  {d:"2026-07-09",mv:1190, cv:337,pdp:1042,cs:85, csub:34},
+  {d:"2026-07-10",mv:1223, cv:270,pdp:1051,cs:73, csub:19},
+  {d:"2026-07-11",mv:1411, cv:368,pdp:1176,cs:102,csub:26},
+  {d:"2026-07-12",mv:3000, cv:480,pdp:1390,cs:107,csub:26},
+  {d:"2026-07-13",mv:1363, cv:373,pdp:1174,cs:155,csub:90},
+  {d:"2026-07-14",mv:1217, cv:329,pdp:1023,cs:68, csub:17},
+  {d:"2026-07-15",mv:1221, cv:338,pdp:980, cs:81, csub:30},
+  {d:"2026-07-16",mv:1196, cv:328,pdp:1078,cs:111,csub:28},
+  {d:"2026-07-17",mv:1387, cv:329,pdp:1105,cs:101,csub:30},
+  {d:"2026-07-18",mv:2216, cv:439,pdp:1335,cs:113,csub:37},
+  {d:"2026-07-19",mv:1586, cv:382,pdp:1386,cs:146,csub:38},
+  {d:"2026-07-20",mv:1407, cv:372,pdp:1122,cs:115,csub:26},
+  {d:"2026-07-21",mv:1723, cv:478,pdp:1481,cs:156,csub:58},
+  {d:"2026-07-22",mv:1394, cv:406,pdp:1188,cs:110,csub:23},
+  {d:"2026-07-23",mv:1327, cv:351,pdp:1279,cs:158,csub:50},
+  {d:"2026-07-24",mv:1397, cv:360,pdp:1198,cs:118,csub:38},
+  {d:"2026-07-25",mv:2444, cv:484,pdp:1781,cs:189,csub:62},
+  {d:"2026-07-26",mv:1831, cv:449,pdp:1520,cs:174,csub:55},
+  {d:"2026-07-27",mv:1594, cv:410,pdp:1275,cs:123,csub:40},
+  {d:"2026-07-28",mv:1591, cv:432,pdp:1243,cs:140,csub:44},
+  {d:"2026-07-29",mv:1591, cv:444,pdp:1425,cs:138,csub:50},
+  {d:"2026-07-30",mv:1703, cv:512,pdp:1281,cs:137,csub:51},
+  {d:"2026-07-31",mv:2195, cv:418,pdp:1300,cs:134,csub:34},
+  {d:"2026-08-01",mv:1827, cv:483,pdp:1499,cs:128,csub:48},
+  {d:"2026-08-02",mv:1806, cv:545,pdp:1767,cs:200,csub:57},
+  {d:"2026-08-03",mv:1638, cv:425,pdp:1384,cs:172,csub:59},
+  {d:"2026-08-04",mv:1766, cv:552,pdp:1525,cs:187,csub:47},
+  {d:"2026-08-05",mv:1796, cv:555,pdp:1548,cs:175,csub:43},
+  {d:"2026-08-06",mv:1782, cv:502,pdp:1546,cs:186,csub:66},
+  {d:"2026-08-07",mv:1798, cv:490,pdp:1626,cs:209,csub:54},
+  {d:"2026-08-08",mv:2021, cv:548,pdp:1730,cs:156,csub:46},
+  {d:"2026-08-09",mv:2117, cv:611,pdp:1956,cs:227,csub:97},
+  {d:"2026-08-10",mv:1831, cv:472,pdp:1545,cs:155,csub:38},
+  {d:"2026-08-11",mv:1784, cv:494,pdp:1540,cs:168,csub:39},
+  {d:"2026-08-12",mv:1833, cv:501,pdp:1610,cs:214,csub:64},
+  {d:"2026-08-13",mv:1727, cv:484,pdp:1440,cs:149,csub:35},
 ];
 
-// ── Merch impressions data ────────────────────────────────────
-const S16_MERCH = [
-  {d:'2026-08-13',iu:18232,impr:42110,cu:652,cl:805,ctr:3.58},
-  {d:'2026-08-12',iu:22615,impr:49632,cu:753,cl:907,ctr:3.33},
-  {d:'2026-08-11',iu:21940,impr:49317,cu:695,cl:849,ctr:3.17},
-  {d:'2026-08-10',iu:21370,impr:48812,cu:669,cl:826,ctr:3.13},
-  {d:'2026-08-09',iu:22675,impr:52390,cu:797,cl:977,ctr:3.51},
-  {d:'2026-08-08',iu:22640,impr:52650,cu:794,cl:987,ctr:3.51},
-  {d:'2026-08-07',iu:21452,impr:47525,cu:684,cl:836,ctr:3.19},
-  {d:'2026-08-06',iu:20242,impr:45412,cu:668,cl:806,ctr:3.30},
-  {d:'2026-08-05',iu:20272,impr:45507,cu:713,cl:861,ctr:3.52},
-  {d:'2026-08-04',iu:19375,impr:44967,cu:665,cl:829,ctr:3.43},
-  {d:'2026-08-03',iu:20905,impr:46037,cu:659,cl:804,ctr:3.15},
-  {d:'2026-08-02',iu:22250,impr:51520,cu:758,cl:934,ctr:3.41},
-  {d:'2026-08-01',iu:21905,impr:48882,cu:708,cl:866,ctr:3.23},
-  {d:'2026-07-31',iu:28080,impr:57065,cu:674,cl:835,ctr:2.40},
-  {d:'2026-07-30',iu:18912,impr:39357,cu:559,cl:688,ctr:2.96},
+// ── TOP PRODUCTS MTD Aug 1-14 (live DB, rds_main.scapiadb.orders)
+const S16_PRODUCTS_MTD = [
+  {t:"Universal Studios Singapore Entry",id:"22090",city:"Singapore",bkgs:23,gmv:348986,avg:15173},
+  {t:"Burj Khalifa Levels 124 & 125",    id:"21938",city:"Dubai",    bkgs:11,gmv:93519, avg:8502},
+  {t:"Swiss Travel Pass (Train/Bus/Boat)",id:"8643", city:"Ennetbürgen",bkgs:10,gmv:667661,avg:66766},
+  {t:"Gardens by the Bay Entry",         id:"21726",city:"Singapore",bkgs:8, gmv:80385, avg:10048},
+  {t:"Marina Bay Sands SkyPark",         id:"26097",city:"Singapore",bkgs:7, gmv:45864, avg:6552},
+  {t:"Skyline Luge Sentosa",             id:"17574",city:"Singapore",bkgs:7, gmv:39950, avg:5707},
+  {t:"ArtScience Museum",                id:"95",   city:"Singapore",bkgs:7, gmv:47555, avg:6794},
+  {t:"Genting Highlands Awana SkyWay",   id:"22332",city:"Genting Highlands",bkgs:7,gmv:5560,avg:794},
+  {t:"Singapore Flyer Entry",            id:"21728",city:"Singapore",bkgs:7, gmv:51694, avg:7385},
+  {t:"Dubai: Museum of the Future",      id:"21975",city:"Dubai",    bkgs:6, gmv:32834, avg:5472},
+  {t:"USS + Express Pass",               id:"87",   city:"Singapore",bkgs:6, gmv:231620,avg:38603},
+  {t:"Langkawi SkyBridge + Cable Car",   id:"602",  city:"Langkawi", bkgs:6, gmv:31634, avg:5272},
+  {t:"Lindt Home of Chocolate Museum",   id:"27161",city:"Zürich",   bkgs:6, gmv:26322, avg:4387},
+  {t:"Harry Potter Studio Tour Tokyo",   id:"26615",city:"Tokyo",    bkgs:5, gmv:40753, avg:8151},
+  {t:"Mandai Wildlife Multi-Attraction", id:"86",   city:"Singapore",bkgs:5, gmv:121892,avg:24378},
 ];
 
-// ── Merch by page (Aug 10–13 only) ───────────────────────────
-const S16_MERCH_PAGE = [
-  {d:'2026-08-13',page:'SCAPIA_HOME', iu:13767,cu:373,cl:481,ctr:2.71},
-  {d:'2026-08-13',page:'COINS_PAGE',  iu:5245, cu:236,cl:262,ctr:4.50},
-  {d:'2026-08-13',page:'TRAVEL_HOME', iu:707,  cu:24, cl:30, ctr:3.39},
-  {d:'2026-08-13',page:'CARDS_HOME',  iu:217,  cu:31, cl:32, ctr:14.29},
-  {d:'2026-08-12',page:'SCAPIA_HOME', iu:17612,cu:469,cl:590,ctr:2.66},
-  {d:'2026-08-12',page:'COINS_PAGE',  iu:6097, cu:235,cl:257,ctr:3.85},
-  {d:'2026-08-12',page:'TRAVEL_HOME', iu:832,  cu:36, cl:41, ctr:4.33},
-  {d:'2026-08-12',page:'CARDS_HOME',  iu:247,  cu:18, cl:19, ctr:7.29},
-  {d:'2026-08-11',page:'SCAPIA_HOME', iu:16760,cu:389,cl:512,ctr:2.32},
-  {d:'2026-08-11',page:'COINS_PAGE',  iu:6340, cu:244,cl:261,ctr:3.85},
-  {d:'2026-08-11',page:'TRAVEL_HOME', iu:787,  cu:39, cl:42, ctr:4.96},
-  {d:'2026-08-11',page:'CARDS_HOME',  iu:257,  cu:30, cl:32, ctr:11.67},
-  {d:'2026-08-10',page:'SCAPIA_HOME', iu:16227,cu:380,cl:493,ctr:2.34},
-  {d:'2026-08-10',page:'COINS_PAGE',  iu:6128, cu:250,cl:277,ctr:4.08},
-  {d:'2026-08-10',page:'TRAVEL_HOME', iu:742,  cu:28, cl:35, ctr:3.77},
+// ── TOP CITIES MTD Aug 1-14 (live DB, by experience city)
+const S16_CITIES_MTD = [
+  {city:"Singapore",     bkgs:106,gmv:1364317,aov:12871},
+  {city:"Dubai",         bkgs:38, gmv:724231, aov:19059},
+  {city:"Tokyo",         bkgs:20, gmv:161612, aov:8081},
+  {city:"Bangkok",       bkgs:15, gmv:96458,  aov:6431},
+  {city:"London",        bkgs:14, gmv:185825, aov:13273},
+  {city:"Langkawi",      bkgs:13, gmv:54899,  aov:4223},
+  {city:"Kuala Lumpur",  bkgs:12, gmv:86046,  aov:7170},
+  {city:"Zürich",        bkgs:11, gmv:248563, aov:22597},
+  {city:"Ennetbürgen",   bkgs:10, gmv:667661, aov:66766},
+  {city:"New York City", bkgs:10, gmv:50959,  aov:5096},
+  {city:"Paris",         bkgs:9,  gmv:79942,  aov:8882},
+  {city:"Genting Highlands",bkgs:7,gmv:5560,  aov:794},
+  {city:"Abu Dhabi",     bkgs:5,  gmv:78331,  aov:15666},
+  {city:"Ho Chi Minh City",bkgs:5,gmv:18639,  aov:3728},
+  {city:"Phu Quoc",      bkgs:5,  gmv:82692,  aov:16538},
 ];
 
-// ── Products and countries per period ────────────────────────
-const S16_PRODUCTS = {
-  yesterday: [
-    {n:'Brussels: Atomium Entry + Design Museum',id:10527,country:'Belgium',avg:2178,qty:2,gmv:4355},
-    {n:'From Vik: Katla Ice Cave Small-Group Tour',id:15376,country:'Iceland',avg:127757,qty:1,gmv:127757},
-    {n:'Swiss Travel Pass: All-in-One Rail/Bus/Boat',id:8643,country:'Switzerland',avg:86026,qty:1,gmv:86026},
-    {n:'Dubai: Skydive at The Palm',id:15791,country:'UAE',avg:59681,qty:1,gmv:59681},
-    {n:'Universal Studios Hollywood Express Pass',id:2045,country:'USA',avg:45605,qty:1,gmv:45605},
-    {n:'From Melbourne: Penguin Parade, Koalas & Roos',id:23945,country:'Australia',avg:20320,qty:1,gmv:20320},
-    {n:'Taliya Day Cruise — Lan Ha Bay',id:12608,country:'Vietnam',avg:17898,qty:1,gmv:17898},
-    {n:'Chicago: Flyover Flying Theatre',id:5616,country:'USA',avg:15701,qty:1,gmv:15701},
-    {n:'Sparty: Late-Night Spa Party Szechenyi',id:2957,country:'Hungary',avg:13748,qty:1,gmv:13748},
-    {n:'Singapore Cable Car + Wings of Time combo',id:141,country:'Singapore',avg:12719,qty:1,gmv:12719},
-    {n:'Night Safari Tickets with Tram Ride',id:57,country:'Singapore',avg:11923,qty:1,gmv:11923},
-    {n:'Universal Studios Singapore Entry',id:22090,country:'Singapore',avg:11371,qty:1,gmv:11371},
-    {n:'Colosseum, Roman Forum & Palatine',id:25564,country:'Italy',avg:9301,qty:1,gmv:9301},
-    {n:'Symphony of the Sea Show + Dinner',id:28204,country:'Vietnam',avg:8078,qty:1,gmv:8078},
-    {n:'Bangkok: Jurassic World Experience',id:20824,country:'Thailand',avg:7332,qty:1,gmv:7332},
-  ],
-  mtd: [
-    {n:'Universal Studios Singapore Entry',id:22090,country:'Singapore',avg:15173,qty:23,gmv:349000},
-    {n:'Tickets to Frigate D. Fernando II e Glória',id:3648,country:'Portugal',avg:692,qty:11,gmv:7613},
-    {n:'Dubai: Burj Khalifa Levels 124 & 125',id:21938,country:'UAE',avg:8901,qty:10,gmv:89006},
-    {n:'Swiss Travel Pass',id:8643,country:'Switzerland',avg:62240,qty:9,gmv:560000},
-    {n:'Singapore: Gardens by the Bay Entry',id:21726,country:'Singapore',avg:10699,qty:9,gmv:96293},
-    {n:'Lindt Home of Chocolate Museum',id:27161,country:'Switzerland',avg:4271,qty:8,gmv:34167},
-    {n:'Singapore Flyer Entry',id:21728,country:'Singapore',avg:7385,qty:7,gmv:51694},
-    {n:'ArtScience Museum Exhibition',id:95,country:'Singapore',avg:6794,qty:7,gmv:47555},
-    {n:'Marina Bay Sands SkyPark',id:26097,country:'Singapore',avg:6552,qty:7,gmv:45864},
-    {n:'Skyline Luge Sentosa',id:17574,country:'Singapore',avg:5707,qty:7,gmv:39950},
-    {n:'Genting Highlands Awana SkyWay',id:22332,country:'Malaysia',avg:794,qty:7,gmv:5560},
-    {n:'Dubai: Skydive at The Palm',id:15791,country:'UAE',avg:95371,qty:5,gmv:477000},
-    {n:'USS + Express Pass (save 4 hrs)',id:87,country:'Singapore',avg:33494,qty:5,gmv:167000},
-    {n:'Mandai Wildlife Multi-Attraction Pass',id:86,country:'Singapore',avg:24378,qty:5,gmv:122000},
-    {n:'Langkawi SkyBridge with Cable Car',id:602,country:'Malaysia',avg:5887,qty:5,gmv:29436},
-  ],
-  lm_full: [
-    {n:'Universal Studios Singapore Entry',id:22090,country:'Singapore',avg:14733,qty:53,gmv:781000},
-    {n:'Swiss Travel Pass',id:8643,country:'Switzerland',avg:79170,qty:18,gmv:1425000},
-    {n:'Singapore: Gardens by the Bay Entry',id:21726,country:'Singapore',avg:10158,qty:15,gmv:152000},
-    {n:'London: The London Eye Entry Ticket',id:23676,country:'UK',avg:11230,qty:13,gmv:146000},
-    {n:'ArtScience Museum Exhibition',id:95,country:'Singapore',avg:3443,qty:13,gmv:44757},
-    {n:'Dubai: Burj Khalifa Levels 124 & 125',id:21938,country:'UAE',avg:8627,qty:11,gmv:94902},
-    {n:'1-Day Ticket to Disneyland® Paris',id:830,country:'France',avg:17255,qty:10,gmv:173000},
-    {n:'Dubai: Museum of the Future',id:21975,country:'UAE',avg:6506,qty:10,gmv:65064},
-    {n:'Singapore Flyer Entry',id:21728,country:'Singapore',avg:9528,qty:9,gmv:85749},
-    {n:'Gardens by the Bay: Cloud Forest + Flower Dome',id:51,country:'Singapore',avg:9513,qty:8,gmv:76104},
-    {n:'Kuala Lumpur: Aquaria KLCC',id:23180,country:'Malaysia',avg:5323,qty:8,gmv:42587},
-    {n:'Tickets to Frigate D. Fernando II e Glória',id:3648,country:'Portugal',avg:763,qty:8,gmv:6104},
-    {n:'Mandai Wildlife Multi-Attraction Pass',id:86,country:'Singapore',avg:14379,qty:7,gmv:101000},
-    {n:'Hanoi: Ninh Binh & Trang An Tour',id:12384,country:'Vietnam',avg:11123,qty:7,gmv:77860},
-    {n:'London: Tower of London + Crown Jewels',id:23490,country:'UK',avg:9994,qty:7,gmv:69955},
-  ],
-};
-S16_PRODUCTS.wtd = S16_PRODUCTS.mtd;
-S16_PRODUCTS.lm_same = S16_PRODUCTS.lm_full;
-S16_PRODUCTS.all = S16_PRODUCTS.mtd;
+// ── Helpers ──────────────────────────────────────────────────────
+function s16_N(v)  { return v==null?'—':Number(v).toLocaleString('en-IN'); }
+function s16_RL(v) { if(v==null)return'—'; return v>=100000?'₹'+(v/100000).toFixed(2)+' L':'₹'+Number(v).toLocaleString('en-IN'); }
+function s16_R(v)  { return v==null?'—':'₹'+Number(v).toLocaleString('en-IN'); }
+function s16_P(v,d){ return v==null?'—':v.toFixed(d||1)+'%'; }
+function s16_D(cur,prev){ if(!cur||!prev)return''; const d=((cur-prev)/prev*100); const cls=d>=0?'delta-up':'delta-down'; return `<span class="${cls}">${d>=0?'▲':'▼'} ${Math.abs(d).toFixed(1)}%</span>`; }
 
-const S16_COUNTRIES = {
-  mtd: [
-    {c:'Singapore',bkgs:105,share:24.8,gmv:1284000,aov:12228},
-    {c:'United Arab Emirates',bkgs:40,share:9.4,gmv:782000,aov:19562},
-    {c:'Malaysia',bkgs:31,share:7.3,gmv:149000,aov:4795},
-    {c:'Switzerland',bkgs:28,share:6.6,gmv:1030000,aov:36776},
-    {c:'Thailand',bkgs:24,share:5.7,gmv:205000,aov:8550},
-    {c:'Vietnam',bkgs:20,share:4.7,gmv:253000,aov:12645},
-    {c:'United States',bkgs:19,share:4.5,gmv:215000,aov:11330},
-    {c:'Japan',bkgs:19,share:4.5,gmv:154000,aov:8124},
-    {c:'United Kingdom',bkgs:17,share:4.0,gmv:208000,aov:12226},
-    {c:'France',bkgs:15,share:3.5,gmv:218000,aov:14558},
-    {c:'Indonesia',bkgs:15,share:3.5,gmv:75019,aov:5001},
-    {c:'Portugal',bkgs:12,share:2.8,gmv:13692,aov:1141},
-    {c:'Türkiye',bkgs:9,share:2.1,gmv:110000,aov:12254},
-    {c:'Australia',bkgs:8,share:1.9,gmv:146000,aov:18272},
-    {c:'Spain',bkgs:7,share:1.7,gmv:67378,aov:9625},
-  ],
-  lm_full: [
-    {c:'Singapore',bkgs:152,share:23.7,gmv:1565000,aov:10298},
-    {c:'United Kingdom',bkgs:58,share:9.0,gmv:691000,aov:11915},
-    {c:'United Arab Emirates',bkgs:54,share:8.4,gmv:422000,aov:7807},
-    {c:'Thailand',bkgs:49,share:7.6,gmv:419000,aov:8553},
-    {c:'United States',bkgs:41,share:6.4,gmv:541000,aov:13194},
-    {c:'Malaysia',bkgs:39,share:6.1,gmv:214000,aov:5483},
-    {c:'Vietnam',bkgs:33,share:5.1,gmv:280000,aov:8486},
-    {c:'France',bkgs:32,share:5.0,gmv:406000,aov:12687},
-    {c:'Switzerland',bkgs:29,share:4.5,gmv:1711000,aov:58994},
-    {c:'Netherlands',bkgs:19,share:3.0,gmv:83651,aov:4403},
-    {c:'Japan',bkgs:16,share:2.5,gmv:78399,aov:4900},
-    {c:'Indonesia',bkgs:15,share:2.3,gmv:67887,aov:4526},
-    {c:'Australia',bkgs:12,share:1.9,gmv:148000,aov:12367},
-    {c:'Spain',bkgs:10,share:1.6,gmv:48641,aov:4864},
-    {c:'Portugal',bkgs:9,share:1.4,gmv:12314,aov:1368},
-  ],
-};
-S16_COUNTRIES.yesterday = S16_COUNTRIES.mtd;
-S16_COUNTRIES.wtd = S16_COUNTRIES.mtd;
-S16_COUNTRIES.lm_same = S16_COUNTRIES.lm_full;
-S16_COUNTRIES.all = S16_COUNTRIES.mtd;
+function s16_sum(arr, key, from, to) {
+  return arr.filter(r=>(!from||r.d>=from)&&(!to||r.d<=to)).reduce((s,r)=>s+(r[key]||0),0);
+}
+function s16_rows(arr, from, to) {
+  return arr.filter(r=>r.d>=from && r.d<=to);
+}
 
-// ── Period definitions ─────────────────────────────────────────
-const S16_PERIODS = {
-  yesterday: {label:'Yesterday (Aug 13)',      dates:['2026-08-13'],
-    kpis:{sv:104555,tv:1813,pdp:683,bkrs:25,bkgs:25,gmv:476000,aov:19059,ppct:0.65,cvr:3.66},
-    prev_label:'7d avg', prev:{bkrs:30,bkgs:35,gmv:520000,cvr:4.12},
-    prodLabel:'24 distinct products', ctryLabel:'38 countries'},
-  wtd:       {label:'This week (Aug 10–13)',   dates:['2026-08-10','2026-08-11','2026-08-12','2026-08-13'],
-    kpis:{sv:null,tv:1878,pdp:null,bkrs:null,bkgs:118,gmv:1912000,aov:16202,ppct:0.63,cvr:3.55},
-    prev_label:'prev week avg', prev:{bkrs:26,bkgs:32,gmv:380000,cvr:4.23},
-    prodLabel:'top MTD products', ctryLabel:'MTD countries'},
-  mtd:       {label:'Month to date (Aug 1–13)',dates:null,
-    kpis:{sv:null,tv:1896,pdp:null,bkrs:null,bkgs:424,gmv:5493000,aov:12956,ppct:0.62,cvr:3.94},
-    prev_label:'Jul 1–13',prev:{bkrs:null,bkgs:193,gmv:2468000,cvr:2.21},
-    prodLabel:'229 distinct products', ctryLabel:'38 countries'},
-  lm_same:   {label:'Jul 1–13 (same days LM)',dates:null,
-    kpis:{sv:null,tv:1739,pdp:null,bkrs:null,bkgs:193,gmv:2468000,aov:12786,ppct:0.55,cvr:2.21},
-    prev_label:'Aug 1–13', prev:{bkrs:null,bkgs:424,gmv:5493000,cvr:3.94},
-    prodLabel:'top July products', ctryLabel:'July countries'},
-  lm_full:   {label:'July 2026 (full month)', dates:null,
-    kpis:{sv:null,tv:1733,pdp:null,bkrs:null,bkgs:641,gmv:7647000,aov:11929,ppct:0.55,cvr:2.99},
-    prev_label:'Aug MTD', prev:{bkrs:null,bkgs:424,gmv:5493000,cvr:3.94},
-    prodLabel:'316 distinct products', ctryLabel:'43 countries'},
-  all:       {label:'All 15 days (Jul 30–Aug 13)',dates:null,
-    kpis:{sv:null,tv:null,pdp:null,bkrs:null,bkgs:null,gmv:null,aov:null,ppct:null,cvr:null},
-    prev_label:null,prev:null,
-    prodLabel:'top MTD products', ctryLabel:'MTD countries'},
-};
-
-// ── Helpers ────────────────────────────────────────────────────
-const s16N = v => v == null ? '—' : typeof v === 'number' ? v.toLocaleString('en-IN') : v;
-const s16R = v => v == null ? '—' : '₹' + v.toLocaleString('en-IN');
-const s16Pct = v => v == null ? '—' : v.toFixed(2) + '%';
-const s16RL = v => {  // format in lakhs
-  if(v == null) return '—';
-  if(v >= 100000) return '₹' + (v/100000).toFixed(2) + ' L';
-  return '₹' + v.toLocaleString('en-IN');
-};
-const s16Delta = (cur, prev) => {
-  if(cur == null || prev == null || prev === 0) return '';
-  const d = ((cur-prev)/prev*100).toFixed(1);
-  const cls = d >= 0 ? 'delta-up' : 'delta-down';
-  return ` <span class="${cls}">${d >= 0 ? '▲' : '▼'} ${Math.abs(d)}%</span>`;
-};
-
-let s16CurrentPeriod = 'yesterday';
+let s16Period = 'mtd';
 
 function s16SetPeriod(btn) {
-  document.querySelectorAll('.s16-period-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.s16-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  s16CurrentPeriod = btn.dataset.period;
-  renderSection16();
+  s16Period = btn.dataset.p;
+  s16Render();
 }
 
-function renderSection16() {
-  const period = S16_PERIODS[s16CurrentPeriod];
-  const prev = period.prev;
+function s16Render() {
+  const periods = {
+    yesterday:  {from:'2026-08-13', to:'2026-08-13', label:'Yesterday — Aug 13'},
+    wtd:        {from:'2026-08-11', to:'2026-08-14', label:'This week — Aug 11–14'},
+    mtd:        {from:'2026-08-01', to:'2026-08-14', label:'Month to date — Aug 1–14'},
+    lm_same:    {from:'2026-07-01', to:'2026-07-14', label:'Jul 1–14 (same days last month)'},
+    lm_full:    {from:'2026-07-01', to:'2026-07-31', label:'July 2026 (full month)'},
+    all:        {from:'2026-07-01', to:'2026-08-14', label:'All data — Jul 1–Aug 14 (45 days)'},
+  };
+  const p = periods[s16Period];
+  const oRows = s16_rows(S16_ORDERS, p.from, p.to);
+  const fRows = s16_rows(S16_FUNNEL, p.from, p.to);
+  const days  = oRows.length;
 
-  // ── KPI cards ─────────────────────────────────────────────
-  const k = period.kpis;
-  const kpiDefs = [
-    {label:'TEA Visitors / day', val:k.tv, prevVal:prev?prev.tv:null, fmt:s16N},
-    {label:'Bookings',           val:k.bkgs,prevVal:prev?prev.bkgs:null,fmt:s16N},
-    {label:'GMV',                val:k.gmv, prevVal:prev?prev.gmv:null, fmt:s16RL},
-    {label:'AOV',                val:k.aov, prevVal:null,               fmt:s16R},
-    {label:'% PDP Viewers',      val:k.ppct,prevVal:null,               fmt:s16Pct},
-    {label:'% Conversion',       val:k.cvr, prevVal:prev?prev.cvr:null, fmt:s16Pct},
-  ];
-  const kpiHtml = `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px">` +
-    kpiDefs.map(kd => {
-      const delta = kd.prevVal != null ? s16Delta(kd.val, kd.prevVal) : '';
-      const prevLabel = kd.prevVal != null ? `<div style="font-size:9px;color:var(--muted)">${period.prev_label}: ${kd.fmt(kd.prevVal)}</div>` : '';
-      return `<div style="background:var(--head-bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px">
-        <div style="font-size:10px;color:var(--muted);margin-bottom:3px">${kd.label}</div>
-        <div style="font-size:20px;font-weight:700;font-variant-numeric:tabular-nums">${kd.fmt(kd.val)}${delta}</div>
-        ${prevLabel}
-      </div>`;
-    }).join('') + '</div>';
-  document.getElementById('s16-kpis').innerHTML = kpiHtml;
+  const totBkgs = oRows.reduce((s,r)=>s+r.bkgs,0);
+  const totBkrs = oRows.reduce((s,r)=>s+r.bkrs,0);
+  const totGmv  = oRows.reduce((s,r)=>s+r.gmv,0);
+  const totMv   = fRows.reduce((s,r)=>s+r.mv,0);
+  const totCv   = fRows.reduce((s,r)=>s+r.cv,0);
+  const totPdp  = fRows.reduce((s,r)=>s+r.pdp,0);
+  const totCs   = fRows.reduce((s,r)=>s+r.cs,0);
+  const totCsub = fRows.reduce((s,r)=>s+r.csub,0);
+  const avgAov  = totBkgs>0 ? Math.round(totGmv/totBkgs) : 0;
+  const cvrPdp  = totPdp>0  ? (totBkgs/totPdp*100).toFixed(2) : '—';
 
-  // ── Daily table ────────────────────────────────────────────
-  const dailyRows = period.dates
-    ? S16_DAILY.filter(r => period.dates.includes(r.d))
-    : [...S16_DAILY];
+  // WoW for KPIs — compare to same period 1 week earlier
+  const prevFrom = new Date(p.from); prevFrom.setDate(prevFrom.getDate()-7);
+  const prevTo   = new Date(p.to);   prevTo.setDate(prevTo.getDate()-7);
+  const pf = prevFrom.toISOString().slice(0,10);
+  const pt = prevTo.toISOString().slice(0,10);
+  const pRows = s16_rows(S16_ORDERS, pf, pt);
+  const pBkgs = pRows.reduce((s,r)=>s+r.bkgs,0);
+  const pGmv  = pRows.reduce((s,r)=>s+r.gmv,0);
 
-  document.getElementById('s16-daily-title').textContent =
-    'Daily breakdown — ' + period.label;
-  document.getElementById('s16-daily-body').innerHTML = dailyRows.map(r => {
-    const highlight = r.bkgs >= 40 ? ' style="background:var(--good);background:rgba(11,122,57,.07)"' : '';
-    return `<tr${highlight}>
+  // KPI cards
+  document.getElementById('s16-kpis').innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px">
+      <div class="ck ${totBkgs>=(days*30)?'good':''}">
+        <div class="ck-l">Bookings (${p.label})</div>
+        <div class="ck-v">${s16_N(totBkgs)}</div>
+        <div class="ck-s">${days} days · ${(totBkgs/days).toFixed(1)}/day avg &nbsp;${s16_D(totBkgs,pBkgs)}</div>
+      </div>
+      <div class="ck ${totGmv>=(days*300000)?'good':''}">
+        <div class="ck-l">GMV</div>
+        <div class="ck-v">${s16_RL(totGmv)}</div>
+        <div class="ck-s">${s16_RL(Math.round(totGmv/days))}/day avg &nbsp;${s16_D(totGmv,pGmv)}</div>
+      </div>
+      <div class="ck">
+        <div class="ck-l">AOV</div>
+        <div class="ck-v">${s16_R(avgAov)}</div>
+        <div class="ck-s">per completed booking</div>
+      </div>
+      <div class="ck ${parseFloat(cvrPdp)>=4.0?'good':parseFloat(cvrPdp)<2.5?'bad':'warn'}">
+        <div class="ck-l">CVR (Bookings ÷ PDP views)</div>
+        <div class="ck-v">${cvrPdp}%</div>
+        <div class="ck-s">${s16_N(totBkgs)} bkgs / ${s16_N(totPdp)} PDP views</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px">
+      <div class="ck"><div class="ck-l">Module Views</div><div class="ck-v" style="font-size:18px">${s16_N(totMv)}</div><div class="ck-s">${(totMv/days).toFixed(0)}/day</div></div>
+      <div class="ck"><div class="ck-l">City Views</div><div class="ck-v" style="font-size:18px">${s16_N(totCv)}</div><div class="ck-s">${(totCv/days).toFixed(0)}/day</div></div>
+      <div class="ck"><div class="ck-l">PDP Views</div><div class="ck-v" style="font-size:18px">${s16_N(totPdp)}</div><div class="ck-s">${(totPdp/days).toFixed(0)}/day</div></div>
+      <div class="ck"><div class="ck-l">Checkout Start</div><div class="ck-v" style="font-size:18px">${s16_N(totCs)}</div><div class="ck-s">${(totPdp>0?(totCs/totPdp*100):0).toFixed(1)}% of PDP</div></div>
+      <div class="ck"><div class="ck-l">Checkout Submit</div><div class="ck-v" style="font-size:18px">${s16_N(totCsub)}</div><div class="ck-s">${(totCs>0?(totCsub/totCs*100):0).toFixed(1)}% of checkout</div></div>
+    </div>`;
+
+  // Orders table — all rows in range, newest first
+  const oSorted = [...oRows].reverse();
+  document.getElementById('s16-orders-body').innerHTML = oSorted.map(r=>`<tr>
+    <td>${r.d}</td>
+    <td class="num" ${r.bkgs>=40?' style="color:var(--good);font-weight:700"':''}>${s16_N(r.bkgs)}</td>
+    <td class="num">${s16_N(r.bkrs)}</td>
+    <td class="num">${s16_RL(r.gmv)}</td>
+    <td class="num">${s16_R(r.aov)}</td>
+  </tr>`).join('');
+  const ot = document.getElementById('s16-orders-tbl');
+  if(ot){ot.classList.remove('collapsed');makeCollapsible(ot,7);}
+
+  // Funnel table — newest first
+  const fSorted = [...fRows].reverse();
+  document.getElementById('s16-funnel-body').innerHTML = fSorted.map(r=>{
+    const bRow = S16_ORDERS.find(o=>o.d===r.d);
+    const bkgs = bRow?bRow.bkgs:0;
+    const cvr  = r.pdp>0?(bkgs/r.pdp*100).toFixed(2):'—';
+    return `<tr>
       <td>${r.d}</td>
-      <td class="num">${s16N(r.sv)}</td>
-      <td class="num">${s16N(r.tv)}</td>
-      <td class="num">${s16N(r.pdp)}</td>
-      <td class="num"${r.bkrs>=30?' style="color:var(--good);font-weight:700"':''}>${s16N(r.bkrs)}</td>
-      <td class="num"${r.bkgs>=40?' style="color:var(--good);font-weight:700"':''}>${s16N(r.bkgs)}</td>
-      <td class="num">${s16RL(r.gmv)}</td>
-      <td class="num">${s16R(r.aov)}</td>
-      <td class="num">${s16Pct(r.ppct)}</td>
-      <td class="num"${r.cvr>=5?' style="color:var(--good);font-weight:700"':''}>${s16Pct(r.cvr)}</td>
+      <td class="num">${s16_N(r.mv)}</td>
+      <td class="num">${s16_N(r.cv)}</td>
+      <td class="num">${s16_N(r.pdp)}</td>
+      <td class="num">${s16_N(r.cs)}</td>
+      <td class="num">${s16_N(r.csub)}</td>
+      <td class="num" ${parseFloat(cvr)>=4?' style="color:var(--good);font-weight:700"':''}>${cvr}%</td>
     </tr>`;
   }).join('');
-  document.getElementById('s16-daily-note').textContent =
-    'Bookers = distinct users. Bookings = total orders. Aug 12–13 from settled live data (fetched Aug 14). Sections 1–14 have COHORT data to Aug 11 due to percept_event_agg 1-day lag.';
-  const dt = document.getElementById('s16-daily-tbl');
-  if(dt) { dt.classList.remove('collapsed'); makeCollapsible(dt, 5); }
+  const ft = document.getElementById('s16-funnel-tbl');
+  if(ft){ft.classList.remove('collapsed');makeCollapsible(ft,7);}
 
-  // ── Merch table ────────────────────────────────────────────
-  const merchRows = period.dates
-    ? S16_MERCH.filter(r => period.dates.includes(r.d))
-    : [...S16_MERCH];
-  document.getElementById('s16-merch-body').innerHTML = merchRows.map(r =>
-    `<tr>
-      <td>${r.d}</td>
-      <td class="num">${s16N(r.iu)}</td>
-      <td class="num">${s16N(r.impr)}</td>
-      <td class="num">${s16N(r.cu)}</td>
-      <td class="num">${s16N(r.cl)}</td>
-      <td class="num">${r.ctr.toFixed(2)}%</td>
-    </tr>`
-  ).join('');
-  const mt = document.getElementById('s16-merch-tbl');
-  if(mt) { mt.classList.remove('collapsed'); makeCollapsible(mt, 5); }
+  // Products — only MTD and full month have product-level data from live DB
+  const showProd = ['mtd','lm_full','all'].includes(s16Period);
+  document.getElementById('s16-prod-body').innerHTML = S16_PRODUCTS_MTD.map(r=>`<tr>
+    <td>${r.t}</td>
+    <td class="num" style="font-size:10px;color:var(--muted)">${r.id}</td>
+    <td>${r.city}</td>
+    <td class="num"${r.bkgs>=10?' style="color:var(--good);font-weight:700"':''}>${r.bkgs}</td>
+    <td class="num">${s16_RL(r.gmv)}</td>
+    <td class="num">${s16_R(r.avg)}</td>
+  </tr>`).join('');
+  const pt2 = document.getElementById('s16-prod-tbl');
+  if(pt2){pt2.classList.remove('collapsed');makeCollapsible(pt2,5);}
 
-  // ── Page table ─────────────────────────────────────────────
-  const pageRows = period.dates
-    ? S16_MERCH_PAGE.filter(r => period.dates.includes(r.d))
-    : [...S16_MERCH_PAGE];
-  document.getElementById('s16-page-body').innerHTML = pageRows.map(r =>
-    `<tr>
-      <td>${r.d}</td>
-      <td>${r.page}</td>
-      <td class="num">${s16N(r.iu)}</td>
-      <td class="num">${s16N(r.cu)}</td>
-      <td class="num">${s16N(r.cl)}</td>
-      <td class="num"${r.ctr>=7?' style="color:var(--good);font-weight:700"':''}>${r.ctr.toFixed(2)}%</td>
-    </tr>`
-  ).join('');
-  const pt = document.getElementById('s16-page-tbl');
-  if(pt) { pt.classList.remove('collapsed'); makeCollapsible(pt, 5); }
-
-  // ── Products table ─────────────────────────────────────────
-  const prods = S16_PRODUCTS[s16CurrentPeriod] || S16_PRODUCTS.mtd;
-  document.getElementById('s16-prod-title').textContent =
-    'Top products — ' + period.label + ' (' + period.prodLabel + ')';
-  document.getElementById('s16-prod-body').innerHTML = prods.map(r =>
-    `<tr>
-      <td>${r.n}</td>
-      <td class="num">${r.id}</td>
-      <td>${r.country}</td>
-      <td class="num">${s16R(r.avg)}</td>
-      <td class="num"${r.qty>=10?' style="color:var(--good);font-weight:700"':''}>${r.qty}</td>
-      <td class="num">${s16RL(r.gmv)}</td>
-    </tr>`
-  ).join('');
-  const prt = document.getElementById('s16-prod-tbl');
-  if(prt) { prt.classList.remove('collapsed'); makeCollapsible(prt, 5); }
-
-  // ── Countries table ────────────────────────────────────────
-  const ctries = S16_COUNTRIES[s16CurrentPeriod] || S16_COUNTRIES.mtd;
-  document.getElementById('s16-country-title').textContent =
-    'Bookings by country — ' + period.label + ' (' + period.ctryLabel + ')';
-  document.getElementById('s16-country-body').innerHTML = ctries.map(r =>
-    `<tr>
-      <td>${r.c}</td>
-      <td class="num"${r.bkgs>=50?' style="font-weight:700"':''}>${r.bkgs}</td>
-      <td class="num">${r.share.toFixed(1)}%</td>
-      <td class="num">${s16RL(r.gmv)}</td>
-      <td class="num"${r.aov>=20000?' style="color:var(--good);font-weight:700"':''}>${s16R(r.aov)}</td>
-    </tr>`
-  ).join('');
-  const ct = document.getElementById('s16-country-tbl');
-  if(ct) { ct.classList.remove('collapsed'); makeCollapsible(ct, 5); }
-
-  document.getElementById('s16-country-note').textContent =
-    'Switzerland highest AOV ₹36,776 (Swiss Travel Pass avg ₹62k). UAE ₹19,562 AOV. Portugal low AOV ₹1,141 (Frigate Museum ticket ₹692).';
+  // Cities
+  const totCityBkgs = S16_CITIES_MTD.reduce((s,r)=>s+r.bkgs,0);
+  document.getElementById('s16-city-body').innerHTML = S16_CITIES_MTD.map((r,i)=>`<tr>
+    <td style="color:var(--muted);font-size:10px">${i+1}</td>
+    <td>${r.city}</td>
+    <td class="num"${r.bkgs>=50?' style="font-weight:700"':''}>${r.bkgs}</td>
+    <td class="num">${(r.bkgs/totCityBkgs*100).toFixed(1)}%</td>
+    <td class="num">${s16_RL(r.gmv)}</td>
+    <td class="num"${r.aov>=20000?' style="color:var(--good);font-weight:700"':''}>${s16_R(r.aov)}</td>
+  </tr>`).join('');
+  const ct = document.getElementById('s16-city-tbl');
+  if(ct){ct.classList.remove('collapsed');makeCollapsible(ct,7);}
 }
 
-// WoW table — always static (doesn't filter by period)
-function renderS16WoW() {
-  const metrics = [
-    {label:'Scapia Visitors', key:'sv', fmt:s16N},
-    {label:'TEA Visitors',    key:'tv', fmt:s16N},
-    {label:'PDP Viewers',     key:'pdp',fmt:s16N},
-    {label:'Bookers / day',   key:'bkrs',fmt:s16N},
-    {label:'Bookings / day',  key:'bkgs',fmt:s16N},
-    {label:'GMV / day',       key:'gmv', fmt:s16RL},
-    {label:'AOV',             key:'aov', fmt:s16R},
-    {label:'% PDP Viewers',   key:'ppct',fmt:s16Pct},
-    {label:'% Conversion',    key:'cvr', fmt:s16Pct},
+// WoW table — computed from live data
+function s16RenderWoW() {
+  const weeks = [
+    {l:'Jul 14–20', from:'2026-07-14', to:'2026-07-20'},
+    {l:'Jul 21–27', from:'2026-07-21', to:'2026-07-27'},
+    {l:'Jul 28–Aug 3',from:'2026-07-28',to:'2026-08-03'},
+    {l:'Aug 4–10',  from:'2026-08-04', to:'2026-08-10'},
   ];
-  const wowWrap = document.getElementById('s16-wow-wrap');
-  if(!wowWrap) return;
-  const last = S16_WOW[S16_WOW.length-1];
-  const prev = S16_WOW[S16_WOW.length-2];
-  let html = `<table data-collapsible="5"><thead><tr><th>Metric</th>`;
-  S16_WOW.forEach(w => html += `<th>${w.w}</th>`);
-  html += `<th>WoW Δ</th></tr></thead><tbody>`;
+  const metrics = [
+    {l:'Bookings / day',      fn: rows => rows.reduce((s,r)=>s+r.bkgs,0)/rows.length, src:'o', fmt: v=>v.toFixed(1)},
+    {l:'GMV / day',           fn: rows => rows.reduce((s,r)=>s+r.gmv,0)/rows.length,  src:'o', fmt: v=>s16_RL(Math.round(v))},
+    {l:'AOV',                 fn: rows => { const b=rows.reduce((s,r)=>s+r.bkgs,0),g=rows.reduce((s,r)=>s+r.gmv,0); return b>0?g/b:0; }, src:'o', fmt: v=>s16_R(Math.round(v))},
+    {l:'PDP Views / day',     fn: rows => rows.reduce((s,r)=>s+r.pdp,0)/rows.length,  src:'f', fmt: v=>v.toFixed(0)},
+    {l:'CVR (Bkgs ÷ PDP %)',  fn: (oRows,fRows) => { const b=oRows.reduce((s,r)=>s+r.bkgs,0),p=fRows.reduce((s,r)=>s+r.pdp,0); return p>0?b/p*100:0; }, src:'both', fmt: v=>v.toFixed(2)+'%'},
+    {l:'Checkout Start / day',fn: rows => rows.reduce((s,r)=>s+r.cs,0)/rows.length,   src:'f', fmt: v=>v.toFixed(1)},
+  ];
+
+  let html = '<table data-collapsible="5"><thead><tr><th>Metric</th>';
+  weeks.forEach(w => html += `<th>${w.l}</th>`);
+  html += '<th>WoW Δ (last 2 wks)</th></tr></thead><tbody>';
+
   metrics.forEach(m => {
-    html += `<tr><td>${m.label}</td>`;
-    S16_WOW.forEach(w => html += `<td class="num">${m.fmt(w[m.key])}</td>`);
-    const delta = last[m.key] != null && prev[m.key] != null
-      ? s16Delta(last[m.key], prev[m.key]) : '';
-    html += `<td class="num">${delta}</td></tr>`;
+    html += `<tr><td>${m.l}</td>`;
+    const vals = weeks.map(w => {
+      const oR = s16_rows(S16_ORDERS, w.from, w.to);
+      const fR = s16_rows(S16_FUNNEL, w.from, w.to);
+      return m.src==='both' ? m.fn(oR,fR) : m.fn(m.src==='o'?oR:fR);
+    });
+    vals.forEach(v => html += `<td class="num">${m.fmt(v)}</td>`);
+    const last=vals[vals.length-1], prev=vals[vals.length-2];
+    const d = prev>0?((last-prev)/prev*100):0;
+    const cls = d>=0?'delta-up':'delta-down';
+    html += `<td class="num"><span class="${cls}">${d>=0?'▲':'▼'} ${Math.abs(d).toFixed(1)}%</span></td></tr>`;
   });
   html += '</tbody></table>';
-  wowWrap.innerHTML = html;
-  const t = wowWrap.querySelector('table');
-  if(t) makeCollapsible(t, 5);
+  const w = document.getElementById('s16-wow-wrap');
+  if(w){
+    w.innerHTML = html;
+    const t = w.querySelector('table');
+    if(t) makeCollapsible(t,10);
+  }
 }
 
-// Init
-renderSection16();
-renderS16WoW();
+s16Render();
+s16RenderWoW();
+
 
 </script>
 </body>
