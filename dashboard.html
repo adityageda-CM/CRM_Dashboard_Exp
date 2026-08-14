@@ -249,6 +249,23 @@ body {
   .crm-kpi-grid, .crm-4col { grid-template-columns: 1fr 1fr; }
   .crm-2col, .crm-3col { grid-template-columns: 1fr; }
 }
+
+/* ── Collapsible tables ── */
+.tbl-collapsible tbody tr { display: table-row; }
+.tbl-collapsible.collapsed tbody tr:nth-child(n+6) { display: none; }
+.tbl-expand-row td {
+  text-align: center !important;
+  padding: 7px !important;
+  background: var(--head-bg, #f0efeb);
+  border-top: 1px solid var(--line-strong, #c3c2b7) !important;
+}
+.tbl-expand-btn {
+  font-family: var(--font, system-ui); font-size: 11px; font-weight: 500;
+  color: var(--accent, #2a78d6); background: none; border: none;
+  cursor: pointer; padding: 2px 8px; border-radius: 4px;
+}
+.tbl-expand-btn:hover { text-decoration: underline; }
+
 </style>
 
 <!-- v9 TEA original styles scoped to #tab-tea only -->
@@ -458,7 +475,7 @@ body {
   <div class="crm-section-label">3-day cohort matrix — what each user receives</div>
   <div class="crm-card">
     <div class="crm-card-title">One person's journey through the flow (max 4 messages, max 1 per day)</div>
-    <table class="crm-table">
+    <table class="crm-table" data-collapsible="5">
       <thead><tr>
         <th style="text-align:left">Message</th>
         <th>Day 0 (entry)</th><th>Day 1 (P2)</th><th>Day 1 +30min (WA)</th><th>Day 3 (FP)</th><th>Total</th>
@@ -492,7 +509,7 @@ body {
   <div class="crm-card">
     <div class="crm-card-title">CRM flow entries, clicks, city views and bookings by nearestTeaCity</div>
     <div style="overflow-x:auto">
-    <table class="crm-table">
+    <table class="crm-table" data-collapsible="5">
       <thead><tr>
         <th style="text-align:left">#</th>
         <th style="text-align:left">City</th>
@@ -519,7 +536,7 @@ body {
   </div>
   <div class="crm-card">
     <div style="overflow-x:auto">
-    <table class="crm-table">
+    <table class="crm-table" data-collapsible="5">
       <thead><tr>
         <th style="text-align:left">Date</th>
         <th style="text-align:left">Segment</th>
@@ -937,6 +954,19 @@ function metricCell(v, base, isMoney){
 // ---------- KPI table ----------
 function renderKPIs(){
   const cur = aggregate(rowsInRange(state.start,state.end), bookingsInRange(state.start,state.end));
+  // Detect stale/missing COHORT data: bookings exist but no entry data (percept_event_agg lag)
+  const hasCohortData = cur.entering > 0;
+  const hasBookingData = cur.ord > 0;
+  const cohortRows = rowsInRange(state.start, state.end);
+  if(!hasCohortData && cohortRows.length === 0){
+    // Show a warning banner in the KPI wrap
+    const bannerWrap = document.getElementById('kpiTableWrap');
+    const lagNote = hasBookingData 
+      ? `<div class="flag" style="background:#fff8e8;border-color:#e8a800;margin-bottom:10px">⚠ <strong>Funnel entry data not available for this period</strong> — <code>percept_event_agg</code> has a 1–2 day batch lag. The selected date range has no COHORT rows yet, so Entering/Browse/Product/Checkout values will show 0. <strong>Orders = ${cur.ord.toLocaleString()}, GMV = ₹${Math.round(cur.gmv).toLocaleString()}</strong> are from the orders table and are correct. Select an earlier date for full funnel data, or see Section 16 for today's live numbers.</div>`
+      : `<div class="flag" style="background:#fff8e8;border-color:#e8a800;margin-bottom:10px">⚠ <strong>No data for this period</strong> — the selected date range falls outside the available data window (${MIN_DATE} → ${MAX_DATE}). Try selecting "Today (last available day)" from the date range control.</div>`;
+    // Prepend the banner — but still render the table below
+    if(bannerWrap) bannerWrap.insertAdjacentHTML('beforebegin', lagNote);
+  }
   const [ps,pe] = shiftRangeBack(state.start,state.end,state.compare==='none'?'prev_period':state.compare);
   const noPriorData = pe < MIN_DATE;
   const prev = noPriorData ? {entering:0,browse:0,product:0,cs:0,csub:0,ord:0,gmv:0} : aggregate(rowsInRange(ps,pe), bookingsInRange(ps,pe));
@@ -953,7 +983,9 @@ function renderKPIs(){
   if(state.compare!=='none') html += `<th>Comparison (${ps} → ${pe})</th><th>Δ</th>`;
   html += '</tr></thead><tbody>';
   for(const [label,key,isMoney] of metrics){
-    html += `<tr><td>${label}</td><td class="num">${metricCell(cur[key], cur.entering, isMoney)}</td>`;
+    const isCohortMetric = !['ord','gmv'].includes(key);
+    const displayVal = (isCohortMetric && !hasCohortData) ? '—' : metricCell(cur[key], cur.entering, isMoney);
+    html += `<tr><td>${label}</td><td class="num">${displayVal}</td>`;
     if(state.compare!=='none'){
       if(noPriorData){
         html += `<td class="num">No prior data</td><td><span class="delta-flat">—</span></td>`;
@@ -965,6 +997,7 @@ function renderKPIs(){
   }
   html += '</tbody></table>';
   document.getElementById('kpiTableWrap').innerHTML = html;
+  {const _w=document.getElementById('kpiTableWrap');if(_w){const _t=_w.querySelector('table');if(_t)makeCollapsible(_t);}}
   return cur;
 }
 
@@ -984,6 +1017,7 @@ function renderBuckets(cur){
   html += `<tfoot><tr><td>Total</td><td class="num">${fmtN(cur.entering)}</td><td class="num">100.0%</td><td class="num">${metricCell(cur.browse,cur.entering,false)}</td><td class="num">${metricCell(cur.product,cur.entering,false)}</td><td class="num">${metricCell(cur.cs,cur.entering,false)}</td><td class="num">${metricCell(cur.csub,cur.entering,false)}</td><td class="num">${fmtN(cur.ord)}</td><td class="num">${fmtMoney(cur.gmv)}</td></tr></tfoot>`;
   html += '</tbody></table>';
   document.getElementById('bucketTableWrap').innerHTML = html;
+  {const _w=document.getElementById('bucketTableWrap');if(_w){const _t=_w.querySelector('table');if(_t)makeCollapsible(_t);}}
 }
 
 // ---------- Funnel tree ----------
@@ -1056,6 +1090,7 @@ function renderTrend(){
   }
   html += '</tbody></table>';
   document.getElementById('trendTableWrap').innerHTML = html;
+  {const _w=document.getElementById('trendTableWrap');if(_w){const _t=_w.querySelector('table');if(_t)makeCollapsible(_t);}}
 }
 
 // ---------- Merch placement impact table (date-aware: entry-date rows filtered by state range) ----------
@@ -1086,6 +1121,7 @@ function renderMerch(){
   html += `<tfoot><tr><td>Total</td><td></td><td class="num">${fmtN(totals.entering)}</td><td class="num">100.0%</td><td class="num">${metricCell(totals.browse,totals.entering,false)}</td><td class="num">${metricCell(totals.product,totals.entering,false)}</td><td class="num">${metricCell(totals.cs,totals.entering,false)}</td><td class="num">${metricCell(totals.csub,totals.entering,false)}</td><td class="num">${fmtN(totals.ord)}</td><td class="num">${fmtMoney(totals.gmv)}</td><td class="num">${totals.entering?fmtPct(totals.ord/totals.entering):'—'}</td></tr></tfoot>`;
   html += '</tbody></table>';
   wrap.innerHTML = html;
+  {const _t=wrap.querySelector('table');if(_t)makeCollapsible(_t,5);}
 }
 
 function renderUnattributed(cur){
@@ -1128,6 +1164,7 @@ function renderCampaigns(){
   list.forEach(r=>{ html += `<tr><td>${r.channel}</td><td>${r.campaign_id}</td><td>${r.title||'<span class="stat">not decoded</span>'}</td><td class="num">${fmtN(r.entrants)}</td></tr>`; });
   html += '</tbody></table>';
   document.getElementById('campaignTableWrap').innerHTML = list.length ? html : '<div class="note">No campaign-attributed entrants in this period.</div>';
+  {const _w=document.getElementById('campaignTableWrap');if(_w){const _t=_w.querySelector('table');if(_t)makeCollapsible(_t);}}
   document.getElementById('campaignNote').textContent = 'Decoded via simple.crud.crm_campaign_content joined on campaign_name = source_attribute_id; titles shown where a match exists, raw campaign name otherwise. No send/delivery log table exists in this warehouse, so this is entrants-who-engaged only, not a send→deliver→click funnel — a genuine data gap, not an oversight. Entrants are keyed by entry date and recompute with the controls above.';
 }
 // ---------- In-trip (country table is date-aware; channel/top-cities remain all-time supplementary cuts) ----------
@@ -1193,6 +1230,7 @@ function renderStageTiming(){
   html += '</tbody></table>';
   html += `<div class="note">Average and median often disagree a lot (e.g. Browse → Product) because most people who convert between two stages do it the same day, and the average is pulled upward by a smaller number of users who come back weeks or months later. Median is the more honest "typical" number; average is more useful for sizing a re-engagement window.</div>`;
   document.getElementById('stageTimingWrap').innerHTML = html;
+  {const _w=document.getElementById('stageTimingWrap');if(_w){const _t=_w.querySelector('table');if(_t)makeCollapsible(_t);}}
 }
 // ---------- Cities (date-aware: booking-date rows filtered by state range) ----------
 function renderCities(){
@@ -1205,6 +1243,7 @@ function renderCities(){
   cities.forEach(c=>{ html+=`<tr><td>${c}</td><td class="num">${fmtN(byCity[c].ord)}</td><td class="num">${fmtMoney(byCity[c].gmv)}</td></tr>`; });
   html += '</tbody></table>';
   document.getElementById('citiesWrap').innerHTML = cities.length ? html : (html + '<div class="note">No bookings in this period.</div>');
+  {const _w=document.getElementById('citiesWrap');if(_w){const _t=_w.querySelector('table');if(_t)makeCollapsible(_t);}}
 }
 // ---------- AOV & day-of-week patterns (derived client-side from COHORT/BOOKINGS already in scope — no new data needed) ----------
 function renderAOVDow(cur){
@@ -1229,6 +1268,7 @@ function renderAOVDow(cur){
   html += '</tbody></table>';
   html += '<div class="note">Both tables recompute with the date controls above. Day-of-week entering/orders use the same entry-date / booking-date convention as the rest of this dashboard — a day\'s "Orders" count is bookings that closed on that weekday, not orders from entrants who first arrived on that weekday.</div>';
   wrap.innerHTML = html;
+  {const _ts=wrap.querySelectorAll('table');_ts.forEach(t=>makeCollapsible(t,5));}
 }
 function renderMixpanel(){
   const mc = SUPP.mixpanelCrossCheckLive || {};
@@ -1248,6 +1288,7 @@ function renderMixpanel(){
       The Aug 11 cross-check above confirms DB and Mixpanel agree on <code>tea_checkout_detail_submit</code> (26 vs 26). If Mixpanel's Aug 12 "orders" metric is using a different event (e.g. <code>tea_order_updates</code>), it would fire multiple times per order on any status change, inflating the count further. Verify in Mixpanel which event they are actually tracking as "bookings".
     </div>`;
   document.getElementById('mixpanelWrap').innerHTML = html;
+  {const _w=document.getElementById('mixpanelWrap');if(_w){const _t=_w.querySelector('table');if(_t)makeCollapsible(_t);}}
 }
 
 function renderScopeBanner(){
@@ -1269,6 +1310,8 @@ function renderAll(){
   renderPretrip();
   renderCities();
   renderAOVDow(cur);
+  // Re-apply collapsible after every full render
+  initCollapsibleTables();
 }
 
 // sections with no dependency on the date controls (fixed by design — see methodology)
@@ -1276,6 +1319,7 @@ renderMixpanel();
 
 // init
 applyPreset();
+initCollapsibleTables();
 
 })();
 </script>
@@ -1422,7 +1466,7 @@ applyPreset();
 
   <!-- ── Week on week table ── -->
   <h3>16c · Week-on-week · last 4 completed weeks</h3>
-  <table>
+  <table data-collapsible="5">
     <thead><tr>
       <th>Metric</th><th>13–19 Jul</th><th>20–26 Jul</th><th>27 Jul–2 Aug</th><th>3–9 Aug</th><th>WoW Δ</th>
     </tr></thead>
@@ -1443,7 +1487,7 @@ applyPreset();
   <!-- ── Daily breakdown ── -->
   <h3>16d · Daily breakdown — last 15 days (most recent first)</h3>
   <div style="overflow-x:auto">
-  <table id="s16-daily-table">
+  <table data-collapsible="5" id="s16-daily-table">
     <thead><tr>
       <th>Date</th><th>Scapia Visitors</th><th>TEA Visitors</th><th>PDP Viewers</th><th>Bookers</th><th>Bookings</th><th>GMV</th><th>AOV</th><th>% PDP</th><th>% CVR</th>
     </tr></thead>
@@ -1472,7 +1516,7 @@ applyPreset();
   <h3>16e · Experiences merch — impressions &amp; clicks (last 15 days)</h3>
   <div class="note" style="margin-bottom:8px">Impressions on all pages <em>except</em> the Experiences home (Scapia Home, Coins, Travel Home). Impression users &amp; impressions are ×2.5 sampling-adjusted estimates; clicks are actual. CTR = click users ÷ impression users.</div>
   <div style="overflow-x:auto">
-  <table>
+  <table data-collapsible="5">
     <thead><tr>
       <th>Date</th><th>Impr Users (est)</th><th>Impressions (est)</th><th>Click Users</th><th>Clicks</th><th>CTR</th>
     </tr></thead>
@@ -1498,7 +1542,7 @@ applyPreset();
 
   <!-- ── By page ── -->
   <h3>16f · Merch impressions by page — Aug 10–13</h3>
-  <table>
+  <table data-collapsible="5">
     <thead><tr><th>Date</th><th>Page</th><th>Impr Users</th><th>Click Users</th><th>Clicks</th><th>CTR</th></tr></thead>
     <tbody>
       <tr><td>2026-08-13</td><td>SCAPIA_HOME</td><td class="num">13,767</td><td class="num">373</td><td class="num">481</td><td class="num">2.71%</td></tr>
@@ -1520,7 +1564,7 @@ applyPreset();
 
   <!-- ── Top products yesterday ── -->
   <h3>16g · Products bought — 2026-08-13 (24 products)</h3>
-  <table>
+  <table data-collapsible="5">
     <thead><tr><th>Product</th><th>ID</th><th>Country</th><th>Avg Price</th><th>Qty</th><th>GMV</th></tr></thead>
     <tbody>
       <tr><td>Brussels: Atomium Entry + Design Museum</td><td class="num">10527</td><td>Belgium</td><td class="num">₹2,178</td><td class="num">2</td><td class="num">₹4,355</td></tr>
@@ -1543,7 +1587,7 @@ applyPreset();
 
   <!-- ── Top products MTD ── -->
   <h3>16h · Products bought — Aug 1–13 MTD (229 distinct products)</h3>
-  <table>
+  <table data-collapsible="5">
     <thead><tr><th>Product</th><th>ID</th><th>Country</th><th>Avg Price</th><th>Qty</th><th>GMV</th></tr></thead>
     <tbody>
       <tr><td>Universal Studios Singapore Entry</td><td class="num">22090</td><td>Singapore</td><td class="num">₹15,173</td><td class="num" style="font-weight:700">23</td><td class="num" style="font-weight:700">₹3.49 L</td></tr>
@@ -1569,7 +1613,7 @@ applyPreset();
   <h3>16i · Bookings by country — Aug 1–13 MTD (38 countries)</h3>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
     <div>
-      <table>
+      <table data-collapsible="5">
         <thead><tr><th>Country</th><th>Bookings</th><th>Share</th><th>GMV</th><th>AOV</th></tr></thead>
         <tbody>
           <tr><td>Singapore</td><td class="num" style="font-weight:700">105</td><td class="num">24.8%</td><td class="num" style="font-weight:700">₹12.84 L</td><td class="num">₹12,228</td></tr>
@@ -1584,7 +1628,7 @@ applyPreset();
       </table>
     </div>
     <div>
-      <table>
+      <table data-collapsible="5">
         <thead><tr><th>Country</th><th>Bookings</th><th>Share</th><th>GMV</th><th>AOV</th></tr></thead>
         <tbody>
           <tr><td>United Kingdom</td><td class="num">17</td><td class="num">4.0%</td><td class="num">₹2.08 L</td><td class="num">₹12,226</td></tr>
@@ -1899,6 +1943,54 @@ function buildChart() {
         y: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { color: '#8c8b86', font: { size: 10, family: "'Inter'" }, callback: v => v >= 1000 ? Math.round(v/1000)+'k' : v } }
       }
     }
+  });
+}
+
+
+/* ─── Collapsible table helper ─────────────────────────────────────────
+   Call makeCollapsible(table, defaultRows=5) on any <table> element.
+   Adds a tfoot "Show all N rows" button that toggles visibility.
+   Also called automatically on all [data-collapsible] tables on load.
+──────────────────────────────────────────────────────────────────────── */
+function makeCollapsible(tbl, defaultRows) {
+  defaultRows = defaultRows || 5;
+  const tbody = tbl.querySelector('tbody');
+  if (!tbody) return;
+  const rows = tbody.querySelectorAll('tr');
+  const total = rows.length;
+  if (total <= defaultRows) return; // nothing to collapse
+  tbl.classList.add('tbl-collapsible', 'collapsed');
+
+  // Add or reuse tfoot
+  let tfoot = tbl.querySelector('tfoot.tbl-expand-foot');
+  if (!tfoot) {
+    tfoot = document.createElement('tfoot');
+    tfoot.className = 'tbl-expand-foot';
+    tbl.appendChild(tfoot);
+  }
+  const cols = tbl.querySelector('thead tr') 
+    ? tbl.querySelector('thead tr').cells.length 
+    : (rows[0] ? rows[0].cells.length : 1);
+
+  function refresh() {
+    const collapsed = tbl.classList.contains('collapsed');
+    tfoot.innerHTML = `<tr class="tbl-expand-row"><td colspan="${cols}">
+      <button class="tbl-expand-btn" onclick="
+        var t=this.closest('table');
+        t.classList.toggle('collapsed');
+        var c=t.classList.contains('collapsed');
+        this.textContent=c?'▼ Show all ${total} rows':'▲ Show less';
+      ">${collapsed ? '▼ Show all ' + total + ' rows' : '▲ Show less'}</button>
+    </td></tr>`;
+  }
+  refresh();
+}
+
+// Auto-apply to any table with data-collapsible attribute
+function initCollapsibleTables() {
+  document.querySelectorAll('table[data-collapsible]').forEach(tbl => {
+    const n = parseInt(tbl.getAttribute('data-collapsible')) || 5;
+    makeCollapsible(tbl, n);
   });
 }
 
