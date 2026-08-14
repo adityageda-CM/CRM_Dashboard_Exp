@@ -668,9 +668,9 @@ body {
   <div class="ctrl">
     <label>Comparison</label>
     <select id="compareSel">
-      <option value="prev_period" selected>Previous period (same length)</option>
+      <option value="prev_period">Previous period (same length)</option>
       <option value="dod">Day over Day</option>
-      <option value="wow">Week over Week</option>
+      <option value="wow" selected>Week over Week</option>
       <option value="mom">Month over Month</option>
       <option value="qoq">Quarter over Quarter</option>
       <option value="none">No comparison</option>
@@ -840,7 +840,7 @@ function presetToRange(id){
   return [MIN_DATE, MAX_DATE];
 }
 
-const state = { start: null, end: null, grain:'month', compare:'prev_period', display:'abs' };
+const state = { start: null, end: null, grain:'month', compare:'wow', display:'abs' };
 
 function applyPreset(){
   const id = sel.value;
@@ -1234,7 +1234,14 @@ function renderMixpanel(){
     html += `<tr><td>${r.stage}</td><td class="num">${fmtN(r.dbx)}</td><td class="num">${fmtN(r.mp)}</td><td>${pct<0.03?'<span class="delta-up">match</span>':'<span class="delta-down">check</span>'}</td></tr>`;
   });
   html += '</tbody></table>';
-  html += `<div class="note">Spot-checked for ${mc.date||'2026-08-11'} (single day, simple total unique users per event — not cohort-restricted): Databricks and Mixpanel agree within a few percent on every stage, confirming the raw event data itself was always correct — the discrepancy the previous build showed was purely a cohort-scoping bug, now fixed above.</div>`;
+  html += `<div class="note">Spot-checked for ${mc.date||'2026-08-11'} (single day, simple total unique users per event — not cohort-restricted): Databricks and Mixpanel agree within a few percent on every stage, confirming the raw event data itself was always correct — the discrepancy the previous build showed was purely a cohort-scoping bug, now fixed above.</div>
+    <div class="note" style="margin-top:10px;background:#fff8e8;border:1px solid #e8c96b;border-radius:6px;padding:8px 10px">
+      <b>⚠ Aug 12 discrepancy — 34 (Mixpanel) vs 21 (this dashboard):</b><br>
+      This is not a data error — the two numbers measure different things.<br>
+      <b>This dashboard (21):</b> <code>rds_main.scapiadb.orders</code> filtered to <code>status='COMPLETE'</code> and <code>product_category='EXPERIENCE'</code>, booking_date = Aug 12 IST. These are confirmed, settled Experience orders only.<br>
+      <b>Mixpanel (34):</b> Most likely counting <code>tea_checkout_detail_submit</code> events (order submission), which fires the moment a user submits checkout — <em>before</em> payment clears and before the order reaches COMPLETE status. The gap (13 orders) represents payment failures, supplier rejections, and orders still in PENDING/PROCESSING state as of the query time.<br>
+      The Aug 11 cross-check above confirms DB and Mixpanel agree on <code>tea_checkout_detail_submit</code> (26 vs 26). If Mixpanel's Aug 12 "orders" metric is using a different event (e.g. <code>tea_order_updates</code>), it would fire multiple times per order on any status change, inflating the count further. Verify in Mixpanel which event they are actually tracking as "bookings".
+    </div>`;
   document.getElementById('mixpanelWrap').innerHTML = html;
 }
 
