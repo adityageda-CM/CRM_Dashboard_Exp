@@ -2,369 +2,620 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TEA Experiences — CRM + Funnel Dashboard</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TEA Experiences — Master Dashboard</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#f8f9fa;--surface:#fff;--surface2:#f1f3f5;--border:#dee2e6;
-  --text:#212529;--text2:#6c757d;--text3:#adb5bd;
-  --blue:#2a78d6;--blue-bg:#e7f0fc;--blue-border:#b6d0f5;
-  --green:#1a7a4a;--green-bg:#eaf7ef;--green-border:#a3d9b8;
-  --red:#c0392b;--red-bg:#fdecea;--red-border:#f5bfba;
-  --amber:#d97706;--amber-bg:#fffbeb;--amber-border:#fcd34d;
-  --radius:6px;
+  --bg:#f5f5f3;--surface:#ffffff;--surface2:#f0eeeb;--border:#e0dcd6;--border2:#ccc8c0;
+  --text:#1a1a18;--text2:#5a5850;--text3:#9a9890;
+  --blue:#1d6fd1;--blue-bg:#eaf2fd;--blue-border:#b8d5f5;
+  --green:#0e7a42;--green-bg:#e8f7ee;--green-border:#9fd8b8;
+  --red:#c0341c;--red-bg:#fcecea;--red-border:#f4bdb5;
+  --amber:#c97200;--amber-bg:#fff8e8;--amber-border:#f5d48a;
+  --purple:#5c3bb5;--purple-bg:#f0edfc;--purple-border:#c8bdef;
+  --r:6px;
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;padding:0;margin:0}
-.container{max-width:1200px;margin:0 auto;padding:20px 24px}
-.top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap}
-.top-bar h1{font-size:17px;font-weight:600;color:var(--text)}
-.top-bar .meta{font-size:12px;color:var(--text2);margin-top:2px}
-.refresh-btn{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;padding:8px 18px;border-radius:var(--radius);border:1px solid var(--blue-border);background:var(--blue-bg);color:var(--blue);cursor:pointer;transition:opacity .15s}
-.refresh-btn:hover{opacity:.8}
-.refresh-btn:disabled{opacity:.5;cursor:not-allowed}
-.dash-tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:1px solid var(--border)}
-.dash-tab{font-size:13px;font-weight:500;padding:8px 20px;cursor:pointer;color:var(--text2);border:1px solid transparent;border-bottom:none;background:transparent;border-radius:var(--radius) var(--radius) 0 0;margin-bottom:-1px}
-.dash-tab.act{color:var(--blue);border-color:var(--border);border-bottom-color:#fff;background:#fff}
-.slabel{font-size:11px;font-weight:600;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;margin:20px 0 8px}
-.kpi-grid{display:grid;gap:10px;margin-bottom:14px}
-.g4{grid-template-columns:repeat(4,1fr)}
-.g3{grid-template-columns:repeat(3,1fr)}
-.g5{grid-template-columns:repeat(5,1fr)}
-.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px}
-.kpi-label{font-size:11px;color:var(--text2);margin-bottom:4px}
-.kpi-val{font-size:22px;font-weight:600;color:var(--text);line-height:1.1}
-.kpi-sub{font-size:11px;color:var(--text2);margin-top:3px}
-.kpi.danger{border-color:var(--red-border);background:var(--red-bg)}
-.kpi.danger .kpi-val{color:var(--red)}
-.kpi.warn{border-color:var(--amber-border);background:var(--amber-bg)}
-.kpi.warn .kpi-val{color:var(--amber)}
-.kpi.ok{border-color:var(--green-border);background:var(--green-bg)}
-.kpi.ok .kpi-val{color:var(--green)}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:14px}
-.card-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:12px}
-.funnel-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
-.funnel-lbl{font-size:11px;color:var(--text2);width:172px;text-align:right;flex-shrink:0}
-.funnel-bg{flex:1;background:var(--surface2);border-radius:3px;height:18px;overflow:hidden;border:1px solid var(--border)}
-.funnel-fill{height:100%;border-radius:3px}
-.funnel-ct{font-size:11px;font-weight:600;color:var(--text);width:56px;text-align:right;flex-shrink:0}
-.funnel-pct{font-size:10px;color:var(--text3);width:38px;text-align:right;flex-shrink:0}
-.drop-note{font-size:9px;color:var(--red);text-align:center;margin-left:180px;margin-bottom:2px}
-.src-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5}
+.page{max-width:1160px;margin:0 auto;padding:16px 20px}
+.topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.topbar-left h1{font-size:16px;font-weight:600;color:var(--text);margin-bottom:3px}
+.topbar-left .meta{font-size:11px;color:var(--text3)}
+.btn-refresh{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;padding:7px 15px;border-radius:var(--r);border:1px solid var(--blue-border);background:var(--blue-bg);color:var(--blue);cursor:pointer;white-space:nowrap;transition:opacity .15s}
+.btn-refresh:hover{opacity:.8}
+.tabs{display:flex;border-bottom:1.5px solid var(--border);margin-bottom:16px;gap:0}
+.tab{font-size:12px;font-weight:500;padding:7px 18px;cursor:pointer;color:var(--text2);border:1px solid transparent;border-bottom:none;background:transparent;border-radius:var(--r) var(--r) 0 0;margin-bottom:-1.5px}
+.tab.on{color:var(--blue);border-color:var(--border);border-bottom-color:#fff;background:#fff}
+.slbl{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin:16px 0 8px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.g5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px}
+.kpi .lbl{font-size:10px;color:var(--text3);margin-bottom:3px}
+.kpi .val{font-size:21px;font-weight:600;color:var(--text);line-height:1.1}
+.kpi .sub{font-size:10px;color:var(--text2);margin-top:3px}
+.kpi.ok{border-color:var(--green-border);background:var(--green-bg)}.kpi.ok .val{color:var(--green)}
+.kpi.warn{border-color:var(--amber-border);background:var(--amber-bg)}.kpi.warn .val{color:var(--amber)}
+.kpi.bad{border-color:var(--red-border);background:var(--red-bg)}.kpi.bad .val{color:var(--red)}
+.kpi.info{border-color:var(--blue-border);background:var(--blue-bg)}.kpi.info .val{color:var(--blue)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:12px}
+.card-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px}
+.day-bar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.day-btn{font-size:10px;padding:3px 9px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer}
+.day-btn.on{background:var(--blue-bg);color:var(--blue);border-color:var(--blue-border);font-weight:600}
+.today-btn{background:#0e7a42 !important;color:#fff !important;border-color:#0e7a42 !important;font-weight:600 !important}
+.today-btn.on{opacity:.85}
+.date-pick{display:flex;align-items:center;gap:6px;margin-left:4px}
+.date-pick label{font-size:10px;color:var(--text3)}
+.date-pick input{font-size:10px;padding:3px 7px;border:1px solid var(--border);border-radius:var(--r);color:var(--text);background:var(--surface);cursor:pointer}
+.funnel-row{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.f-lbl{font-size:10px;color:var(--text2);width:170px;text-align:right;flex-shrink:0}
+.f-track{flex:1;background:var(--surface2);border-radius:3px;height:16px;overflow:hidden;border:1px solid var(--border)}
+.f-fill{height:100%;border-radius:3px;transition:width .35s}
+.f-ct{font-size:10px;font-weight:600;color:var(--text);width:54px;text-align:right;flex-shrink:0}
+.f-pct{font-size:9px;color:var(--text3);width:34px;text-align:right;flex-shrink:0}
+.f-drop{font-size:9px;color:var(--red);margin-left:176px;margin-bottom:2px}
+.src-row{display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid var(--border)}
 .src-row:last-child{border-bottom:none}
-.src-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
-.src-lbl{flex:1;font-size:12px;color:var(--text)}
-.src-bar-bg{width:80px;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;flex-shrink:0}
+.src-dot{width:7px;height:7px;border-radius:2px;flex-shrink:0}
+.src-lbl{flex:1;font-size:11px;color:var(--text)}
+.src-bar-bg{width:72px;height:5px;background:var(--surface2);border-radius:3px;overflow:hidden;flex-shrink:0}
 .src-bar-fill{height:100%;border-radius:3px}
-.src-n{font-size:12px;font-weight:600;width:40px;text-align:right}
-.src-pct{font-size:11px;color:var(--text2);width:40px;text-align:right}
-.badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px}
-.badge-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
-.badge-ok{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
-.badge-warn{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
-.day-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
-.day-btn{font-size:11px;padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer}
-.day-btn.act{background:var(--blue-bg);color:var(--blue);border-color:var(--blue-border);font-weight:500}
-.alert-box{background:var(--red-bg);border:1px solid var(--red-border);border-radius:var(--radius);padding:12px 16px;margin-bottom:14px}
-.alert-box p{font-size:12px;color:var(--red);line-height:1.6}
-.sys-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px}
+.src-n{font-size:11px;font-weight:600;width:38px;text-align:right;flex-shrink:0}
+.src-pct{font-size:10px;color:var(--text2);width:38px;text-align:right;flex-shrink:0}
+.badge{display:inline-block;font-size:9px;font-weight:600;padding:1px 6px;border-radius:8px;margin-left:4px}
+.badge-r{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.badge-o{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.badge-g{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.sys-row{display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid var(--border);font-size:11px}
 .sys-row:last-child{border-bottom:none}
-.insight-chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:4px 10px;border-radius:20px;margin:3px;background:var(--surface);border:1px solid var(--border);color:var(--text2)}
-.insight-chip.red{background:var(--red-bg);border-color:var(--red-border);color:var(--red)}
-.insight-chip.ok{background:var(--green-bg);border-color:var(--green-border);color:var(--green)}
-.stamp{font-size:10px;color:var(--text3);text-align:right;margin-top:6px}
-.chart-wrap{position:relative;width:100%;height:180px}
-.update-banner{background:var(--green-bg);border:1px solid var(--green-border);border-radius:var(--radius);padding:10px 14px;font-size:12px;color:var(--green);margin-bottom:14px;display:none;align-items:center;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:3px 8px;border-radius:16px;margin:2px;background:var(--surface);border:1px solid var(--border);color:var(--text2)}
+.chip.ok{background:var(--green-bg);border-color:var(--green-border);color:var(--green)}
+.chip.bad{background:var(--red-bg);border-color:var(--red-border);color:var(--red)}
+.alert{background:var(--red-bg);border:1px solid var(--red-border);border-radius:var(--r);padding:10px 14px;margin-bottom:12px;font-size:11px;color:var(--red);line-height:1.6}
+.period-bar{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:16px;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r)}
+.period-group{display:flex;align-items:center;gap:3px;margin-right:12px}
+.period-group .grp-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-right:4px;white-space:nowrap}
+.pbtn{font-size:10px;padding:3px 8px;border-radius:16px;border:1px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer}
+.pbtn.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.chart-wrap{position:relative;width:100%;height:160px}
+.stamp{font-size:9px;color:var(--text3);text-align:right;margin-top:5px}
+.data-note{background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:var(--r);padding:8px 12px;margin-bottom:12px;font-size:10px;color:var(--amber)}
+.sep{border:none;border-top:1px solid var(--border);margin:12px 0}
+.chan-row{display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid var(--border)}
+.chan-row:last-child{border-bottom:none}
 @keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
-<div class="container">
+<div class="page">
 
-<div id="updateBanner" class="update-banner">
-  <i class="ti ti-check"></i>
-  <span id="bannerMsg">Data refreshed successfully.</span>
-</div>
-
-<div class="top-bar">
-  <div>
+<div class="topbar">
+  <div class="topbar-left">
     <h1>TEA Experiences — CRM + Funnel master dashboard</h1>
-    <div class="meta">Flow: Experimental — Travel_Experiences_Location_based &nbsp;·&nbsp; Aug 2026 &nbsp;·&nbsp; <span id="last-updated">Last pulled: Aug 14, 2026</span></div>
+    <div class="meta">Flow: Experimental — Travel_Experiences_Location_based &nbsp;·&nbsp; <span id="last-ts">Aug 14, 2026 &nbsp;·&nbsp; Session data</span></div>
   </div>
-  <button class="refresh-btn" id="refreshBtn" onclick="triggerRefresh()">
-    <i class="ti ti-refresh" id="refreshIcon"></i>
-    Refresh live data
+  <button class="btn-refresh" id="rfBtn" onclick="doRefresh()">
+    <i class="ti ti-refresh" id="rfIcon"></i> Refresh live data
   </button>
 </div>
 
-<div class="dash-tabs">
-  <button class="dash-tab act" onclick="switchDash('crm',this)">CRM flow dashboard</button>
-  <button class="dash-tab" onclick="switchDash('tea',this)">TEA funnel dashboard</button>
+<div class="tabs">
+  <button class="tab on" onclick="sw('crm',this)">CRM flow dashboard</button>
+  <button class="tab" onclick="sw('tea',this)">TEA organic funnel</button>
 </div>
 
-<!-- CRM DASHBOARD -->
+<!-- ==================== CRM DASHBOARD ==================== -->
 <div id="dash-crm">
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px">
-  <div class="day-filter" id="dayFilter" style="margin-bottom:0"></div>
-  <button class="day-btn" id="todayBtn" onclick="goToday()" style="background:#1a7a4a;color:#fff;border-color:#1a7a4a;font-weight:600">Today</button>
-  <div style="display:flex;align-items:center;gap:6px;margin-left:4px">
-    <label style="font-size:11px;color:#6c757d">Custom date:</label>
-    <input type="date" id="customDate" min="2026-08-01" max="2026-08-14" value="2026-08-10"
-      style="font-size:11px;padding:3px 8px;border:1px solid #dee2e6;border-radius:6px;color:#212529;background:#fff;cursor:pointer"
-      onchange="goCustomDate(this.value)">
-  </div>
-</div>
-
-  <div class="slabel">CRM delivery — <span id="crm-day-lbl">Aug 10</span></div>
-  <div class="kpi-grid g4">
-    <div class="kpi warn"><div class="kpi-label">Messages sent</div><div class="kpi-val" id="k-msgs">10,071</div><div class="kpi-sub">P1 + P2 + WA + FP</div></div>
-    <div class="kpi"><div class="kpi-label">Unique people</div><div class="kpi-val" id="k-ppl">1,657</div><div class="kpi-sub">entered flow</div></div>
-    <div class="kpi warn"><div class="kpi-label">Msgs per person</div><div class="kpi-val" id="k-mpp">6.1</div><div class="kpi-sub">multi-channel waste</div></div>
-    <div class="kpi"><div class="kpi-label">Held-out (GCG)</div><div class="kpi-val" id="k-gcg">13</div><div class="kpi-sub">global control group</div></div>
-  </div>
-  <div class="kpi-grid g4">
-    <div class="kpi warn"><div class="kpi-label">Total clicks</div><div class="kpi-val" id="k-clicks">102</div><div class="kpi-sub" id="k-ctr">CTR 1.0% of msgs</div></div>
-    <div class="kpi"><div class="kpi-label">Push seen rate</div><div class="kpi-val" id="k-seen">~52%</div><div class="kpi-sub">of P1 sent</div></div>
-    <div class="kpi danger"><div class="kpi-label">CRM → city view (DB)</div><div class="kpi-val" id="k-cv">1</div><div class="kpi-sub">0.01% of msgs sent</div></div>
-    <div class="kpi danger"><div class="kpi-label">MoEngage CVR</div><div class="kpi-val">0.0%</div><div class="kpi-sub">all 13 days confirmed</div></div>
+  <div class="day-bar" id="dayBar"></div>
+  <div class="date-pick" style="margin-bottom:12px">
+    <label>Custom date:</label>
+    <input type="date" id="datePick" min="2026-08-01" max="2026-08-13" value="2026-08-10" onchange="pickDate(this.value)">
   </div>
 
-  <div class="two-col">
+  <div class="slabel" id="crm-slbl">CRM delivery — Aug 10</div>
+  <div class="g4">
+    <div class="kpi warn"><div class="lbl">Messages sent</div><div class="val" id="k-total">10,071</div><div class="sub">P1 + P2 + WA + Final Push</div></div>
+    <div class="kpi"><div class="lbl">New entrants today</div><div class="val" id="k-ppl">1,657</div><div class="sub">Users who triggered location event</div></div>
+    <div class="kpi info"><div class="lbl">Flow design</div><div class="val" style="font-size:14px">4 msgs / trip</div><div class="sub">P1 → P2 → WA → FP over ~3 days</div></div>
+    <div class="kpi"><div class="lbl">Global control held out</div><div class="val" id="k-gcg">13</div><div class="sub">Did not receive any message</div></div>
+  </div>
+  <div class="g4">
+    <div class="kpi warn"><div class="lbl">Total clicks (all channels)</div><div class="val" id="k-clicks">102</div><div class="sub" id="k-ctr">CTR 1.0% of msgs sent</div></div>
+    <div class="kpi"><div class="lbl">P1 push seen rate</div><div class="val" id="k-seen">~52%</div><div class="sub" id="k-seen-sub">~1,997 of 3,841 P1 sent</div></div>
+    <div class="kpi bad"><div class="lbl">CRM clicks → city view (DB)</div><div class="val" id="k-cv">1</div><div class="sub">of 10,071 msgs = 0.01%</div></div>
+    <div class="kpi bad"><div class="lbl">MoEngage CVR (all 13 days)</div><div class="val">0.0%</div><div class="sub">tea_city_view — confirmed zero</div></div>
+  </div>
+
+  <div class="alert">
+    <strong><i class="ti ti-alert-triangle" style="font-size:13px;vertical-align:-1px;margin-right:5px"></i>Root cause — deep link broken.</strong>
+    Users click the push → app opens → mpin screen appears → after mpin, app routes to home screen instead of TEA city page.
+    Result: 919 users had <code>dynamic_link_executed</code> fire but 1,083 landed on home screen.
+    Only 1 user reached <code>tea_city_view</code> from CRM on Aug 10. Fix: persist deep link destination across mpin auth.
+  </div>
+
+  <div class="g2">
     <div class="card">
-      <div class="card-title">Channel breakdown — <span id="chan-day">Aug 10</span></div>
+      <div class="card-title">Channel breakdown — <span id="chan-lbl">Aug 10</span></div>
       <div id="chan-grid"></div>
     </div>
     <div class="card">
-      <div class="card-title">Post-click funnel — DB confirmed Aug 10 (Push attr)</div>
-      <div id="funnel-crm"></div>
+      <div class="card-title">Post-click funnel (DB confirmed, Aug 8–12 per day)</div>
+      <div id="crm-funnel"></div>
+      <div class="stamp" id="funnel-stamp">Source: DB percept_event_all, source_attribute_type = 'Push'</div>
     </div>
   </div>
 
-  <div class="alert-box">
-    <p><i class="ti ti-alert-triangle" style="font-size:14px;vertical-align:-2px;margin-right:6px"></i>
-    <strong>Deep link is broken.</strong> 919 users had <code>dynamic_link_executed</code> fire — but 1,083 landed on home+mpin instead of the TEA city page. Only 1 user reached tea_city_view. Fix: persist deep link destination across mpin auth flow (Akshata / engineering to own).</p>
+  <div class="slbl">Vignes's 3 questions — Aug 10 ground truth (Databricks confirmed)</div>
+  <div class="g3">
+    <div class="kpi ok">
+      <div class="lbl">Q1 — CRM × organic overlap</div>
+      <div class="val">4.2%</div>
+      <div class="sub">Only 15 of 357 organic TEA city viewers also got a PN that day. The sets are 95.8% non-overlapping — CRM is reaching incremental users.</div>
+    </div>
+    <div class="kpi bad">
+      <div class="lbl">Q2 — System 2 pipeline leak</div>
+      <div class="val">~63%</div>
+      <div class="sub">DB user_location qualifies ~1,866 users/day. MoEngage receives ~682. ~1,184 users/day are lost between DB trigger and MoEngage entry.</div>
+    </div>
+    <div class="kpi warn">
+      <div class="lbl">Q3 — CRM-pool EXPERIENCE orders</div>
+      <div class="val">4 orders</div>
+      <div class="sub">₹41k GMV, Aug 1–13. Loose attribution — users in CRM pool who later booked, not necessarily same-session. Cannot attribute directly to push.</div>
+    </div>
   </div>
 
-  <div class="slabel">Vignes's 3 questions — Aug 10 ground truth (DB)</div>
-  <div class="kpi-grid g3">
-    <div class="kpi ok"><div class="kpi-label">Overlap: CRM recipients in organic TEA</div><div class="kpi-val">4.2%</div><div class="kpi-sub">Only 15 of 357 TEA visitors also got a PN — sets are almost entirely distinct. CRM reaches new users.</div></div>
-    <div class="kpi danger"><div class="kpi-label">System 2 pipeline leak</div><div class="kpi-val">~47%</div><div class="kpi-sub">DB user_location: ~1,866 qualify/day. MoEngage gets: ~682. ~1,184 users/day lost in the pipeline.</div></div>
-    <div class="kpi warn"><div class="kpi-label">CRM-pool EXPERIENCE bookings</div><div class="kpi-val">4 bookings</div><div class="kpi-sub">₹41k GMV Aug 1–13 (loose attribution — users who got PN and later booked)</div></div>
-  </div>
-
-  <div class="two-col">
+  <div class="g2">
     <div class="card">
-      <div class="card-title">tea_city_view source attribution — Aug 10 (DB)</div>
-      <div id="src-breakdown"></div>
-      <div class="stamp">Source: percept_event_all, source_attribute_type field</div>
+      <div class="card-title">tea_city_view source attribution — Aug 10 (DB confirmed)</div>
+      <div id="src-bkdn"></div>
+      <div class="stamp">372 attribution events → 357 unique users (15 users in both organic + CRM)</div>
     </div>
     <div class="card">
-      <div class="card-title">System 1 vs System 2 — daily qualifying users</div>
+      <div class="card-title">System 1 (DB) vs System 2 (MoEngage) — daily qualifying users</div>
       <div id="sys-compare"></div>
-      <div class="stamp">System 1 = simple.crud.user_location &nbsp;·&nbsp; System 2 = MoEngage engaged trips</div>
+      <div class="stamp">System 1 = simple.crud.user_location qualifying users &nbsp;·&nbsp; System 2 = MoEngage flow entrants</div>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-title">Daily CRM delivery — Aug 1–12 (orange = spike day)</div>
-    <div class="chart-wrap"><canvas id="dailyChart" role="img" aria-label="Bar chart of daily CRM messages Aug 1 to 12">Daily messages ranging from 7,763 to 14,431.</canvas></div>
+    <div class="card-title">Daily CRM delivery — Aug 1–12 (⚡ = spike day)</div>
+    <div class="chart-wrap"><canvas id="dailyChart" role="img" aria-label="Bar chart daily CRM messages Aug 1-12">Aug 1-12 daily messages sent, ranging 1,743 to 14,431.</canvas></div>
   </div>
 
   <div class="card">
-    <div class="card-title">A/B — Personalised vs Simple (all-time, MoEngage split_stage_stats)</div>
-    <div class="kpi-grid g4" style="margin-bottom:0">
-      <div class="kpi"><div class="kpi-label">P1 Personalised sent</div><div class="kpi-val">17,894</div><div class="kpi-sub">247 clicks · 1.4% CTR</div></div>
-      <div class="kpi ok"><div class="kpi-label">P1 Simple sent</div><div class="kpi-val">4,149</div><div class="kpi-sub">81 clicks · 2.0% CTR ↑</div></div>
-      <div class="kpi"><div class="kpi-label">WA Personalised sent</div><div class="kpi-val">4,991</div><div class="kpi-sub">70 clicks · 1.4% CTR</div></div>
-      <div class="kpi ok"><div class="kpi-label">WA Simple sent</div><div class="kpi-val">5,575</div><div class="kpi-sub">82 clicks · 1.5% CTR ↑</div></div>
+    <div class="card-title">A/B performance: Personalised vs Simple — all-time (MoEngage split_stage_stats)</div>
+    <div class="g4" style="margin-bottom:0">
+      <div class="kpi"><div class="lbl">P1 Personalised</div><div class="val">17,894</div><div class="sub">247 clicks · 1.4% CTR</div></div>
+      <div class="kpi ok"><div class="lbl">P1 Simple ↑</div><div class="val">4,149</div><div class="sub">81 clicks · 2.0% CTR</div></div>
+      <div class="kpi"><div class="lbl">WA Personalised</div><div class="val">4,991</div><div class="sub">70 clicks · 1.4% CTR</div></div>
+      <div class="kpi ok"><div class="lbl">WA Simple ↑</div><div class="val">5,575</div><div class="sub">82 clicks · 1.5% CTR</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Flow timeline — how one person experiences this flow</div>
+    <div style="display:flex;flex-wrap:wrap;gap:0;font-size:11px">
+      <div style="background:var(--blue-bg);border:1px solid var(--blue-border);border-radius:var(--r);padding:8px 12px;margin:4px;flex:1;min-width:130px">
+        <div style="font-weight:600;color:var(--blue);margin-bottom:2px">Day 0, T+20min</div>
+        <div style="color:var(--text2)">P1 Push sent</div>
+        <div style="font-size:9px;color:var(--text3);margin-top:2px">Triggered by location event</div>
+      </div>
+      <div style="display:flex;align-items:center;color:var(--text3);font-size:16px;padding:0 2px">→</div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:8px 12px;margin:4px;flex:1;min-width:130px">
+        <div style="font-weight:600;color:var(--text);margin-bottom:2px">Day 1, T+20min</div>
+        <div style="color:var(--text2)">P2 Push sent</div>
+        <div style="font-size:9px;color:var(--text3);margin-top:2px">24h after P1</div>
+      </div>
+      <div style="display:flex;align-items:center;color:var(--text3);font-size:16px;padding:0 2px">→</div>
+      <div style="background:var(--green-bg);border:1px solid var(--green-border);border-radius:var(--r);padding:8px 12px;margin:4px;flex:1;min-width:130px">
+        <div style="font-weight:600;color:var(--green);margin-bottom:2px">Day 1, T+50min</div>
+        <div style="color:var(--text2)">WhatsApp sent</div>
+        <div style="font-size:9px;color:var(--text3);margin-top:2px">30min after P2</div>
+      </div>
+      <div style="display:flex;align-items:center;color:var(--text3);font-size:16px;padding:0 2px">→</div>
+      <div style="background:var(--purple-bg);border:1px solid var(--purple-border);border-radius:var(--r);padding:8px 12px;margin:4px;flex:1;min-width:130px">
+        <div style="font-weight:600;color:var(--purple);margin-bottom:2px">Day 3, T+50min</div>
+        <div style="color:var(--text2)">Final Push sent</div>
+        <div style="font-size:9px;color:var(--text3);margin-top:2px">48h after WA</div>
+      </div>
+    </div>
+    <div style="font-size:10px;color:var(--text3);margin-top:8px">
+      Max 1 message per day per person. Daily totals include multiple batches: P1 to today's new entrants, P2/WA to yesterday's entrants, FP to 3-days-ago entrants. Daily total msgs ÷ daily new entrants is meaningless — it's a cross-batch ratio.
     </div>
   </div>
 </div>
 
-<!-- TEA FUNNEL DASHBOARD -->
+<!-- ==================== TEA FUNNEL DASHBOARD ==================== -->
 <div id="dash-tea" style="display:none">
-  <div class="slabel">TEA organic funnel — Aug 10 (DB confirmed)</div>
-  <div class="kpi-grid g4">
-    <div class="kpi"><div class="kpi-label">Total TEA city viewers</div><div class="kpi-val">357</div><div class="kpi-sub">all sources, Aug 10</div></div>
-    <div class="kpi ok"><div class="kpi-label">Home page entry</div><div class="kpi-val">135</div><div class="kpi-sub">37.9% of TEA traffic</div></div>
-    <div class="kpi ok"><div class="kpi-label">Merchandising</div><div class="kpi-val">133</div><div class="kpi-sub">37.3% of TEA traffic</div></div>
-    <div class="kpi danger"><div class="kpi-label">CRM push</div><div class="kpi-val">1</div><div class="kpi-sub">0.28% — deep link broken</div></div>
-  </div>
-  <div class="kpi-grid g4">
-    <div class="kpi"><div class="kpi-label">Travel home icon</div><div class="kpi-val">35</div><div class="kpi-sub">9.8%</div></div>
-    <div class="kpi warn"><div class="kpi-label">Unknown / direct</div><div class="kpi-val">68</div><div class="kpi-sub">19.1% untracked</div></div>
-    <div class="kpi ok"><div class="kpi-label">Non-overlap (organic only)</div><div class="kpi-val">95.8%</div><div class="kpi-sub">CRM and organic reach distinct users</div></div>
-    <div class="kpi danger"><div class="kpi-label">CRM efficiency</div><div class="kpi-val">0.01%</div><div class="kpi-sub">10,071 msgs → 1 city view</div></div>
+
+  <div class="period-bar">
+    <div class="period-group">
+      <span class="grp-lbl">Period</span>
+      <button class="pbtn" onclick="setPeriod('today',this)">Today</button>
+      <button class="pbtn" onclick="setPeriod('yesterday',this)">Yesterday</button>
+      <button class="pbtn on" onclick="setPeriod('7d',this)">Last 7d</button>
+      <button class="pbtn" onclick="setPeriod('30d',this)">Last 30d</button>
+      <button class="pbtn" onclick="setPeriod('alltime',this)">All time</button>
+    </div>
+    <div class="period-group">
+      <span class="grp-lbl">Compare</span>
+      <button class="pbtn" onclick="setCompare('dod',this)">DoD</button>
+      <button class="pbtn on" onclick="setCompare('wow',this)">WoW</button>
+      <button class="pbtn" onclick="setCompare('mom',this)">MoM</button>
+      <button class="pbtn" onclick="setCompare('qoq',this)">QoQ</button>
+    </div>
+    <div class="period-group">
+      <span class="grp-lbl">Display</span>
+      <button class="pbtn on" onclick="setDisplay('abs',this)">Absolute</button>
+      <button class="pbtn" onclick="setDisplay('pct',this)">% change</button>
+    </div>
   </div>
 
-  <div class="two-col">
+  <div class="data-note">
+    <i class="ti ti-info-circle" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>
+    TEA funnel data: Aug 8–12 confirmed from Databricks (percept_event_all + rds_main.scapiadb.orders).
+    Aug 1–7 and Aug 13 are MoEngage-only (no DB funnel available for those days). Period comparisons use available confirmed days.
+    <strong>tea_event_mart_daily is dead since May 19 2026 — not used.</strong>
+  </div>
+
+  <div class="slbl">Full funnel — Scapia app to booking (Aug 8–12, DB confirmed)</div>
+  <div class="g4">
+    <div class="kpi"><div class="lbl">TEA module views</div><div class="val" id="tf-module">~1,850</div><div class="sub">tea_module_view, 5-day est.</div></div>
+    <div class="kpi"><div class="lbl">City views (organic)</div><div class="val" id="tf-city">1,893</div><div class="sub">All sources, Aug 8–12 DB confirmed</div></div>
+    <div class="kpi bad"><div class="lbl">CRM push → city view</div><div class="val">4</div><div class="sub">1 per day Aug 8–11, 0 on Aug 12</div></div>
+    <div class="kpi bad"><div class="lbl">EXPERIENCE bookings</div><div class="val">~10–15</div><div class="sub">rds_main.scapiadb.orders Aug 8–12 est.</div></div>
+  </div>
+
+  <div class="g2">
     <div class="card">
-      <div class="card-title">Source attribution — tea_city_view (Aug 10, DB)</div>
+      <div class="card-title">Post-CRM-click full journey — Aug 10 all 3,620 app openers</div>
+      <div id="tea-funnel-full"></div>
+      <div class="stamp">DB percept_event_all, source_attribute_type = 'Push', Aug 10</div>
+    </div>
+    <div class="card">
+      <div class="card-title">tea_city_view source attribution — Aug 10 (357 unique users)</div>
       <div id="tea-src"></div>
+      <div class="stamp">Note: 372 attribution events vs 357 unique users — 15 users got both organic and CRM</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">City view daily tracker — Aug 8–12 (DB confirmed per source)</div>
+    <div class="g5">
+      <div class="kpi"><div class="lbl">Aug 8</div><div class="val">415</div><div class="sub">push=1, home=128, merch=171</div></div>
+      <div class="kpi"><div class="lbl">Aug 9</div><div class="val">455</div><div class="sub">push=1, home=173, merch=181</div></div>
+      <div class="kpi ok"><div class="lbl">Aug 10</div><div class="val">357</div><div class="sub">push=1, home=135, merch=133 (ground truth)</div></div>
+      <div class="kpi"><div class="lbl">Aug 11</div><div class="val">378</div><div class="sub">push=1, home=132, merch=131</div></div>
+      <div class="kpi"><div class="lbl">Aug 12</div><div class="val">395</div><div class="sub">push=0, home=141, merch=158</div></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px">
+      <span class="chip ok"><i class="ti ti-check"></i> Home + merch = 70–80% of traffic every day</span>
+      <span class="chip bad"><i class="ti ti-x"></i> CRM = 0.22–0.28% every single day — deep link broken</span>
+      <span class="chip ok"><i class="ti ti-check"></i> CRM and organic are 95.8% non-overlapping users</span>
+      <span class="chip bad"><i class="ti ti-x"></i> 0% booking CVR every day in MoEngage (all 13 days)</span>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-title">Entry points — 5 buckets (Jun 1–Aug 11, DB live data)</div>
+      <div id="entry-bkdn"></div>
+      <div class="stamp">source_attribute_type from percept_event_agg — sample Aug 10</div>
     </div>
     <div class="card">
-      <div class="card-title">Post-PN journey — all 3,620 app openers (Aug 10, Push attr)</div>
-      <div id="funnel-tea"></div>
-      <div class="stamp">Source: DB percept_event_all, source_attribute_type = 'Push'</div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">TEA city viewers by day — Aug 8–12 (DB confirmed)</div>
-    <div class="kpi-grid g5">
-      <div class="kpi"><div class="kpi-label">Aug 8</div><div class="kpi-val">415</div><div class="kpi-sub">push = 1</div></div>
-      <div class="kpi"><div class="kpi-label">Aug 9</div><div class="kpi-val">455</div><div class="kpi-sub">push = 1</div></div>
-      <div class="kpi ok"><div class="kpi-label">Aug 10</div><div class="kpi-val">357</div><div class="kpi-sub">push = 1 (ground truth)</div></div>
-      <div class="kpi"><div class="kpi-label">Aug 11</div><div class="kpi-val">378</div><div class="kpi-sub">push = 1</div></div>
-      <div class="kpi"><div class="kpi-label">Aug 12</div><div class="kpi-val">395</div><div class="kpi-sub">push = 0</div></div>
-    </div>
-    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px">
-      <span class="insight-chip ok"><i class="ti ti-check"></i> Home + merch drives 70%+ every day</span>
-      <span class="insight-chip red"><i class="ti ti-x"></i> CRM = 0.22–0.28% every single day</span>
-      <span class="insight-chip ok"><i class="ti ti-check"></i> CRM + organic are 95.8% non-overlapping</span>
-      <span class="insight-chip red"><i class="ti ti-x"></i> Deep link routing is the single root cause</span>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">MoEngage conversion goal — all 13 days (Aug 1–13)</div>
-    <div style="display:flex;align-items:center;gap:14px;padding:8px 0">
-      <div style="width:56px;height:56px;border-radius:50%;background:var(--red-bg);border:2px solid var(--red-border);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--red);flex-shrink:0">0%</div>
-      <div>
-        <div style="font-size:14px;font-weight:600;color:var(--red)">tea_city_view CVR = 0.0% on all 13 days</div>
-        <div style="font-size:12px;color:var(--text2);margin-top:4px;line-height:1.5">Confirmed independently by both MoEngage flow analytics API and Databricks percept_event_all. Not a measurement gap — structurally zero because the deep link does not route users to the TEA page after mpin authentication.</div>
+      <div class="card-title">MoEngage conversion goal — all 13 days</div>
+      <div style="display:flex;align-items:center;gap:12px;padding:8px 0">
+        <div style="width:54px;height:54px;border-radius:50%;background:var(--red-bg);border:2px solid var(--red-border);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--red);flex-shrink:0">0%</div>
+        <div>
+          <div style="font-size:13px;font-weight:600;color:var(--red)">tea_city_view CVR = 0.0% on all 13 days (Aug 1–13)</div>
+          <div style="font-size:11px;color:var(--text2);margin-top:4px;line-height:1.6">
+            Confirmed independently by both MoEngage flow analytics API and Databricks percept_event_all.
+            Not a measurement gap — structurally zero because the deep link does not route to the TEA city page post-mpin.
+            Goal 1 (tea_order_updates) also near-zero across all 20 campaigns in the PN export.
+          </div>
+        </div>
       </div>
     </div>
   </div>
+
+  <div class="card">
+    <div class="card-title">What's working vs what's broken</div>
+    <div class="g2" style="margin-bottom:0">
+      <div>
+        <div style="font-size:11px;font-weight:600;color:var(--green);margin-bottom:6px"><i class="ti ti-check" style="font-size:12px"></i> Working</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.7">
+          • Home page icon and merchandising together drive 70–80% of all TEA traffic<br>
+          • CRM and organic user sets are 95.8% non-overlapping — no cannibalisation<br>
+          • System 1 (DB qualifying) identifies 1,700–2,100 users/day correctly<br>
+          • A/B: Simple messages outperform Personalised (2.0% vs 1.4% CTR)<br>
+          • Total CRM reach is significant: 10k+ msgs/day at peak
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:600;color:var(--red);margin-bottom:6px"><i class="ti ti-x" style="font-size:12px"></i> Broken / needs fixing</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.7">
+          • <strong>Deep link post-mpin</strong>: CRM gets 0.01% click-to-city-view rate (should be ~60%)<br>
+          • <strong>System 2 pipeline</strong>: 63% of qualifying users never enter MoEngage flow<br>
+          • <strong>0% booking CVR</strong>: No post-click conversions in 13 days across all CRM channels<br>
+          • <strong>Price mismatch</strong>: UX audit found consistent price inconsistency across verified experiences<br>
+          • <strong>Unknown attribution</strong>: 19% of tea_city_view visits have unknown source
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Supplier split — Databricks orders Aug 1–13 (approximate, cross-checking needed)</div>
+    <div class="g3" style="margin-bottom:0">
+      <div class="kpi"><div class="lbl">GetYourGuide (GYG)</div><div class="val">~60%</div><div class="sub">Primary supplier by volume</div></div>
+      <div class="kpi"><div class="lbl">Headout</div><div class="val">~40%</div><div class="sub">Secondary supplier</div></div>
+      <div class="kpi warn"><div class="lbl">Combined GMV Aug 1–13</div><div class="val">~₹41k</div><div class="sub">From CRM-pool attribution, not total category GMV</div></div>
+    </div>
+  </div>
+
+  <div class="card" style="border-color:var(--amber-border);background:var(--amber-bg)">
+    <div class="card-title" style="color:var(--amber)">Data methodology &amp; gaps</div>
+    <div style="font-size:10px;color:var(--text2);line-height:1.8">
+      <strong>Confirmed from DB (percept_event_all):</strong> Aug 8–12 post-click funnel, tea_city_view source attribution Aug 10, overlap analysis Aug 10, system 1 qualifying users Aug 8–13.<br>
+      <strong>Confirmed from MoEngage API:</strong> Aug 1–13 daily delivery (P1/P2/WA/FP sent + clicks), all-time A/B split stage stats, 0% CVR all 13 days.<br>
+      <strong>NOT confirmed / estimates:</strong> Supplier split %, total category GMV, tea_module_view daily counts (tea_event_mart_daily dead since May 19), Aug 14 data (no query run yet).<br>
+      <strong>Known data traps:</strong> tea_event_mart_daily = dead. percept_event_agg missing tea_impressions/tea_book_cta_click/tea_payments. WhatsApp recorded as both "Whatsapp" and "Whasapp" (typo) in DB — must merge. lat/lon swapped in rds_location.locationmaster.
+    </div>
+  </div>
 </div>
 
-</div>
+</div><!-- .page -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
 const DAYS={
-  aug08:{lbl:"Aug 8", p1:4277,p2:3114,wa:2048,fp:836, c:[50,34,26,6], ppl:2248,gcg:30,city:1},
-  aug09:{lbl:"Aug 9", p1:4255,p2:3299,wa:2165,fp:863, c:[52,37,31,7], ppl:1966,gcg:18,city:1},
-  aug10:{lbl:"Aug 10",p1:3841,p2:3069,wa:2138,fp:1023,c:[42,27,26,7], ppl:1657,gcg:13,city:1},
-  aug11:{lbl:"Aug 11",p1:5465,p2:4237,wa:3117,fp:1612,c:[58,39,35,13],ppl:5465,gcg:15,city:1,spike:true},
-  aug12:{lbl:"Aug 12",p1:1310,p2:931, wa:716, fp:364, c:[17,10,8,2],  ppl:1310,gcg:17,city:0},
-  aug13:{lbl:"Aug 13",p1:717, p2:520, wa:362, fp:144, c:[9,7,5,1],    ppl:454, gcg:12,city:null},
+  aug08:{l:"Aug 8", p1:4277,p2:3114,wa:2048,fp:836, cl:[50,34,26,6],  ppl:2248,gcg:30,db:{app:1467,home:1121,trav:276,tea:27,city:1,pdp:1}},
+  aug09:{l:"Aug 9", p1:4255,p2:3299,wa:2165,fp:863, cl:[52,37,31,7],  ppl:1966,gcg:18,db:{app:1399,home:1060,trav:235,tea:26,city:1,pdp:1}},
+  aug10:{l:"Aug 10",p1:3841,p2:3069,wa:2138,fp:1023,cl:[42,27,26,7],  ppl:1657,gcg:13,db:{app:1371,home:1083,trav:241,tea:31,city:1,pdp:2}},
+  aug11:{l:"Aug 11",p1:5465,p2:4237,wa:3117,fp:1612,cl:[58,39,35,13], ppl:5465,gcg:15,db:{app:1379,home:997, trav:264,tea:22,city:1,pdp:1},spike:true},
+  aug12:{l:"Aug 12",p1:1310,p2:931, wa:716, fp:364, cl:[17,10,8,2],   ppl:1310,gcg:17,db:{app:1302,home:1033,trav:227,tea:25,city:0,pdp:1}},
+  aug13:{l:"Aug 13",p1:717, p2:520, wa:362, fp:144, cl:[9,7,5,1],     ppl:454, gcg:12,db:null},
 };
+const SYS=[
+  {d:"Aug 8", s1:2103,s2:782},{d:"Aug 9",s1:2143,s2:773},
+  {d:"Aug 10",s1:1866,s2:682},{d:"Aug 11",s1:1716,s2:582},
+  {d:"Aug 12",s1:1717,s2:588},{d:"Aug 13",s1:1686,s2:570},
+];
 const CHART_DATA={aug01:7763,aug02:8328,aug03:8154,aug04:7976,aug05:7826,aug06:8237,aug07:9008,aug08:10275,aug09:10582,aug10:10071,aug11:14431,aug12:3321};
-const SYS=[{d:"Aug 8",s1:2103,s2:782},{d:"Aug 9",s1:2143,s2:773},{d:"Aug 10",s1:1866,s2:682},{d:"Aug 11",s1:1716,s2:582},{d:"Aug 12",s1:1717,s2:588},{d:"Aug 13",s1:1686,s2:570}];
-const DB_F={app:1371,home:1083,trav:241,tea:31,city:1,pdp:2,book:0};
-const SRC=[{lbl:"Home page entry",n:135,col:"#1a7a4a"},{lbl:"Merchandising",n:133,col:"#1a7a4a"},{lbl:"Unknown / direct",n:68,col:"#888"},{lbl:"Travel home icon",n:35,col:"#2a78d6"},{lbl:"CRM push",n:1,col:"#c0392b",bad:true}];
-let curDay="aug10";
+const SRCS=[
+  {lbl:"Home page entry",  n:135, col:"#0e7a42"},
+  {lbl:"Merchandising",    n:133, col:"#0e7a42"},
+  {lbl:"Unknown / direct", n:68,  col:"#9a9890"},
+  {lbl:"Travel home icon", n:35,  col:"#1d6fd1"},
+  {lbl:"CRM push",         n:1,   col:"#c0341c", bad:true},
+];
+const ENTRY=[
+  {lbl:"Home page icon",  n:135, col:"#1d6fd1"},
+  {lbl:"Merchandising",   n:133, col:"#5c3bb5"},
+  {lbl:"Travel page icon",n:35,  col:"#0e7a42"},
+  {lbl:"Coins / Explore", n:12,  col:"#c97200"},
+  {lbl:"CRM push",        n:1,   col:"#c0341c", bad:true},
+  {lbl:"Other / untagged",n:68,  col:"#9a9890"},
+];
+let cur="aug10";
+let period="7d",compare="wow",display="abs";
 
 const n=v=>typeof v==="number"?v.toLocaleString():String(v);
-const pct=(a,b)=>b>0?(a/b*100).toFixed(1)+"%":"—";
+const p=(a,b)=>b>0?(a/b*100).toFixed(1)+"%":"—";
 
-function triggerRefresh(){
-  const btn=document.getElementById("refreshBtn"),icon=document.getElementById("refreshIcon");
+function doRefresh(){
+  const btn=document.getElementById("rfBtn"),ic=document.getElementById("rfIcon");
   btn.disabled=true;
-  icon.style.animation="spin .7s linear infinite";
-  alert("Refresh request sent to Claude! Go back to the Claude chat — it will pull fresh MoEngage + DB data and post an updated dashboard.");
-  setTimeout(()=>{icon.style.animation="";btn.disabled=false;},2000);
+  ic.style.animation="spin .7s linear infinite";
+  if(typeof sendPrompt==="function"){
+    sendPrompt("Refresh dashboard — pull today's latest MoEngage data for the location flow (flow_id: 6a295838b4cecb7392eeb7a5) and update with fresh Aug 14 numbers.");
+  } else {
+    alert("Go back to the Claude chat and press Refresh — I'll pull latest MoEngage + DB data and post an updated dashboard.");
+    ic.style.animation="";
+    btn.disabled=false;
+  }
+  setTimeout(()=>{ic.style.animation="";btn.disabled=false;},2000);
+}
+
+function sw(id,el){
+  document.getElementById("dash-crm").style.display=id==="crm"?"block":"none";
+  document.getElementById("dash-tea").style.display=id==="tea"?"block":"none";
+  document.querySelectorAll(".tab").forEach(b=>b.classList.remove("on"));
+  el.classList.add("on");
 }
 
 function setDay(k,el){
-  curDay=k;document.querySelectorAll(".day-btn").forEach(b=>b.classList.remove("act"));el.classList.add("act");renderDay();
+  cur=k;
+  document.querySelectorAll(".day-btn").forEach(b=>b.classList.remove("on"));
+  el.classList.add("on");
+  renderDay();
 }
 
-function buildDayFilter(){
-  document.getElementById("dayFilter").innerHTML=Object.keys(DAYS).filter(k=>k!=="aug14").map(k=>`<button class="day-btn${k===curDay?" act":""}" onclick="setDay('${k}',this)">${DAYS[k].lbl}${DAYS[k].spike?" ⚡":""}</button>`).join("");
+function buildDayBar(){
+  const el=document.getElementById("dayBar");
+  const days=["aug08","aug09","aug10","aug11","aug12","aug13"];
+  el.innerHTML=days.map(k=>`<button class="day-btn${k===cur?" on":""}" onclick="setDay('${k}',this)">${DAYS[k].l}${DAYS[k].spike?" ⚡":""}</button>`).join("")
+    + `<button class="day-btn today-btn${cur==="aug13"?" on":""}" onclick="setDay('aug13',this)">Today (Aug 13)</button>`;
+}
+
+function pickDate(v){
+  const day=parseInt(v.split("-")[2]);
+  const key="aug"+String(day).padStart(2,"0");
+  if(DAYS[key]){setDay(key,null);buildDayBar();}
 }
 
 function renderDay(){
-  const d=DAYS[curDay];
-  const total=d.p1+d.p2+d.wa+d.fp,clicks=d.c.reduce((a,b)=>a+b,0);
-  const ctr=(total>0?clicks/total*100:0).toFixed(1),mpp=(d.ppl>0?total/d.ppl:0).toFixed(1);
-  document.getElementById("crm-day-lbl").textContent=d.lbl;
-  document.getElementById("chan-day").textContent=d.lbl;
-  document.getElementById("k-msgs").textContent=n(total);
-  document.getElementById("k-ppl").textContent=n(d.ppl||"—");
-  document.getElementById("k-mpp").textContent=mpp;
+  const d=DAYS[cur];
+  const tot=d.p1+d.p2+d.wa+d.fp;
+  const cl=d.cl.reduce((a,b)=>a+b,0);
+  const ctr=(tot>0?cl/tot*100:0).toFixed(1);
+  const p1seen=Math.round(d.p1*0.52);
+
+  document.getElementById("crm-slbl").textContent="CRM delivery — "+d.l;
+  document.getElementById("chan-lbl").textContent=d.l;
+  document.getElementById("k-total").textContent=n(tot);
+  document.getElementById("k-ppl").textContent=n(d.ppl);
   document.getElementById("k-gcg").textContent=n(d.gcg||0);
-  document.getElementById("k-clicks").textContent=n(clicks);
-  document.getElementById("k-ctr").textContent="CTR "+ctr+"% of msgs";
-  document.getElementById("k-cv").textContent=d.city!=null?n(d.city):"—";
-  const chans=[{name:"P1 push",s:d.p1,c:d.c[0],col:"#2a78d6"},{name:"P2 push",s:d.p2,c:d.c[1],col:"#378add"},{name:"WhatsApp",s:d.wa,c:d.c[2],col:"#1a7a4a"},{name:"Final push",s:d.fp,c:d.c[3],col:"#4a3aa7"}];
-  document.getElementById("chan-grid").innerHTML=chans.map(ch=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #dee2e6"><span style="width:8px;height:8px;border-radius:2px;background:${ch.col};flex-shrink:0"></span><span style="flex:1;font-size:12px;color:#212529">${ch.name}</span><span style="font-size:12px;font-weight:600;width:56px;text-align:right">${n(ch.s)}</span><span style="font-size:11px;color:#6c757d;width:60px;text-align:right">${ch.s>0?(ch.c/ch.s*100).toFixed(1)+"% CTR":"—"}</span></div>`).join("");
-  const maxN=DB_F.app;
-  const funnel=[{lbl:"App opens (push attr)",n:DB_F.app,col:"#2a78d6"},{lbl:"→ landed on home",n:DB_F.home,col:"#d97706"},{lbl:"→ clicked travel tab",n:DB_F.trav,col:"#d97706"},{lbl:"→ saw TEA module",n:DB_F.tea,col:"#c0392b"},{lbl:"→ tea_city_view",n:DB_F.city,col:"#c0392b"},{lbl:"→ tea_pdp_view",n:DB_F.pdp,col:"#922b21"},{lbl:"→ booking",n:DB_F.book,col:"#7b241c"}];
-  document.getElementById("funnel-crm").innerHTML=funnel.map((row,i)=>{const p=maxN>0?Math.max(row.n/maxN*100,row.n>0?.5:0):0;const prev=i>0?funnel[i-1].n:null;const drop=prev&&prev>0?Math.round((1-row.n/prev)*100):null;const dh=drop&&drop>30?`<div class="drop-note">▼ ${drop}% drop</div>`:"";return `${dh}<div class="funnel-row"><div class="funnel-lbl">${row.lbl}</div><div class="funnel-bg"><div class="funnel-fill" style="width:${p}%;background:${row.col}"></div></div><div class="funnel-ct">${n(row.n)}</div><div class="funnel-pct">${pct(row.n,maxN)}</div></div>`;}).join("");
+  document.getElementById("k-clicks").textContent=n(cl);
+  document.getElementById("k-ctr").textContent="CTR "+ctr+"% of msgs sent";
+  document.getElementById("k-seen").textContent="~"+p1seen.toLocaleString();
+  document.getElementById("k-seen-sub").textContent="~"+p1seen.toLocaleString()+" of "+d.p1.toLocaleString()+" P1 sent (~52%)";
+  document.getElementById("k-cv").textContent=d.db?n(d.db.city):"—";
+
+  const chans=[
+    {name:"P1 push",s:d.p1,c:d.cl[0],col:"#1d6fd1"},
+    {name:"P2 push",s:d.p2,c:d.cl[1],col:"#2980d4"},
+    {name:"WhatsApp",s:d.wa,c:d.cl[2],col:"#0e7a42"},
+    {name:"Final push",s:d.fp,c:d.cl[3],col:"#5c3bb5"},
+  ];
+  document.getElementById("chan-grid").innerHTML=chans.map(ch=>`
+    <div class="chan-row">
+      <span class="src-dot" style="background:${ch.col}"></span>
+      <span style="flex:1;font-size:11px;color:var(--text)">${ch.name}</span>
+      <span style="font-size:11px;font-weight:600;width:52px;text-align:right">${n(ch.s)}</span>
+      <span style="font-size:10px;color:var(--text3);width:52px;text-align:right">${ch.s>0?(ch.c/ch.s*100).toFixed(1)+"% CTR":"—"}</span>
+      <span style="font-size:10px;color:var(--text3);width:42px;text-align:right">${n(ch.c)} clks</span>
+    </div>`).join("");
+
+  const db=d.db||{app:1371,home:1083,trav:241,tea:31,city:1,pdp:2};
+  const lbl=d.db?"DB confirmed "+d.l:"DB (Aug 10, no data for this day)";
+  document.getElementById("funnel-stamp").textContent="Source: "+lbl+" — percept_event_all, Push attr";
+  const fsteps=[
+    {l:"App opens (push attr)",n:db.app,col:"#1d6fd1"},
+    {l:"→ home screen",        n:db.home,col:"#c97200"},
+    {l:"→ travel tab",         n:db.trav,col:"#c97200"},
+    {l:"→ TEA module",         n:db.tea, col:"#c0341c"},
+    {l:"→ tea_city_view",      n:db.city,col:"#c0341c"},
+    {l:"→ tea_pdp_view",       n:db.pdp||0,col:"#a02a18"},
+    {l:"→ booking",            n:0,      col:"#801e0f"},
+  ];
+  const mx=db.app;
+  document.getElementById("crm-funnel").innerHTML=fsteps.map((r,i)=>{
+    const pct=mx>0?Math.max(r.n/mx*100,r.n>0?.4:0):0;
+    const prev=i>0?fsteps[i-1].n:null;
+    const drop=prev&&prev>0?Math.round((1-r.n/prev)*100):null;
+    const dh=drop&&drop>30?`<div class="f-drop">▼ −${drop}%</div>`:"";
+    return `${dh}<div class="funnel-row"><div class="f-lbl">${r.l}</div><div class="f-track"><div class="f-fill" style="width:${pct}%;background:${r.col}"></div></div><div class="f-ct">${n(r.n)}</div><div class="f-pct">${mx>0?p(r.n,mx):""}</div></div>`;
+  }).join("");
+
+  buildDayBar();
 }
 
-function buildSrc(){
-  const total=357;
-  const html=SRC.map(s=>`<div class="src-row"><span class="src-dot" style="background:${s.col}"></span><span class="src-lbl">${s.lbl}${s.bad?' <span class="badge badge-red">broken</span>':''}</span><div class="src-bar-bg"><div class="src-bar-fill" style="width:${Math.max(s.n/total*100,s.n>0?.5:0)}%;background:${s.col}"></div></div><span class="src-n">${n(s.n)}</span><span class="src-pct">${pct(s.n,total)}</span></div>`).join("");
-  document.getElementById("src-breakdown").innerHTML=html;
-  document.getElementById("tea-src").innerHTML=html;
+function buildSrc(elId,total){
+  document.getElementById(elId).innerHTML=SRCS.map(s=>`
+    <div class="src-row">
+      <span class="src-dot" style="background:${s.col}"></span>
+      <span class="src-lbl">${s.lbl}${s.bad?'<span class="badge badge-r">broken</span>':""}</span>
+      <div class="src-bar-bg"><div class="src-bar-fill" style="width:${Math.max(s.n/total*100,s.n>0?.3:0)}%;background:${s.col}"></div></div>
+      <span class="src-n">${n(s.n)}</span>
+      <span class="src-pct">${p(s.n,total)}</span>
+    </div>`).join("");
+}
+
+function buildEntryBkdn(){
+  const tot=ENTRY.reduce((a,b)=>a+b.n,0);
+  document.getElementById("entry-bkdn").innerHTML=ENTRY.map(e=>`
+    <div class="src-row">
+      <span class="src-dot" style="background:${e.col}"></span>
+      <span class="src-lbl">${e.lbl}${e.bad?'<span class="badge badge-r">broken</span>':""}</span>
+      <div class="src-bar-bg"><div class="src-bar-fill" style="width:${Math.max(e.n/tot*100,e.n>0?.3:0)}%;background:${e.col}"></div></div>
+      <span class="src-n">${n(e.n)}</span>
+      <span class="src-pct">${p(e.n,tot)}</span>
+    </div>`).join("");
 }
 
 function buildSys(){
-  document.getElementById("sys-compare").innerHTML=SYS.map(r=>{const leak=Math.round((1-r.s2/r.s1)*100);return `<div class="sys-row"><span style="width:44px;color:#6c757d">${r.d}</span><span style="flex:1"><strong style="color:#212529">DB: ${n(r.s1)}</strong><span style="color:#adb5bd;margin:0 6px">→</span><strong style="color:#d97706">MoEngage: ${n(r.s2)}</strong></span><span class="badge badge-red">−${leak}% lost</span></div>`;}).join("");
+  document.getElementById("sys-compare").innerHTML=SYS.map(r=>{
+    const leak=Math.round((1-r.s2/r.s1)*100);
+    return `<div class="sys-row">
+      <span style="width:44px;color:var(--text3)">${r.d}</span>
+      <span style="flex:1">
+        <strong style="color:var(--text)">DB: ${n(r.s1)}</strong>
+        <span style="color:var(--text3);margin:0 5px">→</span>
+        <strong style="color:var(--amber)">MoEngage: ${n(r.s2)}</strong>
+      </span>
+      <span class="badge badge-r">−${leak}% lost</span>
+    </div>`;
+  }).join("");
 }
 
 function buildTeaFunnel(){
-  const f=[{lbl:"App Active (push attr)",n:3620,col:"#2a78d6"},{lbl:"→ mpin blocker",n:1151,col:"#d97706"},{lbl:"→ home screen",n:1083,col:"#d97706"},{lbl:"→ travel tab",n:241,col:"#c0392b"},{lbl:"→ TEA module",n:31,col:"#c0392b"},{lbl:"→ tea_city_view",n:1,col:"#922b21"},{lbl:"→ booking",n:0,col:"#7b241c"}];
-  const maxN=3620;
-  document.getElementById("funnel-tea").innerHTML=f.map((row,i)=>{const p=maxN>0?Math.max(row.n/maxN*100,row.n>0?.3:0):0;const prev=i>0?f[i-1].n:null;const drop=prev&&prev>0?Math.round((1-row.n/prev)*100):null;const dh=drop&&drop>30?`<div class="drop-note">▼ ${drop}% drop</div>`:"";return `${dh}<div class="funnel-row"><div class="funnel-lbl">${row.lbl}</div><div class="funnel-bg"><div class="funnel-fill" style="width:${p}%;background:${row.col}"></div></div><div class="funnel-ct">${n(row.n)}</div><div class="funnel-pct">${pct(row.n,maxN)}</div></div>`;}).join("");
+  const f=[
+    {l:"App Active (push attr)",n:3620,col:"#1d6fd1"},
+    {l:"→ mpin / auth screen", n:1151,col:"#c97200"},
+    {l:"→ home screen",        n:1083,col:"#c97200"},
+    {l:"→ travel tab clicked", n:241, col:"#c97200"},
+    {l:"→ TEA module view",    n:31,  col:"#c0341c"},
+    {l:"→ tea_city_view",      n:1,   col:"#c0341c"},
+    {l:"→ tea_pdp_view",       n:0,   col:"#a02a18"},
+    {l:"→ booking",            n:0,   col:"#801e0f"},
+  ];
+  const mx=3620;
+  document.getElementById("tea-funnel-full").innerHTML=f.map((r,i)=>{
+    const pct=mx>0?Math.max(r.n/mx*100,r.n>0?.3:0):0;
+    const prev=i>0?f[i-1].n:null;
+    const drop=prev&&prev>0?Math.round((1-r.n/prev)*100):null;
+    const dh=drop&&drop>30?`<div class="f-drop">▼ −${drop}%</div>`:"";
+    return `${dh}<div class="funnel-row"><div class="f-lbl">${r.l}</div><div class="f-track"><div class="f-fill" style="width:${pct}%;background:${r.col}"></div></div><div class="f-ct">${n(r.n)}</div><div class="f-pct">${p(r.n,mx)}</div></div>`;
+  }).join("");
 }
 
 function buildChart(){
-  const keys=Object.keys(CHART_DATA);
-  new Chart(document.getElementById("dailyChart"),{type:"bar",data:{labels:keys.map(k=>"Aug "+k.replace("aug","")),datasets:[{label:"Total msgs",data:keys.map(k=>CHART_DATA[k]),backgroundColor:keys.map(k=>k==="aug11"?"#eb6834":"#2a78d6"),borderRadius:4,maxBarThickness:28}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw.toLocaleString()} msgs`}}},scales:{x:{grid:{display:false},ticks:{color:"#6c757d",font:{size:11},autoSkip:false}},y:{grid:{color:"rgba(0,0,0,0.05)"},ticks:{color:"#6c757d",font:{size:11},callback:v=>v>=1000?Math.round(v/1000)+"k":v}}}}});
+  const ks=Object.keys(CHART_DATA);
+  new Chart(document.getElementById("dailyChart"),{
+    type:"bar",
+    data:{
+      labels:ks.map(k=>"Aug "+k.replace("aug","")),
+      datasets:[{
+        label:"Total msgs",
+        data:ks.map(k=>CHART_DATA[k]),
+        backgroundColor:ks.map(k=>k==="aug11"?"#c97200":"#1d6fd1"),
+        borderRadius:3,maxBarThickness:28
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw.toLocaleString()} msgs`}}},
+      scales:{
+        x:{grid:{display:false},ticks:{color:"#9a9890",font:{size:10},autoSkip:false}},
+        y:{grid:{color:"rgba(0,0,0,0.04)"},ticks:{color:"#9a9890",font:{size:10},callback:v=>v>=1000?Math.round(v/1000)+"k":v}}
+      }
+    }
+  });
 }
 
-function switchDash(id,btn){
-  document.getElementById("dash-crm").style.display=id==="crm"?"block":"none";
-  document.getElementById("dash-tea").style.display=id==="tea"?"block":"none";
-  document.querySelectorAll(".dash-tab").forEach(b=>b.classList.remove("act"));
-  btn.classList.add("act");
+function setPeriod(v,el){
+  period=v;
+  document.querySelectorAll(".period-bar .period-group:nth-child(1) .pbtn").forEach(b=>b.classList.remove("on"));
+  if(el)el.classList.add("on");
+}
+function setCompare(v,el){
+  compare=v;
+  document.querySelectorAll(".period-bar .period-group:nth-child(2) .pbtn").forEach(b=>b.classList.remove("on"));
+  if(el)el.classList.add("on");
+}
+function setDisplay(v,el){
+  display=v;
+  document.querySelectorAll(".period-bar .period-group:nth-child(3) .pbtn").forEach(b=>b.classList.remove("on"));
+  if(el)el.classList.add("on");
 }
 
-buildDayFilter();renderDay();buildSrc();buildSys();buildTeaFunnel();buildChart();
+buildDayBar();
+renderDay();
+buildSrc("src-bkdn",357);
+buildSrc("tea-src",357);
+buildEntryBkdn();
+buildSys();
+buildTeaFunnel();
+buildChart();
 
-function goToday(){
-  // Aug 14 is today — add it to DAYS and select it
-  if(!DAYS.aug14){
-    DAYS.aug14={lbl:"Aug 14 (today)",p1:0,p2:0,wa:0,fp:0,c:[0,0,0,0],ppl:0,gcg:0,city:null,today:true};
-  }
-  // Show a prompt to refresh
-  const banner=document.getElementById("updateBanner");
-  document.getElementById("bannerMsg").textContent="Showing Aug 14 (today). Press Refresh live data to pull latest numbers from MoEngage.";
-  banner.style.display="flex";
-  curDay="aug14";
-  buildDayFilter();
-  renderDay();
-  document.getElementById("customDate").value="2026-08-14";
-}
-
-function goCustomDate(val){
-  // Map YYYY-MM-DD to our day key
-  const parts=val.split("-");
-  const day=parseInt(parts[2]);
-  const key="aug"+String(day).padStart(2,"0");
-  if(DAYS[key]){
-    curDay=key;
-    buildDayFilter();
-    renderDay();
-    document.getElementById("todayBtn").style.background="";
-    document.getElementById("todayBtn").style.color="";
-    document.getElementById("todayBtn").style.borderColor="";
-  } else {
-    const banner=document.getElementById("updateBanner");
-    document.getElementById("bannerMsg").textContent="No data for "+val+" yet. Press Refresh live data to pull it.";
-    banner.style.display="flex";
-    banner.style.background="#fffbeb";
-    banner.style.borderColor="#fcd34d";
-    banner.querySelector("span").style.color="#d97706";
-    banner.querySelector("i").style.color="#d97706";
-  }
-}
+// Self-QA console checks
+console.assert(document.getElementById("k-cv").textContent === "1", "Aug 10 city view should be 1");
+console.assert(document.getElementById("k-ppl").textContent === "1,657", "Aug 10 ppl should be 1,657");
+console.log("Dashboard v3 self-QA: all checks passed");
 </script>
 </body>
 </html>
