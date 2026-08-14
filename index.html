@@ -344,6 +344,15 @@ canvas { max-height:155px; }
 /* ── TEA tab overrides ── */
 #tab-tea { background:var(--bg); color:var(--text-1); }
 
+
+/* ── Funnel bar class aliases (CRM JS uses f-* names) ── */
+.f-row  { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+.f-lbl  { font-size:10px; color:var(--text-2); width:148px; text-align:right; flex-shrink:0; }
+.f-track { flex:1; background:var(--surface-3); border-radius:3px; height:13px; overflow:hidden; }
+.f-bar  { height:100%; border-radius:3px; transition:width .3s; }
+.f-ct   { font-size:10px; font-weight:600; color:var(--text-1); width:48px; text-align:right; font-variant-numeric:tabular-nums; }
+.f-pct  { font-size:9px; color:var(--text-3); width:32px; text-align:right; }
+.f-drop { font-size:9px; color:var(--red); opacity:.7; margin-left:158px; margin-bottom:2px; }
 </style>
 
 <!-- v9 original styles (scoped to TEA tab) -->
@@ -753,10 +762,6 @@ canvas { max-height:155px; }
 </div><!-- #tab-crm -->
 
 <!-- ═══════════════════════ TAB 2 — TEA ═══════════════════════ -->
-<div id="tab-tea" class="tab-panel">
-  <div style="padding:16px 24px 0">
-    <p class="note">Full TEA funnel — all 14 original sections preserved. Section 15 = CRM deep-dive. Section 16 = Live Databricks tracker.</p>
-  </div>
 <div id="tab-tea" class="tab-panel">
   <div style="padding:20px 24px 0">
     <p style="font-size:12px;color:#52514e;margin:0 0 12px">
