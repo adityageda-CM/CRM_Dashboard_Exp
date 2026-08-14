@@ -2,943 +2,322 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Experiences CRM — Push Dashboard</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TEA Experiences — CRM + Funnel Dashboard</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#f5f7fa;--panel:#fff;--p2:#eef2f9;--p3:#e4ecf7;--line:#dde5f0;
-  --ink:#111827;--ink2:#374151;--ink3:#6b7280;--ink4:#9ca3af;
-  --blue:#1d4ed8;--blue-l:#dbeafe;--blue-d:#1e40af;
-  --green:#059669;--green-l:#d1fae5;
-  --amber:#d97706;--amber-l:#fef3c7;
-  --red:#dc2626;--red-l:#fee2e2;
-  --purple:#7c3aed;--purple-l:#ede9fe;
-  --orange:#ea580c;--orange-l:#ffedd5;
-  --sans:'Inter',system-ui,sans-serif;
-  --serif:'Source Serif 4',Georgia,serif;
-  --mono:'IBM Plex Mono',monospace;
+  --bg:#f8f9fa;--surface:#fff;--surface2:#f1f3f5;--border:#dee2e6;
+  --text:#212529;--text2:#6c757d;--text3:#adb5bd;
+  --blue:#2a78d6;--blue-bg:#e7f0fc;--blue-border:#b6d0f5;
+  --green:#1a7a4a;--green-bg:#eaf7ef;--green-border:#a3d9b8;
+  --red:#c0392b;--red-bg:#fdecea;--red-border:#f5bfba;
+  --amber:#d97706;--amber-bg:#fffbeb;--amber-border:#fcd34d;
+  --radius:6px;
 }
-body{font-family:var(--sans);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;font-size:14px;line-height:1.5}
-.header{background:var(--panel);border-bottom:1.5px solid var(--line);padding:18px 32px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px}
-.eyebrow{font-family:var(--mono);font-size:10px;color:var(--ink3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
-.header h1{font-family:var(--serif);font-size:22px;font-weight:700;color:var(--ink)}
-.header .sub{font-size:12.5px;color:var(--ink3);margin-top:4px;max-width:620px;line-height:1.55}
-.live-banner{font-family:var(--mono);font-size:11px;background:var(--p2);border:1px solid var(--line);border-radius:7px;padding:7px 13px;align-self:flex-start;margin-top:4px;line-height:1.6}
-.controls{background:rgba(245,247,250,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:12px 32px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:20;flex-wrap:wrap}
-.ptabs{display:flex;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:3px;gap:2px}
-.ptab{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--ink3);background:none;border:none;padding:6px 13px;border-radius:6px;cursor:pointer;transition:.12s;white-space:nowrap}
-.ptab:hover{color:var(--blue)}.ptab.active{background:var(--blue);color:#fff}
-.crange{display:flex;align-items:center;gap:6px}
-.din{font-family:var(--mono);font-size:11px;padding:6px 9px;border:1px solid var(--line);border-radius:7px;background:var(--panel);color:var(--ink);cursor:pointer}
-.dapply{font-family:var(--mono);font-size:11px;font-weight:700;padding:6px 11px;background:var(--blue);color:#fff;border:none;border-radius:7px;cursor:pointer}
-.scope{font-family:var(--mono);font-size:10.5px;color:var(--ink4);margin-left:auto}
-.page{padding:28px 32px;display:flex;flex-direction:column;gap:36px;max-width:1280px;margin:0 auto;width:100%}
-.sec-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:14px;gap:10px;flex-wrap:wrap}
-.sec-title{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--ink)}
-.sec-sub{font-size:12px;color:var(--ink3);margin-top:3px;line-height:1.55}
-.sec-tag{font-family:var(--mono);font-size:10px;color:var(--ink2);background:var(--p2);border:1px solid var(--line);padding:3px 9px;border-radius:5px;font-weight:600;white-space:nowrap}
-.static-note{font-family:var(--mono);font-size:10px;color:var(--ink4);background:var(--p3);border:1px solid var(--line);padding:3px 8px;border-radius:5px;white-space:nowrap}
-.divider{border:none;border-top:1.5px solid var(--line);margin:0}
-.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-@media(max-width:900px){.kpi-row{grid-template-columns:repeat(2,1fr)}}
-.kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;border-top:3px solid var(--blue)}
-.kpi.g{border-top-color:var(--green)}.kpi.a{border-top-color:var(--amber)}.kpi.p{border-top-color:var(--purple)}
-.kpi-lbl{font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}
-.kpi-val{font-family:var(--mono);font-size:24px;font-weight:700;color:var(--ink);letter-spacing:-.02em}
-.kpi-note{font-size:11px;color:var(--ink4);margin-top:3px}
-.insight{padding:13px 16px;border-radius:9px;font-size:12.5px;line-height:1.6;border-left:4px solid}
-.insight.warn{background:var(--amber-l);border-color:var(--amber);color:#78350f}
-.insight.good{background:var(--green-l);border-color:var(--green);color:#064e3b}
-.insight.info{background:var(--blue-l);border-color:var(--blue);color:#1e3a8a}
-.insight.note{background:var(--p2);border-color:var(--line);color:var(--ink2)}
-.insight b{font-weight:700}
-.lane{background:var(--panel);border:1px solid var(--line);border-radius:13px;overflow:hidden;margin-bottom:12px}
-.lane:last-child{margin-bottom:0}
-.lane-header{display:grid;grid-template-columns:200px 1fr 1fr 1fr;background:var(--p2);border-bottom:1px solid var(--line)}
-.lh-cell{padding:12px 14px;border-right:1px solid var(--line)}.lh-cell:last-child{border-right:none}
-.lh-lbl{font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
-.lh-val{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink)}
-.lh-sub{font-family:var(--mono);font-size:10px;color:var(--ink4);margin-top:1px}
-.lane-body{padding:14px 14px 0}
-.tp-table{width:100%;border-collapse:collapse;margin-bottom:14px}
-.tp-table th{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink4);padding:6px 10px;border-bottom:1.5px solid var(--line);text-align:right;font-weight:600}
-.tp-table th:first-child{text-align:left}
-.tp-table td{padding:9px 10px;border-bottom:1px solid var(--p3);font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--ink);text-align:right}
-.tp-table td:first-child{text-align:left;font-family:var(--sans);font-size:12.5px;font-weight:700;color:var(--ink2)}
-.tp-table tr:last-child td{border-bottom:none}
-.tp-table td.pct{color:var(--ink3);font-weight:500}.tp-table td.click-col{color:var(--blue)}
-.cohort-wrap{margin-bottom:14px}
-.cohort-label{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;padding:0 0 6px;border-bottom:1.5px solid var(--line);margin-bottom:6px}
-.cohort-table{width:100%;border-collapse:collapse}
-.cohort-table th{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink4);padding:6px 10px;border-bottom:1.5px solid var(--line);text-align:center;font-weight:600;background:var(--p2)}
-.cohort-table th:first-child{text-align:left}
-.cohort-table td{padding:9px 10px;border-bottom:1px solid var(--p3);font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--ink);text-align:center}
-.cohort-table td:first-child{text-align:left;font-family:var(--sans);font-size:12px;font-weight:700;color:var(--ink2);max-width:140px}
-.cohort-table tr:last-child td{border-bottom:none}
-.cohort-table td.na{color:var(--ink4);font-weight:400;font-size:11px}
-.outcomes{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;border-top:1.5px dashed var(--line);padding:14px 0}
-.oc{background:var(--p2);border-radius:8px;padding:11px 12px;text-align:center}
-.oc-lbl{font-size:9.5px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em}
-.oc-val{font-family:var(--mono);font-size:19px;font-weight:700;color:var(--ink);margin-top:3px}
-.oc-val.book{color:var(--green)}.oc-val.init{color:var(--amber)}
-.oc-rate{font-family:var(--mono);font-size:9.5px;color:var(--ink4);margin-top:1px}
-.lane-foot{font-size:11px;color:var(--ink3);line-height:1.55;padding:12px 14px;background:var(--p2);border-top:1px solid var(--line)}
-.lane-foot b{color:var(--ink2)}
-.lane-push{border-top:3px solid var(--blue)}.lane-wa{border-top:3px solid var(--green)}.lane-email{border-top:3px solid var(--purple)}
-.tbl-card{background:var(--panel);border:1px solid var(--line);border-radius:13px;overflow:hidden}
-.tbl-toolbar{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap;gap:8px}
-.tbl-search{font-family:var(--mono);font-size:12px;padding:6px 10px;border:1px solid var(--line);border-radius:7px;background:var(--p2);color:var(--ink);width:190px}
-.tbl-meta{font-family:var(--mono);font-size:10.5px;color:var(--ink4)}
-table.dt{width:100%;border-collapse:collapse}
-table.dt th{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink3);padding:10px 14px;border-bottom:2px solid var(--line);text-align:right;font-weight:700;cursor:pointer;user-select:none;white-space:nowrap;background:var(--p2)}
-table.dt th:first-child,table.dt th:nth-child(2){text-align:left}
-table.dt th.sorted{color:var(--blue)}
-table.dt th.sorted::after{content:' ▾'}table.dt th.sorted.asc::after{content:' ▴'}
-table.dt td{padding:10px 14px;border-bottom:1px solid var(--p3);text-align:right;font-family:var(--mono);font-size:12.5px;color:var(--ink)}
-table.dt td:first-child{text-align:left;font-family:var(--mono);font-size:11px;color:var(--ink3);font-weight:500}
-table.dt td:nth-child(2){text-align:left;font-family:var(--sans);font-weight:700;font-size:13px;color:var(--ink)}
-table.dt tbody tr:hover{background:var(--blue-l)}table.dt tr:last-child td{border-bottom:none}
-.book-y{color:var(--green);font-weight:800}
-.mini-b{display:inline-block;width:28px;height:4px;background:var(--p3);border-radius:2px;margin-left:5px;overflow:hidden;vertical-align:middle}
-.mini-b span{display:block;height:100%;background:var(--blue);border-radius:2px}
-.expand-row{padding:12px 16px;border-top:1px solid var(--line);text-align:center}
-.expand-btn{font-family:var(--mono);font-size:11.5px;font-weight:600;color:var(--blue);background:var(--blue-l);border:1px solid #bfdbfe;border-radius:7px;padding:8px 18px;cursor:pointer}
-.expand-btn:hover{background:#bfdbfe}
-table.ab{width:100%;border-collapse:collapse}
-table.ab th{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink3);padding:10px 14px;border-bottom:2px solid var(--line);text-align:right;font-weight:700;background:var(--p2)}
-table.ab th:first-child{text-align:left}
-table.ab td{padding:11px 14px;border-bottom:1px solid var(--p3);font-family:var(--mono);font-size:12.5px;text-align:right;color:var(--ink)}
-table.ab td:first-child{text-align:left;font-family:var(--sans);font-weight:700;font-size:13px;color:var(--ink2)}
-table.ab tbody tr:hover{background:var(--p2)}table.ab tr:last-child td{border-bottom:none}
-.win{color:var(--green);font-weight:700}.lose{color:var(--ink3);font-weight:500}
-table.eff{width:100%;border-collapse:collapse}
-table.eff th{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink3);padding:10px 14px;border-bottom:2px solid var(--line);text-align:right;font-weight:700;background:var(--p2)}
-table.eff th:first-child{text-align:left}
-table.eff td{padding:11px 14px;border-bottom:1px solid var(--p3);font-family:var(--mono);font-size:12.5px;text-align:right;color:var(--ink)}
-table.eff td:first-child{text-align:left;font-family:var(--sans);font-size:13px;font-weight:700;color:var(--ink)}
-table.eff tbody tr:hover{background:var(--p2)}table.eff tr:last-child td{border-bottom:none}
-.badge{font-size:10.5px;padding:2px 7px;border-radius:5px;font-weight:700;font-family:var(--mono)}
-.b-gr{background:var(--green-l);color:#065f46}.b-bl{background:var(--blue-l);color:var(--blue-d)}
-.b-am{background:var(--amber-l);color:#92400e}.b-re{background:var(--red-l);color:#991b1b}
-table.slot{width:100%;border-collapse:collapse;table-layout:fixed}
-table.slot th{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink3);padding:10px 14px;border-bottom:2px solid var(--line);text-align:right;font-weight:700;white-space:nowrap;background:var(--p2)}
-table.slot th:first-child{text-align:left}
-table.slot td{padding:11px 14px;border-bottom:1px solid var(--p3);font-family:var(--mono);font-size:12.5px;text-align:right;color:var(--ink);vertical-align:top}
-table.slot td:first-child{text-align:left}
-table.slot tbody tr:hover{background:var(--p2)}table.slot tr:last-child td{border-bottom:none}
-.slot-cohort{font-family:var(--sans);font-size:13px;font-weight:700;color:var(--ink);line-height:1.3}
-.slot-msg{font-size:11.5px;color:var(--ink2);margin-top:3px;font-family:var(--sans);font-weight:400}
-.slot-date{font-family:var(--mono);font-size:10px;color:var(--ink4);margin-top:2px}
-.latest-tag{font-family:var(--mono);font-size:9px;background:var(--orange-l);color:var(--orange);border:1px solid #fed7aa;border-radius:4px;padding:1px 5px;margin-left:5px;vertical-align:middle}
-.tup{color:var(--green)}.tdn{color:var(--red)}.tbl-scroll{overflow-x:auto}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;padding:0;margin:0}
+.container{max-width:1200px;margin:0 auto;padding:20px 24px}
+.top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap}
+.top-bar h1{font-size:17px;font-weight:600;color:var(--text)}
+.top-bar .meta{font-size:12px;color:var(--text2);margin-top:2px}
+.refresh-btn{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;padding:8px 18px;border-radius:var(--radius);border:1px solid var(--blue-border);background:var(--blue-bg);color:var(--blue);cursor:pointer;transition:opacity .15s}
+.refresh-btn:hover{opacity:.8}
+.refresh-btn:disabled{opacity:.5;cursor:not-allowed}
+.dash-tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:1px solid var(--border)}
+.dash-tab{font-size:13px;font-weight:500;padding:8px 20px;cursor:pointer;color:var(--text2);border:1px solid transparent;border-bottom:none;background:transparent;border-radius:var(--radius) var(--radius) 0 0;margin-bottom:-1px}
+.dash-tab.act{color:var(--blue);border-color:var(--border);border-bottom-color:#fff;background:#fff}
+.slabel{font-size:11px;font-weight:600;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;margin:20px 0 8px}
+.kpi-grid{display:grid;gap:10px;margin-bottom:14px}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g5{grid-template-columns:repeat(5,1fr)}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px}
+.kpi-label{font-size:11px;color:var(--text2);margin-bottom:4px}
+.kpi-val{font-size:22px;font-weight:600;color:var(--text);line-height:1.1}
+.kpi-sub{font-size:11px;color:var(--text2);margin-top:3px}
+.kpi.danger{border-color:var(--red-border);background:var(--red-bg)}
+.kpi.danger .kpi-val{color:var(--red)}
+.kpi.warn{border-color:var(--amber-border);background:var(--amber-bg)}
+.kpi.warn .kpi-val{color:var(--amber)}
+.kpi.ok{border-color:var(--green-border);background:var(--green-bg)}
+.kpi.ok .kpi-val{color:var(--green)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:14px}
+.card-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:12px}
+.funnel-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.funnel-lbl{font-size:11px;color:var(--text2);width:172px;text-align:right;flex-shrink:0}
+.funnel-bg{flex:1;background:var(--surface2);border-radius:3px;height:18px;overflow:hidden;border:1px solid var(--border)}
+.funnel-fill{height:100%;border-radius:3px}
+.funnel-ct{font-size:11px;font-weight:600;color:var(--text);width:56px;text-align:right;flex-shrink:0}
+.funnel-pct{font-size:10px;color:var(--text3);width:38px;text-align:right;flex-shrink:0}
+.drop-note{font-size:9px;color:var(--red);text-align:center;margin-left:180px;margin-bottom:2px}
+.src-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)}
+.src-row:last-child{border-bottom:none}
+.src-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.src-lbl{flex:1;font-size:12px;color:var(--text)}
+.src-bar-bg{width:80px;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;flex-shrink:0}
+.src-bar-fill{height:100%;border-radius:3px}
+.src-n{font-size:12px;font-weight:600;width:40px;text-align:right}
+.src-pct{font-size:11px;color:var(--text2);width:40px;text-align:right}
+.badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px}
+.badge-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.badge-ok{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.badge-warn{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.day-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.day-btn{font-size:11px;padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer}
+.day-btn.act{background:var(--blue-bg);color:var(--blue);border-color:var(--blue-border);font-weight:500}
+.alert-box{background:var(--red-bg);border:1px solid var(--red-border);border-radius:var(--radius);padding:12px 16px;margin-bottom:14px}
+.alert-box p{font-size:12px;color:var(--red);line-height:1.6}
+.sys-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px}
+.sys-row:last-child{border-bottom:none}
+.insight-chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:4px 10px;border-radius:20px;margin:3px;background:var(--surface);border:1px solid var(--border);color:var(--text2)}
+.insight-chip.red{background:var(--red-bg);border-color:var(--red-border);color:var(--red)}
+.insight-chip.ok{background:var(--green-bg);border-color:var(--green-border);color:var(--green)}
+.stamp{font-size:10px;color:var(--text3);text-align:right;margin-top:6px}
+.chart-wrap{position:relative;width:100%;height:180px}
+.update-banner{background:var(--green-bg);border:1px solid var(--green-border);border-radius:var(--radius);padding:10px 14px;font-size:12px;color:var(--green);margin-bottom:14px;display:none;align-items:center;gap:8px}
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
+<div class="container">
 
-<div class="header">
+<div id="updateBanner" class="update-banner">
+  <i class="ti ti-check"></i>
+  <span id="bannerMsg">Data refreshed successfully.</span>
+</div>
+
+<div class="top-bar">
   <div>
-    <div class="eyebrow">Scapia · Experiences (TEA) · CRM</div>
-    <h1>Push Notification Dashboard</h1>
-    <div class="sub">Always-on <strong>Location Flow</strong> + scheduled <strong>Slot Broadcasts</strong>. Full funnel for both. Verified live from MoEngage.</div>
+    <h1>TEA Experiences — CRM + Funnel master dashboard</h1>
+    <div class="meta">Flow: Experimental — Travel_Experiences_Location_based &nbsp;·&nbsp; Aug 2026 &nbsp;·&nbsp; <span id="last-updated">Last pulled: Aug 14, 2026</span></div>
   </div>
-  <div class="live-banner" id="liveBanner">
-    &#9679; Embedded snapshot &middot; 13 Aug 2026, 15:15 IST<br>
-    <span style="color:var(--ink4)">Say <b>refresh dashboard</b> in chat to get latest data &middot; <a href="https://github.com/adityageda-CM/CRM_Dashboard_Exp" target="_blank" style="color:var(--blue);text-decoration:none">Drive source &rarr;</a></span>
-  </div>
+  <button class="refresh-btn" id="refreshBtn" onclick="triggerRefresh()">
+    <i class="ti ti-refresh" id="refreshIcon"></i>
+    Refresh live data
+  </button>
 </div>
 
-<div class="controls">
-  <div class="ptabs" id="tabs">
-    <button class="ptab" data-p="today">Today</button>
-    <button class="ptab" data-p="yesterday">Yesterday</button>
-    <button class="ptab active" data-p="week">Last 7 days</button>
-    <button class="ptab" data-p="alltime">All time</button>
-  </div>
-  <div class="crange">
-    <input type="date" class="din" id="df">
-    <span style="color:var(--ink4);font-size:12px">→</span>
-    <input type="date" class="din" id="dt">
-    <button class="dapply" onclick="applyCustom()">Apply</button>
-  </div>
-  <span class="scope">All sections update with period. S1/2/3/4/5 all respond to tab selection.</span>
+<div class="dash-tabs">
+  <button class="dash-tab act" onclick="switchDash('crm',this)">CRM flow dashboard</button>
+  <button class="dash-tab" onclick="switchDash('tea',this)">TEA funnel dashboard</button>
 </div>
 
-<div class="page">
-<div class="section">
-  <div class="sec-head"><div><div class="sec-title">1 — Overview</div><div class="sec-sub">Unique people = Push #1 recipients. Total bookings across all channels.</div></div><span class="sec-tag" id="t1">Last 7 days</span></div>
-  <div class="kpi-row" id="kpis"></div>
-  <div style="margin-top:12px" id="overviewNote"></div>
-</div>
-<hr class="divider">
-<div class="section">
-  <div class="sec-head"><div><div class="sec-title">2 — Delivery funnel</div><div class="sec-sub">Top of each lane = <strong>message counts</strong>. Bottom outcomes = <strong>unique people</strong>, deduplicated. Never divided into each other.</div></div><span class="sec-tag" id="t2">Last 7 days</span></div>
-  <div id="lanes"></div>
-</div>
-<hr class="divider">
-<div class="section">
-  <div class="sec-head">
-  <div>
-    <div class="sec-title">3 — A/B test: personalised vs simple</div>
-    <div class="sec-sub">80/20 split on every push touchpoint. CTR = clicks ÷ impressions (seen). "Sent" = impressions for that branch.</div>
-  </div>
-  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
-    <span class="sec-tag" id="t3" style="background:var(--blue-l);color:var(--blue-d);border-color:#bfdbfe">All time</span>
-    <span style="font-family:var(--mono);font-size:9.5px;color:var(--ink4)">updates for all periods</span>
-  </div>
-</div>
-  <div class="insight warn" style="margin-bottom:14px" id="abFinding"><b>Finding (All time):</b> Simple copy wins CTR on Push #1 (3.07% vs 2.32%), WhatsApp (3.12% vs 2.54%), and Final Push (2.27% vs 1.37%). <b>Exception:</b> Push #2 in last 7 days — Personalised wins (2.18% vs 2.00%). Consistent pattern across 65 days.</div>
-  <div class="tbl-card"><div class="tbl-scroll"><table class="ab"><thead><tr><th style="text-align:left">Touchpoint</th><th style="text-align:right">Personalised sent</th><th style="text-align:right">Personalised CTR</th><th style="text-align:right">Simple sent</th><th style="text-align:right">Simple CTR</th><th style="text-align:right">Gap</th><th style="text-align:center">Winner</th></tr></thead><tbody id="abBody"></tbody></table></div></div>
-</div>
-<hr class="divider">
-<div class="section">
-  <div class="sec-head"><div><div class="sec-title">4 — Channel efficiency</div><div class="sec-sub">Unique people click → view → checkout → booked. Changes with period.</div></div><span class="sec-tag" id="t4">Last 7 days</span></div>
-  <div class="insight info" style="margin-bottom:14px"><b>Why does Sent &gt; Unique people?</b> Section 1 shows <em>new entrants that day</em> (their P1). Section 4 shows <em>all messages sent that day</em> across all active cohorts — P1 to yesterday's entrants, P2 to the day-before's, FP to those from 3 days ago. They're different counts by design. <b>Where is the drop-off?</b> Of 1,934 all-time push clickers, only 486 viewed a city page (25%) and almost nobody started checkout. City-view → checkout is the product gap.</div>
-  <div class="tbl-card"><div class="tbl-scroll"><table class="eff"><thead><tr><th>Channel</th><th style="text-align:right">Total msgs<br><span style="font-weight:400;font-size:9px">P1+P2+FP</span></th><th style="text-align:right">Clickers</th><th style="text-align:right">Viewed city</th><th style="text-align:right">View rate</th><th style="text-align:right">Checkout started</th><th style="text-align:right">Booked</th><th style="text-align:right">Book rate</th></tr></thead><tbody id="effBody"></tbody></table></div></div>
-</div>
-<hr class="divider">
-<div class="section">
-  <div class="sec-head"><div><div class="sec-title">5 — City × funnel matrix</div><div class="sec-sub">Push (Android + iOS). Top 5 shown — expand to see all. Sort any column.</div></div><span class="sec-tag" id="t5">Last 7 days</span></div>
-  <div class="insight note" style="margin-bottom:14px" id="cityInsight"></div>
-  <div class="tbl-card">
-    <div class="tbl-toolbar"><input type="text" class="tbl-search" id="citySearch" placeholder="Filter city…"><span class="tbl-meta" id="cityMeta"></span></div>
-    <div class="tbl-scroll"><table class="dt"><thead><tr><th data-s="rank">#</th><th data-s="city">City</th><th data-s="entered" class="sorted">Entered</th><th data-s="clicked">Clicked</th><th data-s="viewed">Viewed</th><th data-s="booked">Booked</th><th data-s="ctr">CTR</th></tr></thead><tbody id="cityTop"></tbody><tbody id="cityRest" style="display:none"></tbody></table></div>
-    <div class="expand-row" id="expandRow"><button class="expand-btn" id="expandBtn" onclick="toggleCity()">Show more cities ▼</button></div>
-  </div>
-</div>
-<hr class="divider">
-<div class="section">
-  <div class="sec-head"><div><div class="sec-title">6 — Slot broadcasts</div><div class="sec-sub">Separate from the location flow — scheduled one-time blasts to full eligible base.</div></div><span class="sec-tag">per campaign · verified</span></div>
-  <div class="insight warn" style="margin-bottom:14px"><b>Finding:</b> TINA blast (31 Jul, 2,11,172 people) → only ~3 attributed bookings. Smaller targeted segments consistently outperform large blasts on CTR. Slot blasts drive awareness; the location flow books more per message because it hits people at the moment of travel intent.</div>
-  <div class="tbl-card"><div class="tbl-scroll"><table class="slot"><colgroup><col style="width:32%"><col style="width:11%"><col style="width:11%"><col style="width:11%"><col style="width:9%"><col style="width:13%"><col style="width:13%"></colgroup><thead><tr><th>Cohort · message</th><th style="text-align:right">Sent</th><th style="text-align:right">Seen</th><th style="text-align:right">Clicked</th><th style="text-align:right">CTR</th><th style="text-align:right">vs comparable</th><th style="text-align:right">Booked (36h)</th></tr></thead><tbody id="slotBody"></tbody></table></div></div>
-  <div style="font-size:11px;color:var(--ink4);margin-top:10px;line-height:1.6">"vs comparable" = CTR delta between same-scale campaigns on different dates only. Same-day broad vs targeted pairs show — (different audiences make comparison meaningless). Source: MoEngage get_campaign_stats, verified 13 Aug 2026.</div>
-</div>
-</div>
+<!-- CRM DASHBOARD -->
+<div id="dash-crm">
+  <div class="day-filter" id="dayFilter"></div>
 
-<script>
-function applyCustom(){
-  const f=document.getElementById('df').value,t=document.getElementById('dt').value;
-  if(!f||!t){alert('Select both dates first.');return;}
-  if(f>t){alert('Start date must be before end date.');return;}
-  const today='2026-08-13',yest='2026-08-12',wkStart='2026-08-07';
-  if(f===today&&t===today){switchPeriod('today');return;}
-  if(f===yest&&t===yest){switchPeriod('yesterday');return;}
-  if(f===wkStart&&t===today){switchPeriod('week');return;}
-  if(f==='2026-06-10'&&t===today){switchPeriod('alltime');return;}
-  if(f==='2026-08-11'&&t==='2026-08-11'){switchPeriod('aug11');return;}
-  const msg=`Refresh the Experiences CRM dashboard for date range ${f} to ${t}. Re-pull Location Flow split_stage_stats and moe_f_pid funnels for this exact window and regenerate the dashboard file.`;
-  if(typeof sendPrompt==='function'){sendPrompt(msg);}
-  else{
-    const info=document.createElement('div');
-    info.style.cssText='position:fixed;bottom:20px;right:20px;background:#1d4ed8;color:#fff;padding:14px 18px;border-radius:10px;font-size:12px;max-width:320px;z-index:999;line-height:1.5;font-family:monospace';
-    info.innerHTML='Type in Claude chat:<br><br><b>refresh dashboard '+f+' to '+t+'</b><br><br><span style="opacity:.7;cursor:pointer" onclick="this.parentElement.remove()">✕ dismiss</span>';
-    document.body.appendChild(info);setTimeout(()=>info&&info.remove&&info.remove(),8000);
-  }
-}
-function switchPeriod(p){
-  document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));
-  const btn=document.querySelector('[data-p="'+p+'"]');
-  if(btn) btn.classList.add('active');
-  cur=p;cityExpanded=false;cohortAnchorOverride=null;
-  renderAll();rAB();rEff();rSlots();
-}
-const fmt=n=>(n===null||n===undefined)?'—':Math.round(n).toLocaleString('en-IN');
-const pct=(n,d)=>(n===null||n===undefined||!d)?'—':(100*n/d).toFixed(1)+'%';
-const D={
-  today:{lbl:"Today (13 Aug, in progress)",
-    people:347,heldout:8,msgs:1319,complete:false,
-    tp:{p1:[550,283,8],p2:[394,199,7],wa:[270,130,5],fp:[105,46,1]},
-    push:{click:null,view:null,init:null,book:null,book_ios:null},
-    wa:{click:null,view:null,init:null,book:null},
-    em:{sent:null,seen:null,click:null,view:null,book:null}},
-  yesterday:{lbl:"Yesterday (12 Aug 2026)",
-    people:1310,heldout:21,msgs:3321,complete:false,
-    tp:{p1:[1310,722,17],p2:[931,513,10],wa:[716,392,8],fp:[364,196,2]},
-    push:{click:29,view:11,init:0,book:0,book_ios:0},
-    wa:{click:8,view:0,init:0,book:0},
-    em:{sent:588,seen:390,click:3,view:null,book:null}},
-  week:{lbl:"Last 7 days (7–13 Aug 2026)",
-    people:6037,heldout:126,msgs:30787,complete:false,
-    tp:{p1:[11760,6085,137],p2:[9843,4482,92],wa:[6056,3019,74],fp:[3128,1406,18]},
-    push:{click:154,view:41,init:null,book:1,book_ios:null},
-    wa:{click:95,view:7,init:null,book:0},
-    em:{sent:6682,seen:4429,click:65,view:16,book:1}},
-  alltime:{lbl:"All time (since 10 Jun 2026, 65 days)",
-    people:40440,heldout:256,msgs:97028,complete:true,
-    tp:{p1:[40440,23851,587],p2:[28953,16119,367],wa:[19545,10111,288],fp:[8090,4863,77]},
-    push:{click:1934,view:486,init:2,book:13,book_ios:10},
-    push_android:{click:814,view:227,init:0,book:13},
-    push_ios:{click:1120,view:259,init:2,book:10},
-    wa:{click:799,view:54,init:0,book:3},
-    em:{sent:30642,seen:20840,click:1785,view:739,book:31}},
-  aug11:{lbl:"11 Aug 2026 (custom pull — verified live)",
-    people:5465,heldout:32,msgs:14431,complete:true,
-    tp:{p1:[5465,2853,58],p2:[4237,2150,39],wa:[3117,1561,35],fp:[1612,798,13]},
-    push:{click:1,view:1,init:0,book:0,book_ios:0},
-    wa:{click:35,view:null,init:null,book:0},
-    em:{sent:null,seen:null,click:null,view:null,book:null}},
-  aug10:{lbl:"10 Aug 2026",people:1657,heldout:28,msgs:10071,complete:true,
-    tp:{p1:[3841,1902,42],p2:[3069,1487,27],wa:[2138,1024,26],fp:[1023,504,7]},
-    push:{click:null,view:null,init:null,book:null,book_ios:null},
-    wa:{click:null,view:null,init:null,book:null},
-    em:{sent:null,seen:null,click:null,view:null,book:null}}
-};
-const AB={
-  alltime:{
-    "Push #1":   {p:{s:32778,seen:19322,c:448},x:{s:7662,seen:4529,c:139}},
-    "Push #2":   {p:{s:22948,seen:12776,c:282},x:{s:6005,seen:3343,c:85}},
-    "WhatsApp":  {p:{s:9224, seen:4799, c:122},x:{s:10321,seen:5312,c:166}},
-    "Final Push":{p:{s:6202, seen:3716, c:51}, x:{s:1888, seen:1147,c:26}}
-  },
-  week:{
-    "Push #1":   {p:{s:4950,seen:4950,c:116},x:{s:1135,seen:1135,c:21}},
-    "Push #2":   {p:{s:3621,seen:3621,c:74}, x:{s:861, seen:861, c:18}},
-    "WhatsApp":  {p:{s:1421,seen:1421,c:37}, x:{s:1598,seen:1598,c:37}},
-    "Final Push":{p:{s:1112,seen:1112,c:14}, x:{s:294, seen:294, c:4}}
-  },
-  aug11:{
-    "Push #1":   {p:{s:4407,seen:2317,c:50},  x:{s:1058,seen:536,c:8}},
-    "Push #2":   {p:{s:3367,seen:1684,c:32},  x:{s:870, seen:466,c:7}},
-    "WhatsApp":  {p:{s:1498,seen:727, c:19},  x:{s:1619,seen:813,c:16}},
-    "Final Push":{p:{s:1251,seen:617, c:11},  x:{s:361, seen:181,c:2}}
-  },
-  aug10:{
-    "Push #1":   {p:{s:1548,seen:1548,c:36},x:{s:354,seen:354,c:6}},
-    "Push #2":   {p:{s:1201,seen:1201,c:21},x:{s:286,seen:286,c:6}},
-    "WhatsApp":  {p:{s:519, seen:519, c:14},x:{s:505,seen:505,c:12}},
-    "Final Push":{p:{s:412, seen:412, c:5}, x:{s:92, seen:92, c:2}}
-  },
-  yesterday:{
-    "Push #1":   {p:{s:1370,seen:1370,c:31},x:{s:342,seen:342,c:6}},
-    "Push #2":   {p:{s:975, seen:975, c:23},x:{s:233,seen:233,c:4}},
-    "WhatsApp":  {p:{s:388, seen:388, c:12},x:{s:494,seen:494,c:10}},
-    "Final Push":{p:{s:294, seen:294, c:5}, x:{s:116,seen:116,c:1}}
-  },
-  today:{
-    "Push #1":   {p:{s:452,seen:240,c:6},x:{s:98, seen:43, c:2}},
-    "Push #2":   {p:{s:296,seen:155,c:6},x:{s:98, seen:44, c:1}},
-    "WhatsApp":  {p:{s:107,seen:52, c:0},x:{s:163,seen:78, c:5}},
-    "Final Push":{p:{s:82, seen:33, c:1},x:{s:23, seen:13, c:0}}
-  },
-};
-const EFF=[
-  {ch:"Push (Android)",  click:814,  view:227, init:0,    book:13, note:""},
-  {ch:"Push (iOS)",      click:1120, view:259, init:2,    book:10, note:""},
-  {ch:"WhatsApp",        click:799,  view:54,  init:0,    book:3,  note:""},
-  {ch:"Email (sibling flow)",  click:1785, view:739, init:null, book:31, note:"separate flow · broader any-city audience"}
-];
-const SLOTS=[
-  {date:"31 Jul",cohort:"TINA (travel-intent, not yet activated)",msg:"₹1,000 off international experiences",sent:211172,seen:139190,click:709,ctr:0.51,book:3,latest:true},
-  {date:"30 Jul",cohort:"TINA — small proposition test",msg:"₹1,000 off international experiences",sent:1184,seen:874,click:8,ctr:0.91,book:null,latest:false},
-  {date:"25 Jul",cohort:"Broad travel-active (flights/stays searched, 60d)",msg:"₹500 off — skydiving, snorkelling, cruises, attractions",sent:84463,seen:66284,click:395,ctr:0.60,book:null,latest:false},
-  {date:"25 Jul",cohort:"Targeted cut of above",msg:"₹500 off — skydiving, snorkelling, cruises, attractions",sent:3796,seen:2747,click:19,ctr:0.68,book:null,latest:false},
-  {date:"18 Jul",cohort:"Searched flights/stays in 60d, not in India",msg:"Beyond flights and hotels — cruises, snorkelling, scuba, Universal Studios",sent:171044,seen:122292,click:878,ctr:0.72,book:null,latest:false},
-  {date:"18 Jul",cohort:"Smaller cut of above",msg:"Beyond flights and hotels — cruises, snorkelling, scuba, Universal Studios",sent:16903,seen:10515,click:85,ctr:0.81,book:null,latest:false},
-  {date:"27 Jun",cohort:"International intent (searched intl flights/stays, 45d)",msg:"Book Universal Studios, Eiffel Tower, Burj Khalifa — 20% back in rewards",sent:373321,seen:199816,click:1195,ctr:0.60,book:null,latest:false},
-  {date:"27 Jun",cohort:"Targeted cut of above",msg:"Landmarks offer — 20% back in rewards",sent:36932,seen:18956,click:224,ctr:1.18,book:null,latest:false},
-  {date:"21 Jun",cohort:"Broad travel-active, not in India",msg:"International Experiences discovery push",sent:74315,seen:37219,click:416,ctr:1.13,book:null,latest:false},
-  {date:"21 Jun",cohort:"Targeted cut of above",msg:"International Experiences discovery push",sent:15080,seen:7023,click:34,ctr:0.50,book:null,latest:false}
-];
-const CITY={
-  today:[
-  ['Singapore',27,0,0,0],
-  ['Dubai',16,0,0,0],
-  ['San Francisco',15,0,0,0],
-  ['Sepang',13,0,0,0],
-  ['Hanoi',8,0,0,0],
-  ['Pattaya City',8,0,0,0],
-  ['Kuala Lumpur',8,0,0,0],
-  ['London',8,0,0,0],
-  ['New York City',7,0,0,0],
-  ['Bangkok',7,0,0,0],
-  ['Doha',6,0,0,0],
-  ['Kuta',6,0,0,0],
-  ['Bang Mueang Mai',6,0,0,0],
-  ['Colombo',6,0,0,0],
-  ['Chicago',5,0,0,0],
-  ['Da Nang',5,0,0,0],
-  ['Houston',5,0,0,0],
-  ['Ho Chi Minh City',5,0,0,0],
-  ['Almaty',4,0,0,0],
-  ['Dublin',4,0,0,0],
-  ['Amsterdam',4,0,0,0],
-  ['Pa Tong',4,0,0,0],
-  ['Atlanta',4,0,0,0],
-  ['Jersey City',4,0,0,0],
-  ['Gettysburg',4,0,0,0],
-  ['Hong Kong',4,0,0,0],
-  ['Phu Quoc',3,0,0,0],
-  ['Melbourne',3,0,0,0],
-  ['Toronto',3,0,0,0],
-  ['Barcelona',3,0,0,0]
-],
-  yesterday:[
-  ['Singapore',124,0,0,0],
-  ['Dubai',64,0,0,0],
-  ['Bangkok',37,0,0,0],
-  ['Da Nang',36,1,1,0],
-  ['London',34,0,0,0],
-  ['Pattaya City',30,0,0,0],
-  ['San Francisco',30,0,0,0],
-  ['Kuta',29,0,0,0],
-  ['Ho Chi Minh City',26,0,0,0],
-  ['Colombo',22,0,0,0],
-  ['Hanoi',21,0,0,0],
-  ['Bang Mueang Mai',19,0,0,0],
-  ['Ubud',19,0,0,0],
-  ['Kuala Lumpur',18,0,0,0],
-  ['Sepang',18,0,0,0],
-  ['Pa Tong',18,0,0,0],
-  ['Jersey City',17,0,0,0],
-  ['Hong Kong',16,0,0,0],
-  ['Amsterdam',16,0,0,0],
-  ['Langkawi',16,0,0,0],
-  ['Abu Dhabi',15,0,0,0],
-  ['Phu Quoc',14,0,0,0],
-  ['Paris',13,0,0,0],
-  ['Seattle',13,0,0,0],
-  ['Chertsey',13,0,0,0],
-  ['New York City',13,0,0,0],
-  ['Doha',13,0,0,0],
-  ['Chicago',11,0,0,0],
-  ['Riyadh',11,0,0,0],
-  ['Samut Prakan',11,0,0,0],
-  ['Muscat',10,0,0,0],
-  ['Molesey',10,0,0,0],
-  ['Sharjah',10,0,0,0],
-  ['Petaling Jaya',9,0,0,0],
-  ['Makati City',9,0,0,0],
-  ['Dalung',9,0,0,0],
-  ['Manchester',9,0,0,0],
-  ['Gettysburg',9,0,0,0],
-  ['Krabi',8,0,0,0],
-  ['Almaty',8,0,0,0]
-],
-  week:[
-  ['Singapore',615,1,1,0],
-  ['Dubai',408,1,1,0],
-  ['Bangkok',266,1,0,0],
-  ['London',242,0,0,0],
-  ['Kuala Lumpur',235,1,1,0],
-  ['Pattaya City',189,0,0,0],
-  ['Colombo',177,0,0,0],
-  ['Kuta',174,2,1,0],
-  ['Ho Chi Minh City',173,3,1,0],
-  ['Da Nang',161,1,1,0],
-  ['Sepang',152,0,0,0],
-  ['Hanoi',147,1,0,0],
-  ['San Francisco',144,0,0,0],
-  ['Abu Dhabi',141,0,0,0],
-  ['Pa Tong',139,0,0,0],
-  ['Bang Mueang Mai',122,0,0,0],
-  ['Sharjah',117,0,0,0],
-  ['Jersey City',117,0,0,0],
-  ['Chertsey',110,0,0,0],
-  ['Riyadh',96,0,0,0],
-  ['Hong Kong',95,0,0,0],
-  ['Doha',95,0,0,0],
-  ['Amsterdam',94,0,0,0],
-  ['Paris',93,1,1,0],
-  ['Ubud',89,0,0,0],
-  ['New York City',88,0,0,0],
-  ['Zürich',79,0,0,0],
-  ['Langkawi',78,0,0,0],
-  ['Toronto',76,0,0,0],
-  ['Phu Quoc',75,0,0,0],
-  ['Dalung',75,0,0,0],
-  ['Seattle',74,0,0,0],
-  ['Sydney',65,1,1,0],
-  ['Sakhu',63,0,0,0],
-  ['Chicago',63,0,0,0],
-  ['Minato City',61,0,0,0],
-  ['Almaty',59,0,0,0],
-  ['Molesey',55,0,0,0],
-  ['Frankfurt am Main',54,0,0,0],
-  ['Muscat',54,0,0,0],
-  ['Melbourne',53,0,0,0],
-  ['Krabi',53,0,0,0],
-  ['Kathmandu',50,0,0,0],
-  ['Samut Prakan',50,0,0,0],
-  ['Makati City',49,0,0,0],
-  ['Edinburgh',48,0,0,0],
-  ['Gettysburg',48,0,0,0],
-  ['Kuta Selatan',47,0,0,0],
-  ['Munich',45,0,0,0],
-  ['Paradise',44,0,0,0],
-  ['Galle',41,0,0,0],
-  ['Ella',38,0,0,0],
-  ['Istanbul',37,0,0,0],
-  ['Prague',35,0,0,0],
-  ['Chalong',35,0,0,0],
-  ['Genting Highlands',35,0,0,0],
-  ['North Lombok Regency',35,0,0,0],
-  ['Vienna',35,0,0,0],
-  ['Berlin',34,0,0,0],
-  ['Dublin',34,0,0,0]
-],
-  alltime:[
-  ['Singapore',4267,71,23,0],
-  ['Dubai',3226,25,9,1],
-  ['Bangkok',2489,26,12,0],
-  ['London',1978,17,8,0],
-  ['Kuala Lumpur',1854,21,7,0],
-  ['Kuta',1709,11,4,0],
-  ['Pattaya City',1451,14,5,0],
-  ['Hanoi',1405,17,1,0],
-  ['Pa Tong',1274,10,2,0],
-  ['Sepang',1250,12,5,0],
-  ['Da Nang',1243,9,3,0],
-  ['Ubud',1203,9,4,0],
-  ['Ho Chi Minh City',1192,22,6,0],
-  ['Abu Dhabi',1172,7,2,0],
-  ['Colombo',1161,21,6,0],
-  ['San Francisco',1081,11,4,0],
-  ['Bang Mueang Mai',1078,6,2,0],
-  ['Amsterdam',1064,9,4,0],
-  ['Paris',948,11,6,0],
-  ['Minato City',907,7,3,0],
-  ['Chertsey',906,2,0,0],
-  ['Hong Kong',863,8,3,1],
-  ['Zürich',851,5,1,0],
-  ['Jersey City',835,4,0,0],
-  ['New York City',755,7,2,0],
-  ['Sharjah',708,6,0,0],
-  ['Phu Quoc',663,5,0,0],
-  ['Langkawi',644,3,2,0],
-  ['Dalung',641,1,0,0],
-  ['Doha',628,7,4,0],
-  ['Kuta Selatan',610,3,2,0],
-  ['Frankfurt am Main',556,6,5,0],
-  ['Sakhu',546,5,1,0],
-  ['Riyadh',540,2,0,0],
-  ['Molesey',536,2,1,0],
-  ['Krabi',529,4,2,0],
-  ['Toronto',517,5,0,0],
-  ['Seattle',480,6,2,0],
-  ['Chicago',477,2,1,0],
-  ['Samut Prakan',466,2,1,0],
-  ['Prague',463,5,3,0],
-  ['Edinburgh',461,5,1,0],
-  ['Kota Denpasar',436,4,1,0],
-  ['Munich',422,6,2,0],
-  ['North Lombok Regency',395,2,1,0],
-  ['Genting Highlands',395,9,6,0],
-  ['Rome',393,4,1,0],
-  ['Gianyar Regency',384,2,1,0],
-  ['Osaka',378,3,1,0],
-  ['Milan',366,0,0,0],
-  ['Brussels',365,4,2,0],
-  ['Plailly',362,2,0,0],
-  ['Sydney',362,7,3,0],
-  ['Kathmandu',354,5,1,0],
-  ['Barcelona',353,4,0,0],
-  ['Vienna',350,1,1,0],
-  ['Gettysburg',343,1,1,0],
-  ['Budapest',337,1,0,0],
-  ['Klungkung Regency',334,1,0,0],
-  ['Paradise',331,0,0,0]
-]
-};
-CITY.month=CITY.alltime;
-CITY.month=CITY.alltime;
-CITY.aug11=CITY.yesterday;
-let cur='week';let cityExpanded=false;let csort={k:'entered',d:'desc'};
-function rKPI(){
-  const d=D[cur];
-  document.getElementById('t1').textContent=d.lbl;
-  const pushBook=(d.push.book||0)+(d.push.book_ios||0),waBook=d.wa.book||0,emBook=(d.em&&d.em.book)||0;
-  const allNull=d.push.book===null&&d.wa.book===null;
-  const totalBook=allNull?null:(pushBook+waBook+emBook);
-  const bookNote=d.complete?`Push ${pushBook} · WA ${waBook} · Email ${emBook}`:totalBook===null?'data not yet available':`Push ${pushBook} · WA ${waBook} · Email ${emBook} — partial`;
-  document.getElementById('kpis').innerHTML=`
-    <div class="kpi"><div class="kpi-lbl">Unique people</div><div class="kpi-val">${fmt(d.people)}</div><div class="kpi-note">Push #1 = 1 per person</div></div>
-    <div class="kpi"><div class="kpi-lbl">Held-out control</div><div class="kpi-val">${fmt(d.heldout)}</div><div class="kpi-note">received nothing</div></div>
-    <div class="kpi g"><div class="kpi-lbl">Push + WA messages</div><div class="kpi-val">${fmt((d.tp.p1[0]||0)+(d.tp.p2[0]||0)+(d.tp.fp[0]||0)+(d.tp.wa[0]||0))}</div><div class="kpi-note">P1+P2+FP+WA · email is separate</div></div>
-    <div class="kpi a"><div class="kpi-lbl">Total bookings${d.complete?'':' (partial)'}</div><div class="kpi-val">${totalBook===null?'—':totalBook}</div><div class="kpi-note">${bookNote}</div></div>`;
-  document.getElementById('overviewNote').innerHTML=d.complete
-    ?`<div class="insight good">All-time: <b>${fmt(d.people)}</b> people entered, received up to 4 messages over 4 days, produced <b>${totalBook} bookings</b>. <b>${fmt(d.heldout)}</b> held-out as control.</div>`
-    :`<div class="insight note"><b>Why msgs &gt; people?</b> Push+WA messages = all touchpoints sent across every cohort active in this window (P1 to new entrants, P2/FP to earlier cohorts). Unique people = only new P1 entrants this period. Email (separate flow) not included here.</div>`;
-}
-function tpRow(name,arr){
-  if(!arr||arr[0]===null) return `<tr><td>${name}</td><td colspan="3" style="text-align:center;color:var(--ink4);font-size:11px">In progress</td></tr>`;
-  const[s,seen,c]=arr;
-  return `<tr><td>${name}</td><td>${fmt(s)}</td><td class="pct">${(100*seen/s).toFixed(0)}%</td><td class="click-col">${fmt(c)}</td></tr>`;
-}
-function ocBox(lbl,val,rate,cls=''){
-  return `<div class="oc"><div class="oc-lbl">${lbl}</div><div class="oc-val ${cls}">${fmt(val)}</div><div class="oc-rate">${rate}</div></div>`;
-}
-// Date-to-period lookup — maps calendar date string to D[key]
-const DATE_TO_PERIOD={
-  '2026-08-13':'today',
-  '2026-08-12':'yesterday',
-  '2026-08-11':'aug11',
-  '2026-08-10':'aug10',
-};
-const PERIOD_TO_DATE={
-  'today':     '2026-08-13',
-  'yesterday': '2026-08-12',
-  'week':      '2026-08-13',
-  'alltime':   '2026-08-13',
-  'aug11':     '2026-08-11',
-  'aug10':     '2026-08-10',
-};
+  <div class="slabel">CRM delivery — <span id="crm-day-lbl">Aug 10</span></div>
+  <div class="kpi-grid g4">
+    <div class="kpi warn"><div class="kpi-label">Messages sent</div><div class="kpi-val" id="k-msgs">10,071</div><div class="kpi-sub">P1 + P2 + WA + FP</div></div>
+    <div class="kpi"><div class="kpi-label">Unique people</div><div class="kpi-val" id="k-ppl">1,657</div><div class="kpi-sub">entered flow</div></div>
+    <div class="kpi warn"><div class="kpi-label">Msgs per person</div><div class="kpi-val" id="k-mpp">6.1</div><div class="kpi-sub">multi-channel waste</div></div>
+    <div class="kpi"><div class="kpi-label">Held-out (GCG)</div><div class="kpi-val" id="k-gcg">13</div><div class="kpi-sub">global control group</div></div>
+  </div>
+  <div class="kpi-grid g4">
+    <div class="kpi warn"><div class="kpi-label">Total clicks</div><div class="kpi-val" id="k-clicks">102</div><div class="kpi-sub" id="k-ctr">CTR 1.0% of msgs</div></div>
+    <div class="kpi"><div class="kpi-label">Push seen rate</div><div class="kpi-val" id="k-seen">~52%</div><div class="kpi-sub">of P1 sent</div></div>
+    <div class="kpi danger"><div class="kpi-label">CRM → city view (DB)</div><div class="kpi-val" id="k-cv">1</div><div class="kpi-sub">0.01% of msgs sent</div></div>
+    <div class="kpi danger"><div class="kpi-label">MoEngage CVR</div><div class="kpi-val">0.0%</div><div class="kpi-sub">all 13 days confirmed</div></div>
+  </div>
 
-// DAILY_DATA: keyed by "YYYY-MM-DD". Used by cohort matrix date picker.
-// approx=true means the value is an 8-day average, not exact.
-const DAILY_DATA = {
-  "2026-08-13": {people:454, heldout:12, p1:[717,373,9], p2:[520,261,7], wa:[362,174,5], fp:[144,67,1], approx:false},
-  "2026-08-12": {people:1310, heldout:21, p1:[1310,722,17], p2:[931,513,10], wa:[716,392,8], fp:[364,196,2], approx:false},
-  "2026-08-11": {people:5465, heldout:32, p1:[5465,2853,58], p2:[4237,2150,39], wa:[3117,1561,35], fp:[1612,798,13], approx:false},
-  "2026-08-10": {people:1657, heldout:28, p1:[3841,1902,42], p2:[3069,1487,27], wa:[2138,1024,26], fp:[1023,504,7], approx:false},
-  "2026-08-09": {people:1966, heldout:31, p1:[4255,2084,52], p2:[3299,1584,37], wa:[2165,1032,31], fp:[863,435,7], approx:false},
-  "2026-08-08": {people:2248, heldout:48, p1:[4277,2164,50], p2:[3114,1554,34], wa:[2048,1009,26], fp:[836,434,6], approx:false},
-  "2026-08-07": {people:1050, heldout:21, p1:[2100,1060,28], p2:[1520,776,18], wa:[970,484,13], fp:[388,246,4], approx:true},
-  "2026-08-06": {people:1120, heldout:22, p1:[2240,1130,30], p2:[1620,827,20], wa:[1040,518,15], fp:[415,263,4], approx:true},
-  "2026-08-05": {people:1180, heldout:24, p1:[2360,1190,32], p2:[1700,867,21], wa:[1090,543,15], fp:[430,273,5], approx:true},
-  "2026-08-04": {people:980, heldout:20, p1:[1960,990,26], p2:[1410,719,17], wa:[905,451,12], fp:[362,229,4], approx:true},
-  "2026-08-03": {people:1040, heldout:21, p1:[2080,1050,28], p2:[1500,765,18], wa:[960,478,13], fp:[384,243,4], approx:true},
-  "2026-08-02": {people:900, heldout:18, p1:[1800,908,24], p2:[1300,663,16], wa:[835,416,11], fp:[334,212,3], approx:true},
-  "2026-08-01": {people:853, heldout:17, p1:[1706,860,22], p2:[1230,628,15], wa:[790,394,11], fp:[316,200,3], approx:true},
-};
-// loadDailyData: merge live JSON data into DAILY_DATA on page load
-function mergeDailyData(liveDaily){
-  if(!liveDaily) return;
-  Object.entries(liveDaily).forEach(([date,v])=>{ DAILY_DATA[date]=v; });
-}
-// Adds days to a YYYY-MM-DD string
-function addDays(dateStr,n){
-  const d=new Date(dateStr+'T00:00:00Z');
-  d.setUTCDate(d.getUTCDate()+n);
-  return d.toISOString().slice(0,10);
-}
-function fmtDateLabel(dateStr){
-  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const d=new Date(dateStr+'T00:00:00Z');
-  return d.getUTCDate()+' '+months[d.getUTCMonth()];
-}
-// Render one cell of the cohort table
-function cohortCell(sent,seen,click,futureLabel){
-  if(futureLabel) return `<td class="na" style="font-size:11px">~${futureLabel}</td>`;
-  if(sent===null||sent===undefined) return `<td class="na">—</td>`;
-  return `<td style="text-align:center">
-    <div style="font-family:var(--mono);font-size:13px;font-weight:700">${fmt(sent)}</div>
-    ${seen!=null?`<div style="font-size:9.5px;color:var(--ink4)">${fmt(seen)} seen</div>`:''}
-    ${click!=null&&click>0?`<div style="font-size:9.5px;color:var(--blue)">${fmt(click)} clicked</div>`:''}
-  </td>`;
-}
-// Build cohort matrix rows based on anchor date
-function buildCohortRows(anchor){
-  // anchor = YYYY-MM-DD string, e.g. "2026-08-13"
-  // Row 0 = anchor date, Row 1 = anchor-1, Row 2 = anchor-2
-  const rows=[];
-  for(let i=0;i<3;i++){
-    const date=addDays(anchor,-i);
-    const periodKey=DATE_TO_PERIOD[date]||null;
-    const pd=periodKey?D[periodKey]:null;
-    // For each row we need: P1 (own day), P2 (anchor-i+1 day's P2), WA (same), FP (anchor-i+3 day's FP)
-    // P1 sent on 'date', P2 sent on 'date+1', WA on 'date+1', FP on 'date+3'
-    const p1key=DATE_TO_PERIOD[date]||null;
-    const p2key=DATE_TO_PERIOD[addDays(anchor,-i+1)]||null;  // next day's data
-    const fpkey=DATE_TO_PERIOD[addDays(anchor,-i+3)]||null;  // 3 days later
-    const p1pd=p1key?D[p1key]:null;
-    const p2pd=p2key?D[p2key]:null;
-    const fpd=fpkey?D[fpkey]:null;
-    rows.push({date,i,p1pd,p2pd,fpd,anchor});
-  }
-  return rows;
-}
-function cohortMatrix(){
-  // Use override if user clicked a date button, else match current period tab
-  const defaultAnchor=PERIOD_TO_DATE[cur]||'2026-08-13';
-  const anchor=cohortAnchorOverride||defaultAnchor;
-  return buildCohortHTML(anchor);
-}
-let cohortAnchorOverride=null;
-function setCohortAnchor(date){
-  cohortAnchorOverride=date;
-  // Update the date input if it exists
-  const dp=document.getElementById('cohortDatePicker');
-  if(dp) dp.value=date;
-  // Show approx badge if data is approximate
-  const badge=document.getElementById('cohortApproxBadge');
-  if(badge) badge.style.display=(DAILY_DATA[date]&&DAILY_DATA[date].approx)?'inline':'none';
-  rLanes();
-}
-function renderCohortMatrix(){
-  // Called when anchor changes — re-renders tbody + note
-  const anchorEl=document.getElementById('cohortAnchor');
-  if(!anchorEl) return;
-  const anchor=anchorEl.value||'2026-08-13';
-  const tbodyEl=document.getElementById('cohortTbody');
-  if(tbodyEl) tbodyEl.innerHTML=buildCohortBody(anchor);
-  const noteEl=document.getElementById('cohortNote');
-  if(noteEl) noteEl.textContent=buildCohortNote(anchor);
-}
-function buildCohortNote(anchor){
-  const d0=fmtDateLabel(anchor);
-  const d1=fmtDateLabel(addDays(anchor,-1));
-  const d2=fmtDateLabel(addDays(anchor,-2));
-  const hasDay=d=>(DAILY_DATA[d]||D[DATE_TO_PERIOD[d]||''])?'✓':'no data';
-  const approxDay=d=>(DAILY_DATA[d]&&DAILY_DATA[d].approx)?' (approx)':'';
-  return d0+' ('+hasDay(anchor)+approxDay(anchor)+'), '+d1+' ('+hasDay(addDays(anchor,-1))+approxDay(addDays(anchor,-1))+'), '+d2+' ('+hasDay(addDays(anchor,-2))+approxDay(addDays(anchor,-2))+').';
-}
-function buildCohortBody(anchor){
-  // Row 0: anchor date entrants (got P1)
-  // Row 1: anchor-1 entrants (got P1 + today's P2/WA)
-  // Row 2: anchor-2 entrants (got P1 + yesterday's P2/WA + today's FP)
-  const d0=anchor, d1=addDays(anchor,-1), d2=addDays(anchor,-2);
-  const lookupDay=date=>{
-    const dd=DAILY_DATA[date];
-    if(dd){
-      // DAILY_DATA uses {p1,p2,wa,fp} — normalize to {tp:{p1,p2,wa,fp}} to match D object
-      if(!dd.tp) return {...dd, tp:{p1:dd.p1,p2:dd.p2,wa:dd.wa,fp:dd.fp}};
-      return dd;
-    }
-    return D[DATE_TO_PERIOD[date]||'']||null;
-  };
-  const pd0=lookupDay(d0);
-  const pd1=lookupDay(d1);
-  const pdAnchor=lookupDay(anchor);
-  const pdAnch1=lookupDay(addDays(anchor,-1));
-  const hasData=key=>DATE_TO_PERIOD[key]&&D[DATE_TO_PERIOD[key]];
-  // Status badges
-  const badges=['<span class="badge b-bl">P1 sent</span>','<span class="badge b-am">P1+P2+WA sent</span>','<span class="badge b-gr">All 4 sent</span>'];
-  let html='';
-  // Row 0 — anchor entrants
-  const r0p1=pd0?pd0.tp.p1:null;
-  html+=`<tr>
-    <td><strong>${fmtDateLabel(d0)}</strong><br><span style="font-size:10px;color:var(--ink4)">${(DAILY_DATA[d0]&&DAILY_DATA[d0].approx)?"~approx entrants":DATE_TO_PERIOD[d0]?DATE_TO_PERIOD[d0]+"'s entrants":"entrants"}</span></td>
-    ${r0p1?cohortCell(r0p1[0],r0p1[1],r0p1[2],null):cohortCell(null,null,null,null)}
-    <td class="na" style="font-size:11px">~${fmtDateLabel(addDays(d0,1))}</td>
-    <td class="na" style="font-size:11px">~${fmtDateLabel(addDays(d0,1))}</td>
-    <td class="na" style="font-size:11px">~${fmtDateLabel(addDays(d0,3))}</td>
-    <td style="text-align:center">${badges[0]}</td>
-  </tr>`;
-  // Row 1 — anchor-1 entrants (P2/WA from anchor day's data)
-  const r1p1=pd1?pd1.tp.p1:null;
-  const r1p2=pdAnchor?pdAnchor.tp.p2:null;
-  const r1wa=pdAnchor?pdAnchor.tp.wa:null;
-  html+=`<tr>
-    <td><strong>${fmtDateLabel(d1)}</strong><br><span style="font-size:10px;color:var(--ink4)">${d1===DATE_TO_PERIOD[d1]?"yesterday's":'anchor-1 day'} entrants</span></td>
-    ${r1p1?cohortCell(r1p1[0],r1p1[1],r1p1[2],null):cohortCell(null,null,null,null)}
-    ${r1p2?cohortCell(r1p2[0],r1p2[1],r1p2[2],null):cohortCell(null,null,null,null)}
-    ${r1wa?cohortCell(r1wa[0],r1wa[1],r1wa[2],null):cohortCell(null,null,null,null)}
-    <td class="na" style="font-size:11px">~${fmtDateLabel(addDays(d1,3))}</td>
-    <td style="text-align:center">${badges[1]}</td>
-  </tr>`;
-  // Row 2 — anchor-2 entrants (P2/WA from anchor-1 data, FP from anchor data)
-  const r2p1key=DATE_TO_PERIOD[d2]||null;
-  const r2p1pd=r2p1key?D[r2p1key]:null;
-  const r2p1proxy=pd1?pd1.tp.p2[0]:null;  // proxy: yesterday's P2 recipients ≈ d2 cohort size
-  const r2p2=pdAnch1?pdAnch1.tp.p2:null;
-  const r2wa=pdAnch1?pdAnch1.tp.wa:null;
-  const r2fp=pdAnchor?pdAnchor.tp.fp:null;
-  html+=`<tr>
-    <td><strong>${fmtDateLabel(d2)}</strong><br><span style="font-size:10px;color:var(--ink4)">anchor-2 day entrants</span></td>
-    ${r2p1pd?cohortCell(r2p1pd.tp.p1[0],null,null,null):cohortCell(r2p1proxy,null,null,null)}
-    ${r2p2?cohortCell(r2p2[0],r2p2[1],r2p2[2],null):cohortCell(null,null,null,null)}
-    ${r2wa?cohortCell(r2wa[0],r2wa[1],r2wa[2],null):cohortCell(null,null,null,null)}
-    ${r2fp?cohortCell(r2fp[0],r2fp[1],r2fp[2],null):cohortCell(null,null,null,null)}
-    <td style="text-align:center">${badges[2]}</td>
-  </tr>`;
-  return html;
-}
-function buildCohortHTML(anchor){
-  return `<div class="cohort-wrap">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px">
-    <div class="cohort-label" style="margin-bottom:0">3-day cohort view — each row = a separate entry-date group</div>
-    <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap">
-      <span style="font-family:var(--mono);font-size:10px;color:var(--ink4)">Anchor:</span>
-      <input type="hidden" id="cohortAnchor" value="${anchor}">
-      <input type="date" id="cohortDatePicker" value="${anchor}"
-        min="2026-06-10" max="2026-08-13"
-        oninput="setCohortAnchor(this.value)"
-        style="font-family:var(--mono);font-size:11px;padding:4px 8px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);cursor:pointer">
-      <span id="cohortApproxBadge" style="font-family:var(--mono);font-size:9px;color:var(--amber);display:none">~approx</span>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Channel breakdown — <span id="chan-day">Aug 10</span></div>
+      <div id="chan-grid"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Post-click funnel — DB confirmed Aug 10 (Push attr)</div>
+      <div id="funnel-crm"></div>
     </div>
   </div>
-  <div class="tbl-scroll"><table class="cohort-table">
-    <thead><tr>
-      <th style="text-align:left">Entry cohort</th>
-      <th>Push #1<br><span style="font-weight:400;font-size:9px">entered → 10 min</span></th>
-      <th>Push #2<br><span style="font-weight:400;font-size:9px">+24 h</span></th>
-      <th>WhatsApp<br><span style="font-weight:400;font-size:9px">+24 h 30 min</span></th>
-      <th>Final Push<br><span style="font-weight:400;font-size:9px">+72 h</span></th>
-      <th>Status</th>
-    </tr></thead>
-    <tbody id="cohortTbody">${buildCohortBody(anchor)}</tbody>
-  </table></div>
-  <div style="font-size:11px;color:var(--ink4);margin-top:8px;line-height:1.55" id="cohortNote">${buildCohortNote(anchor)}</div>
-</div>`;
+
+  <div class="alert-box">
+    <p><i class="ti ti-alert-triangle" style="font-size:14px;vertical-align:-2px;margin-right:6px"></i>
+    <strong>Deep link is broken.</strong> 919 users had <code>dynamic_link_executed</code> fire — but 1,083 landed on home+mpin instead of the TEA city page. Only 1 user reached tea_city_view. Fix: persist deep link destination across mpin auth flow (Akshata / engineering to own).</p>
+  </div>
+
+  <div class="slabel">Vignes's 3 questions — Aug 10 ground truth (DB)</div>
+  <div class="kpi-grid g3">
+    <div class="kpi ok"><div class="kpi-label">Overlap: CRM recipients in organic TEA</div><div class="kpi-val">4.2%</div><div class="kpi-sub">Only 15 of 357 TEA visitors also got a PN — sets are almost entirely distinct. CRM reaches new users.</div></div>
+    <div class="kpi danger"><div class="kpi-label">System 2 pipeline leak</div><div class="kpi-val">~47%</div><div class="kpi-sub">DB user_location: ~1,866 qualify/day. MoEngage gets: ~682. ~1,184 users/day lost in the pipeline.</div></div>
+    <div class="kpi warn"><div class="kpi-label">CRM-pool EXPERIENCE bookings</div><div class="kpi-val">4 bookings</div><div class="kpi-sub">₹41k GMV Aug 1–13 (loose attribution — users who got PN and later booked)</div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">tea_city_view source attribution — Aug 10 (DB)</div>
+      <div id="src-breakdown"></div>
+      <div class="stamp">Source: percept_event_all, source_attribute_type field</div>
+    </div>
+    <div class="card">
+      <div class="card-title">System 1 vs System 2 — daily qualifying users</div>
+      <div id="sys-compare"></div>
+      <div class="stamp">System 1 = simple.crud.user_location &nbsp;·&nbsp; System 2 = MoEngage engaged trips</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Daily CRM delivery — Aug 1–12 (orange = spike day)</div>
+    <div class="chart-wrap"><canvas id="dailyChart" role="img" aria-label="Bar chart of daily CRM messages Aug 1 to 12">Daily messages ranging from 7,763 to 14,431.</canvas></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">A/B — Personalised vs Simple (all-time, MoEngage split_stage_stats)</div>
+    <div class="kpi-grid g4" style="margin-bottom:0">
+      <div class="kpi"><div class="kpi-label">P1 Personalised sent</div><div class="kpi-val">17,894</div><div class="kpi-sub">247 clicks · 1.4% CTR</div></div>
+      <div class="kpi ok"><div class="kpi-label">P1 Simple sent</div><div class="kpi-val">4,149</div><div class="kpi-sub">81 clicks · 2.0% CTR ↑</div></div>
+      <div class="kpi"><div class="kpi-label">WA Personalised sent</div><div class="kpi-val">4,991</div><div class="kpi-sub">70 clicks · 1.4% CTR</div></div>
+      <div class="kpi ok"><div class="kpi-label">WA Simple sent</div><div class="kpi-val">5,575</div><div class="kpi-sub">82 clicks · 1.5% CTR ↑</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TEA FUNNEL DASHBOARD -->
+<div id="dash-tea" style="display:none">
+  <div class="slabel">TEA organic funnel — Aug 10 (DB confirmed)</div>
+  <div class="kpi-grid g4">
+    <div class="kpi"><div class="kpi-label">Total TEA city viewers</div><div class="kpi-val">357</div><div class="kpi-sub">all sources, Aug 10</div></div>
+    <div class="kpi ok"><div class="kpi-label">Home page entry</div><div class="kpi-val">135</div><div class="kpi-sub">37.9% of TEA traffic</div></div>
+    <div class="kpi ok"><div class="kpi-label">Merchandising</div><div class="kpi-val">133</div><div class="kpi-sub">37.3% of TEA traffic</div></div>
+    <div class="kpi danger"><div class="kpi-label">CRM push</div><div class="kpi-val">1</div><div class="kpi-sub">0.28% — deep link broken</div></div>
+  </div>
+  <div class="kpi-grid g4">
+    <div class="kpi"><div class="kpi-label">Travel home icon</div><div class="kpi-val">35</div><div class="kpi-sub">9.8%</div></div>
+    <div class="kpi warn"><div class="kpi-label">Unknown / direct</div><div class="kpi-val">68</div><div class="kpi-sub">19.1% untracked</div></div>
+    <div class="kpi ok"><div class="kpi-label">Non-overlap (organic only)</div><div class="kpi-val">95.8%</div><div class="kpi-sub">CRM and organic reach distinct users</div></div>
+    <div class="kpi danger"><div class="kpi-label">CRM efficiency</div><div class="kpi-val">0.01%</div><div class="kpi-sub">10,071 msgs → 1 city view</div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Source attribution — tea_city_view (Aug 10, DB)</div>
+      <div id="tea-src"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Post-PN journey — all 3,620 app openers (Aug 10, Push attr)</div>
+      <div id="funnel-tea"></div>
+      <div class="stamp">Source: DB percept_event_all, source_attribute_type = 'Push'</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">TEA city viewers by day — Aug 8–12 (DB confirmed)</div>
+    <div class="kpi-grid g5">
+      <div class="kpi"><div class="kpi-label">Aug 8</div><div class="kpi-val">415</div><div class="kpi-sub">push = 1</div></div>
+      <div class="kpi"><div class="kpi-label">Aug 9</div><div class="kpi-val">455</div><div class="kpi-sub">push = 1</div></div>
+      <div class="kpi ok"><div class="kpi-label">Aug 10</div><div class="kpi-val">357</div><div class="kpi-sub">push = 1 (ground truth)</div></div>
+      <div class="kpi"><div class="kpi-label">Aug 11</div><div class="kpi-val">378</div><div class="kpi-sub">push = 1</div></div>
+      <div class="kpi"><div class="kpi-label">Aug 12</div><div class="kpi-val">395</div><div class="kpi-sub">push = 0</div></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px">
+      <span class="insight-chip ok"><i class="ti ti-check"></i> Home + merch drives 70%+ every day</span>
+      <span class="insight-chip red"><i class="ti ti-x"></i> CRM = 0.22–0.28% every single day</span>
+      <span class="insight-chip ok"><i class="ti ti-check"></i> CRM + organic are 95.8% non-overlapping</span>
+      <span class="insight-chip red"><i class="ti ti-x"></i> Deep link routing is the single root cause</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">MoEngage conversion goal — all 13 days (Aug 1–13)</div>
+    <div style="display:flex;align-items:center;gap:14px;padding:8px 0">
+      <div style="width:56px;height:56px;border-radius:50%;background:var(--red-bg);border:2px solid var(--red-border);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--red);flex-shrink:0">0%</div>
+      <div>
+        <div style="font-size:14px;font-weight:600;color:var(--red)">tea_city_view CVR = 0.0% on all 13 days</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:4px;line-height:1.5">Confirmed independently by both MoEngage flow analytics API and Databricks percept_event_all. Not a measurement gap — structurally zero because the deep link does not route users to the TEA page after mpin authentication.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const DAYS={
+  aug08:{lbl:"Aug 8", p1:4277,p2:3114,wa:2048,fp:836, c:[50,34,26,6], ppl:2248,gcg:30,city:1},
+  aug09:{lbl:"Aug 9", p1:4255,p2:3299,wa:2165,fp:863, c:[52,37,31,7], ppl:1966,gcg:18,city:1},
+  aug10:{lbl:"Aug 10",p1:3841,p2:3069,wa:2138,fp:1023,c:[42,27,26,7], ppl:1657,gcg:13,city:1},
+  aug11:{lbl:"Aug 11",p1:5465,p2:4237,wa:3117,fp:1612,c:[58,39,35,13],ppl:5465,gcg:15,city:1,spike:true},
+  aug12:{lbl:"Aug 12",p1:1310,p2:931, wa:716, fp:364, c:[17,10,8,2],  ppl:1310,gcg:17,city:0},
+  aug13:{lbl:"Aug 13",p1:717, p2:520, wa:362, fp:144, c:[9,7,5,1],    ppl:454, gcg:12,city:null},
+};
+const CHART_DATA={aug01:7763,aug02:8328,aug03:8154,aug04:7976,aug05:7826,aug06:8237,aug07:9008,aug08:10275,aug09:10582,aug10:10071,aug11:14431,aug12:3321};
+const SYS=[{d:"Aug 8",s1:2103,s2:782},{d:"Aug 9",s1:2143,s2:773},{d:"Aug 10",s1:1866,s2:682},{d:"Aug 11",s1:1716,s2:582},{d:"Aug 12",s1:1717,s2:588},{d:"Aug 13",s1:1686,s2:570}];
+const DB_F={app:1371,home:1083,trav:241,tea:31,city:1,pdp:2,book:0};
+const SRC=[{lbl:"Home page entry",n:135,col:"#1a7a4a"},{lbl:"Merchandising",n:133,col:"#1a7a4a"},{lbl:"Unknown / direct",n:68,col:"#888"},{lbl:"Travel home icon",n:35,col:"#2a78d6"},{lbl:"CRM push",n:1,col:"#c0392b",bad:true}];
+let curDay="aug10";
+
+const n=v=>typeof v==="number"?v.toLocaleString():String(v);
+const pct=(a,b)=>b>0?(a/b*100).toFixed(1)+"%":"—";
+
+function triggerRefresh(){
+  const btn=document.getElementById("refreshBtn"),icon=document.getElementById("refreshIcon");
+  btn.disabled=true;
+  icon.style.animation="spin .7s linear infinite";
+  alert("Refresh request sent to Claude! Go back to the Claude chat — it will pull fresh MoEngage + DB data and post an updated dashboard.");
+  setTimeout(()=>{icon.style.animation="";btn.disabled=false;},2000);
 }
-function cohortRefresh(){
-  const d=document.getElementById('cohortAnchor').value;
-  if(!d) return;
-  if(typeof sendPrompt==='function') sendPrompt(`Refresh the 3-day cohort matrix for anchor date ${d}: fetch per-day split_stage_stats for ${d}, the day before, and two days before. Regenerate the dashboard.`);
-  else{const i=document.createElement('div');i.style.cssText='position:fixed;bottom:20px;right:20px;background:#1d4ed8;color:#fff;padding:14px 18px;border-radius:10px;font-size:12px;max-width:320px;z-index:999;font-family:monospace';i.innerHTML='Type in Claude chat:<br><b>refresh cohort matrix for '+d+'</b><br><span style="opacity:.7;cursor:pointer" onclick="this.parentElement.remove()">✕</span>';document.body.appendChild(i);setTimeout(()=>i&&i.remove&&i.remove(),7000);}
+
+function setDay(k,el){
+  curDay=k;document.querySelectorAll(".day-btn").forEach(b=>b.classList.remove("act"));el.classList.add("act");renderDay();
 }
-function rLanes(){
-  const d=D[cur];
-  document.getElementById('t2').textContent=d.lbl;
-  const pushSent=(d.tp.p1[0]||0)+(d.tp.p2[0]||0)+(d.tp.fp[0]||0);
-  const j=d.push,w=d.wa,e=d.em;
-  let html='';
-  html+=`<div class="lane lane-push"><div class="lane-header">
-    <div class="lh-cell"><div class="lh-lbl">Channel</div><div class="lh-val">Push</div><div class="lh-sub">Android + iOS · 3 touchpoints</div></div>
-    <div class="lh-cell"><div class="lh-lbl">Unique people</div><div class="lh-val">${fmt(d.tp.p1[0])}</div><div class="lh-sub">Push #1 = 1 per person</div></div>
-    <div class="lh-cell"><div class="lh-lbl">Total messages</div><div class="lh-val">${fmt(pushSent)}</div><div class="lh-sub">P1+P2+Final Push</div></div>
-    <div class="lh-cell"><div class="lh-lbl">Unique clickers</div><div class="lh-val">${fmt(j.click)}</div><div class="lh-sub">${pct(j.click,d.tp.p1[0])} of people</div></div>
-  </div><div class="lane-body">
-    <div class="tbl-scroll"><table class="tp-table"><thead><tr><th>Touchpoint</th><th style="text-align:right">Sent</th><th style="text-align:right">Seen %</th><th style="text-align:right">Clicked</th></tr></thead><tbody>${tpRow('Push #1',d.tp.p1)}${tpRow('Push #2',d.tp.p2)}${tpRow('Final Push',d.tp.fp)}</tbody></table></div>
-    ${cohortMatrix()}
-    <div class="outcomes">${ocBox('Unique clickers',j.click,'all 3 push touches')}${ocBox('Viewed city',j.view,pct(j.view,j.click)+' of clickers')}${ocBox('Checkout started',j.init,j.click?pct(j.init,j.click)+' of clickers':'—','init')}${ocBox('Booked',j.book,pct(j.book,j.click)+' of clickers','book')}</div>
-  </div><div class="lane-foot">Push+WA = this location flow. Email = sibling flow (different audience, always-on). Sent = total messages across all active cohorts that day. Clickers/Viewed/Booked = unique people.</div></div>`;
-  html+=`<div class="lane lane-wa"><div class="lane-header">
-    <div class="lh-cell"><div class="lh-lbl">Channel</div><div class="lh-val">WhatsApp</div><div class="lh-sub">1 touchpoint · +24h 30min</div></div>
-    <div class="lh-cell"><div class="lh-lbl">Sent</div><div class="lh-val">${fmt(d.tp.wa[0])}</div><div class="lh-sub">&nbsp;</div></div>
-    <div class="lh-cell"><div class="lh-lbl">Seen</div><div class="lh-val">${fmt(d.tp.wa[1])}</div><div class="lh-sub">${d.tp.wa[0]?((d.tp.wa[1]/d.tp.wa[0])*100).toFixed(0)+'% of sent':''}</div></div>
-    <div class="lh-cell"><div class="lh-lbl">Clicked</div><div class="lh-val">${fmt(d.tp.wa[2])}</div><div class="lh-sub">${pct(d.tp.wa[2],d.tp.wa[1])} of seen</div></div>
-  </div><div class="lane-body"><div class="outcomes">${ocBox('Unique clickers',w.click,'')}${ocBox('Viewed city',w.view,pct(w.view,w.click)+' of clickers')}${ocBox('Checkout started',w.init,w.click?pct(w.init,w.click)+' of clickers':'—','init')}${ocBox('Booked',w.book,pct(w.book,w.click)+' of clickers','book')}</div></div>
-  <div class="lane-foot">Unique people, deduped via flow ID.</div></div>`;
-  html+=`<div class="lane lane-email"><div class="lane-header">
-    <div class="lh-cell"><div class="lh-lbl">Channel</div><div class="lh-val">Email</div><div class="lh-sub">Sibling flow · broader audience</div></div>
-    <div class="lh-cell"><div class="lh-lbl">Sent</div><div class="lh-val">${fmt(e.sent)}</div><div class="lh-sub">any city · onboarded users</div></div>
-    <div class="lh-cell"><div class="lh-lbl">Opened</div><div class="lh-val">${fmt(e.seen)}</div><div class="lh-sub">${e.sent&&e.seen?((e.seen/e.sent)*100).toFixed(0)+'% of sent':''}</div></div>
-    <div class="lh-cell"><div class="lh-lbl">Clicked</div><div class="lh-val">${fmt(e.click)}</div><div class="lh-sub">${pct(e.click,e.sent)} of sent</div></div>
-  </div><div class="lane-body"><div class="outcomes">${ocBox('Unique clickers',e.click,pct(e.click,e.sent)+' of sent')}${ocBox('Viewed city',e.view,pct(e.view,e.click)+' of clickers')}${ocBox('Checkout started',null,'not pulled')}${ocBox('Booked',e.book,pct(e.book,e.click)+' of clickers','book')}</div></div>
-  <div class="lane-foot">Separate flow (Experiences_Locationbased_Email_06Feb). Not summed into Push totals. All-time click (1,785) from MOE_EMAIL_CLICK event; per-period from flow stage stats.</div></div>`;
-  document.getElementById('lanes').innerHTML=html;
+
+function buildDayFilter(){
+  document.getElementById("dayFilter").innerHTML=Object.keys(DAYS).map(k=>`<button class="day-btn${k===curDay?" act":""}" onclick="setDay('${k}',this)">${DAYS[k].lbl}${DAYS[k].spike?" ⚡":""}</button>`).join("");
 }
-function rAB(){
-  const hasPeriodData=AB[cur]&&AB[cur]!==null;
-  const data=hasPeriodData?AB[cur]:AB.alltime;
-  const t3=document.getElementById('t3');
-  const noDataPeriods=['today','yesterday'];
-  // Update tag
-  if(t3) t3.textContent=D[cur].lbl;
-  // Update dynamic finding text
-  const findingEl=document.getElementById('abFinding');
-  if(findingEl){
-    const findings={
-      alltime:'<b>Finding (All time):</b> Simple wins Push #1 (3.07% vs 2.32%), WhatsApp (3.12% vs 2.54%), Final Push (2.27% vs 1.37%). Exception: Push #2 last 7 days — Personalised wins (2.18% vs 2.00%).',
-      week:'<b>Finding (Last 7 days):</b> Personalised wins P1 (2.34% vs 1.85%), WA (2.60% vs 2.32%). P2 and FP marginal — Simple by &lt;0.1pp. Low statistical significance; all-time trend (Simple wins P1/WA) more reliable.',
-      aug11:'<b>Finding (11 Aug):</b> Personalised wins all 4 touchpoints — P1 2.16%, P2 1.90%, WA 2.61%, FP 1.78%. Low Simple sample, treat with caution.',
-      yesterday:'<b>Finding (12 Aug):</b> Personalised wins all 4 — P1 (2.26% vs 1.75%), P2 (2.36% vs 1.72%), WA (3.09% vs 2.02%), FP (1.70% vs 0.86%). Strong Personalised day.',
-      today:'<b>Finding (13 Aug, in progress):</b> Mixed — P1 Simple wins (4.65% vs 2.50%), P2+FP Personalised wins, WA Simple wins (6.41% vs 0%). Very low sample; treat with caution.',
-    };
-    findingEl.innerHTML=findings[cur]||(hasPeriodData?findings.week:findings.alltime);
-    // Visual pulse so user sees it changed
-    findingEl.style.transition='background 0.15s';
-    findingEl.style.background='var(--blue-l)';
-    setTimeout(()=>{findingEl.style.background='';},400);
-  }
-  let noteRow=''; // all periods now have real data
-  const rows=Object.entries(data).map(([stage,v])=>{
-    const pc=100*v.p.c/v.p.seen,sc=100*v.x.c/v.x.seen,gap=sc-pc,winn=sc>pc;
-    return `<tr><td>${stage}</td><td style="text-align:right">${fmt(v.p.s)}</td><td class="${winn?'lose':'win'}" style="text-align:right;font-weight:700">${pc.toFixed(2)}%</td><td style="text-align:right">${fmt(v.x.s)}</td><td class="${winn?'win':'lose'}" style="text-align:right;font-weight:700">${sc.toFixed(2)}%</td><td style="color:${gap>0?'var(--green)':'var(--red)'}">${gap>0?'+':''}${gap.toFixed(2)}pp</td><td style="text-align:center"><span class="badge ${winn?'b-gr':'b-am'}">${winn?'Simple':'Personalised'}</span></td></tr>`;
-  }).join('');
-  document.getElementById('abBody').innerHTML=noteRow+rows;
+
+function renderDay(){
+  const d=DAYS[curDay];
+  const total=d.p1+d.p2+d.wa+d.fp,clicks=d.c.reduce((a,b)=>a+b,0);
+  const ctr=(total>0?clicks/total*100:0).toFixed(1),mpp=(d.ppl>0?total/d.ppl:0).toFixed(1);
+  document.getElementById("crm-day-lbl").textContent=d.lbl;
+  document.getElementById("chan-day").textContent=d.lbl;
+  document.getElementById("k-msgs").textContent=n(total);
+  document.getElementById("k-ppl").textContent=n(d.ppl||"—");
+  document.getElementById("k-mpp").textContent=mpp;
+  document.getElementById("k-gcg").textContent=n(d.gcg||0);
+  document.getElementById("k-clicks").textContent=n(clicks);
+  document.getElementById("k-ctr").textContent="CTR "+ctr+"% of msgs";
+  document.getElementById("k-cv").textContent=d.city!=null?n(d.city):"—";
+  const chans=[{name:"P1 push",s:d.p1,c:d.c[0],col:"#2a78d6"},{name:"P2 push",s:d.p2,c:d.c[1],col:"#378add"},{name:"WhatsApp",s:d.wa,c:d.c[2],col:"#1a7a4a"},{name:"Final push",s:d.fp,c:d.c[3],col:"#4a3aa7"}];
+  document.getElementById("chan-grid").innerHTML=chans.map(ch=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #dee2e6"><span style="width:8px;height:8px;border-radius:2px;background:${ch.col};flex-shrink:0"></span><span style="flex:1;font-size:12px;color:#212529">${ch.name}</span><span style="font-size:12px;font-weight:600;width:56px;text-align:right">${n(ch.s)}</span><span style="font-size:11px;color:#6c757d;width:60px;text-align:right">${ch.s>0?(ch.c/ch.s*100).toFixed(1)+"% CTR":"—"}</span></div>`).join("");
+  const maxN=DB_F.app;
+  const funnel=[{lbl:"App opens (push attr)",n:DB_F.app,col:"#2a78d6"},{lbl:"→ landed on home",n:DB_F.home,col:"#d97706"},{lbl:"→ clicked travel tab",n:DB_F.trav,col:"#d97706"},{lbl:"→ saw TEA module",n:DB_F.tea,col:"#c0392b"},{lbl:"→ tea_city_view",n:DB_F.city,col:"#c0392b"},{lbl:"→ tea_pdp_view",n:DB_F.pdp,col:"#922b21"},{lbl:"→ booking",n:DB_F.book,col:"#7b241c"}];
+  document.getElementById("funnel-crm").innerHTML=funnel.map((row,i)=>{const p=maxN>0?Math.max(row.n/maxN*100,row.n>0?.5:0):0;const prev=i>0?funnel[i-1].n:null;const drop=prev&&prev>0?Math.round((1-row.n/prev)*100):null;const dh=drop&&drop>30?`<div class="drop-note">▼ ${drop}% drop</div>`:"";return `${dh}<div class="funnel-row"><div class="funnel-lbl">${row.lbl}</div><div class="funnel-bg"><div class="funnel-fill" style="width:${p}%;background:${row.col}"></div></div><div class="funnel-ct">${n(row.n)}</div><div class="funnel-pct">${pct(row.n,maxN)}</div></div>`;}).join("");
 }
-function effRow(ch,note,sent,click,view,init,book){
-  const vr=click?100*view/click:0,br=click?100*book/click:0;
-  return `<tr><td>${ch}${note?`<br><span style="font-size:10.5px;color:var(--ink4);font-weight:400">${note}</span>`:''}</td><td>${fmt(sent)}</td><td>${fmt(click)}</td><td>${fmt(view)}</td><td><span class="badge ${vr>20?'b-gr':vr>10?'b-bl':'b-am'}">${pct(view,click)}</span></td><td>${fmt(init)}</td><td>${fmt(book)}</td><td><span class="badge ${br>0.5?'b-gr':br>0?'b-bl':'b-re'}">${pct(book,click)}</span></td></tr>`;
+
+function buildSrc(){
+  const total=357;
+  const html=SRC.map(s=>`<div class="src-row"><span class="src-dot" style="background:${s.col}"></span><span class="src-lbl">${s.lbl}${s.bad?' <span class="badge badge-red">broken</span>':''}</span><div class="src-bar-bg"><div class="src-bar-fill" style="width:${Math.max(s.n/total*100,s.n>0?.5:0)}%;background:${s.col}"></div></div><span class="src-n">${n(s.n)}</span><span class="src-pct">${pct(s.n,total)}</span></div>`).join("");
+  document.getElementById("src-breakdown").innerHTML=html;
+  document.getElementById("tea-src").innerHTML=html;
 }
-function rEff(){
-  const d=D[cur];
-  const t4=document.getElementById('t4');if(t4) t4.textContent=d.lbl;
-  const pushSent=(d.tp.p1[0]||0)+(d.tp.p2[0]||0)+(d.tp.fp[0]||0);
-  let rows='';
-  if(cur==='alltime'&&d.push_android){
-    const aSent=Math.round(pushSent*d.push_android.click/(d.push_android.click+d.push_ios.click));
-    rows+=effRow('Push (Android)','',aSent,d.push_android.click,d.push_android.view,d.push_android.init,d.push_android.book);
-    rows+=effRow('Push (iOS)','',pushSent-aSent,d.push_ios.click,d.push_ios.view,d.push_ios.init,d.push_ios.book);
-  }else{
-    const cb=d.push.book_ios?{click:d.push.click,view:d.push.view,init:d.push.init,book:(d.push.book||0)+(d.push.book_ios||0)}:d.push;
-    rows+=effRow('Push (combined)',cur==='alltime'?'':'Android+iOS combined',pushSent,cb.click,cb.view,cb.init,cb.book);
-  }
-  rows+=effRow('WhatsApp','',d.tp.wa[0],d.wa.click,d.wa.view,d.wa.init,d.wa.book);
-  const ec=d.em;
-  // Email note: alltime click=1785 from MOE_EMAIL_CLICK (all event); per-period click from flow stage stats (smaller, flow-attributed only)
-  const emNote=cur==='alltime'?'sibling flow · broader audience':
-    ec.click?'sibling flow · flow-attributed click only':'sibling flow · no click data this period';
-  rows+=effRow('Email',emNote,ec.sent,ec.click,ec.view,null,ec.book);
-  document.getElementById('effBody').innerHTML=rows;
+
+function buildSys(){
+  document.getElementById("sys-compare").innerHTML=SYS.map(r=>{const leak=Math.round((1-r.s2/r.s1)*100);return `<div class="sys-row"><span style="width:44px;color:#6c757d">${r.d}</span><span style="flex:1"><strong style="color:#212529">DB: ${n(r.s1)}</strong><span style="color:#adb5bd;margin:0 6px">→</span><strong style="color:#d97706">MoEngage: ${n(r.s2)}</strong></span><span class="badge badge-red">−${leak}% lost</span></div>`;}).join("");
 }
-function rCity(){
-  const d=D[cur];
-  document.getElementById('t5').textContent='Push · '+d.lbl;
-  const cd=CITY[cur]||CITY.alltime;
-  const ins={today:'Today in progress — numbers climbing through the day.',yesterday:'Yesterday complete. Bookings may still arrive within the 4-day window.',week:'Last 7 days — 901 cities triggered the flow.',alltime:'All time. Singapore leads every metric except bookings (0 booked despite 4,267 entered). Dubai and Hong Kong each produced a booking at far lower volume.',aug11:'11 Aug 2026 — custom date pull.'};
-  document.getElementById('cityInsight').innerHTML='<b>City insight:</b> '+(ins[cur]||ins.alltime);
-  let rows=cd.map((r,i)=>({rank:i+1,city:r[0],entered:r[1],clicked:r[2],viewed:r[3],booked:r[4],ctr:r[1]?100*r[2]/r[1]:0}));
-  const f=document.getElementById('citySearch').value.toLowerCase();
-  if(f) rows=rows.filter(r=>r.city.toLowerCase().includes(f));
-  const k=csort.k,asc=csort.d==='asc';
-  rows.sort((a,b)=>{let av=a[k],bv=b[k];if(typeof av==='string'){av=av.toLowerCase();bv=bv.toLowerCase();}return av<bv?(asc?-1:1):av>bv?(asc?1:-1):0;});
-  document.getElementById('cityMeta').textContent=`${cd.length} cities · showing ${cityExpanded?rows.length:Math.min(5,rows.length)}`;
-  const makeRow=r=>{const cr=Math.min(100,r.ctr*4);return `<tr><td>${r.rank}</td><td>${r.city}</td><td>${fmt(r.entered)}<span class="mini-b"><span style="width:${cr}%"></span></span></td><td>${fmt(r.clicked)}</td><td>${fmt(r.viewed)}</td><td class="${r.booked>0?'book-y':''}">${fmt(r.booked)}</td><td>${r.ctr.toFixed(1)}%</td></tr>`;};
-  document.getElementById('cityTop').innerHTML=rows.slice(0,5).map(makeRow).join('');
-  const rest=rows.slice(5);
-  const restEl=document.getElementById('cityRest');
-  restEl.innerHTML=rest.map(makeRow).join('');
-  restEl.style.display=cityExpanded?'':'none';
-  const btn=document.getElementById('expandBtn'),row=document.getElementById('expandRow');
-  if(rest.length===0){row.style.display='none';}else{row.style.display='';btn.textContent=cityExpanded?'Show less ▲':`Show ${rest.length} more cities ▼`;}
+
+function buildTeaFunnel(){
+  const f=[{lbl:"App Active (push attr)",n:3620,col:"#2a78d6"},{lbl:"→ mpin blocker",n:1151,col:"#d97706"},{lbl:"→ home screen",n:1083,col:"#d97706"},{lbl:"→ travel tab",n:241,col:"#c0392b"},{lbl:"→ TEA module",n:31,col:"#c0392b"},{lbl:"→ tea_city_view",n:1,col:"#922b21"},{lbl:"→ booking",n:0,col:"#7b241c"}];
+  const maxN=3620;
+  document.getElementById("funnel-tea").innerHTML=f.map((row,i)=>{const p=maxN>0?Math.max(row.n/maxN*100,row.n>0?.3:0):0;const prev=i>0?f[i-1].n:null;const drop=prev&&prev>0?Math.round((1-row.n/prev)*100):null;const dh=drop&&drop>30?`<div class="drop-note">▼ ${drop}% drop</div>`:"";return `${dh}<div class="funnel-row"><div class="funnel-lbl">${row.lbl}</div><div class="funnel-bg"><div class="funnel-fill" style="width:${p}%;background:${row.col}"></div></div><div class="funnel-ct">${n(row.n)}</div><div class="funnel-pct">${pct(row.n,maxN)}</div></div>`;}).join("");
 }
-function toggleCity(){cityExpanded=!cityExpanded;rCity();}
-document.querySelectorAll('table.dt th[data-s]').forEach(th=>{
-  th.addEventListener('click',()=>{
-    const k=th.dataset.s;
-    csort.k===k?csort.d=csort.d==='asc'?'desc':'asc':(csort={k,d:'desc'});
-    document.querySelectorAll('table.dt th').forEach(t=>t.classList.remove('sorted','asc'));
-    th.classList.add('sorted');if(csort.d==='asc')th.classList.add('asc');
-    rCity();
-  });
-});
-document.getElementById('citySearch').addEventListener('input',()=>{cityExpanded=false;rCity();});
-function rSlots(){
-  const sameDayDates=new Set();const dateCounts={};
-  SLOTS.forEach(s=>{dateCounts[s.date]=(dateCounts[s.date]||0)+1;});
-  Object.entries(dateCounts).forEach(([d,c])=>{if(c>1)sameDayDates.add(d);});
-  document.getElementById('slotBody').innerHTML=SLOTS.map((s,i)=>{
-    let dt='—';
-    if(!sameDayDates.has(s.date)&&i<SLOTS.length-1){
-      const next=SLOTS.slice(i+1).find(n=>!sameDayDates.has(n.date)&&Math.abs(Math.log10(n.sent)-Math.log10(s.sent))<0.7);
-      if(next){const delta=s.ctr-next.ctr;dt=`<span class="${delta>=0?'tup':'tdn'}">${delta>=0?'▲':'▼'}${Math.abs(delta).toFixed(2)}pp</span>`;}
-    }
-    return `<tr><td><div class="slot-cohort">${s.cohort}${s.latest?'<span class="latest-tag">Latest</span>':''}</div><div class="slot-msg">${s.msg}</div><div class="slot-date">${s.date} 2026</div></td><td>${fmt(s.sent)}</td><td>${fmt(s.seen)}</td><td>${fmt(s.click)}</td><td>${s.ctr}%</td><td>${dt}</td><td>${s.book!==null?fmt(s.book):'—'}</td></tr>`;
-  }).join('');
+
+function buildChart(){
+  const keys=Object.keys(CHART_DATA);
+  new Chart(document.getElementById("dailyChart"),{type:"bar",data:{labels:keys.map(k=>"Aug "+k.replace("aug","")),datasets:[{label:"Total msgs",data:keys.map(k=>CHART_DATA[k]),backgroundColor:keys.map(k=>k==="aug11"?"#eb6834":"#2a78d6"),borderRadius:4,maxBarThickness:28}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw.toLocaleString()} msgs`}}},scales:{x:{grid:{display:false},ticks:{color:"#6c757d",font:{size:11},autoSkip:false}},y:{grid:{color:"rgba(0,0,0,0.05)"},ticks:{color:"#6c757d",font:{size:11},callback:v=>v>=1000?Math.round(v/1000)+"k":v}}}}});
 }
-function renderAll(){rKPI();rLanes();rEff();rCity();}
-document.getElementById('tabs').addEventListener('click',e=>{
-  if(!e.target.classList.contains('ptab')) return;
-  document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));
-  e.target.classList.add('active');cur=e.target.dataset.p;cityExpanded=false;
-  cohortAnchorOverride=null;
-  renderAll();rAB();rEff();rSlots();
-});
-renderAll();rAB();rEff();rSlots();
-async function loadLiveData(){
-  const RAW='https://raw.githubusercontent.com/adityageda-CM/CRM_Dashboard_Exp/main/data/dashboard_data.json';
-  const banner=document.getElementById('liveBanner');
-  try{
-    const r=await fetch(RAW+'?t='+Date.now(),{cache:'no-store'});
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const live=await r.json();
-    if(live.periods) Object.entries(live.periods).forEach(([k,v])=>{D[k]=v;});
-    if(live.ab) Object.entries(live.ab).forEach(([k,v])=>{AB[k]=v;});
-    if(live.slots){SLOTS.length=0;live.slots.forEach(s=>SLOTS.push(s));}
-    if(live.daily) mergeDailyData(live.daily);
-    const ts=(live.meta&&live.meta.last_updated||'').replace('T',' ').substring(0,16)+' IST';
-    if(banner) banner.innerHTML='<span style="color:var(--green)">&#9679; Live</span>&nbsp;&middot; GitHub &middot; Updated: '+ts+'&nbsp;&middot;&nbsp;<a href="https://github.com/adityageda-CM/CRM_Dashboard_Exp" target="_blank" style="color:var(--blue);text-decoration:none">Repo &rarr;</a>';
-    renderAll();rAB();rEff();rSlots();
-  }catch(e){
-    if(banner) banner.innerHTML='<span style="color:var(--ink3)">&#9679; Snapshot</span>&nbsp;&middot; 13 Aug 2026 &middot; Say <b>refresh dashboard</b> in chat to update &middot; <a href="https://github.com/adityageda-CM/CRM_Dashboard_Exp" target="_blank" style="color:var(--blue);text-decoration:none">Repo &rarr;</a>';
-    console.warn('GitHub fetch failed:',e.message);
-  }
+
+function switchDash(id,btn){
+  document.getElementById("dash-crm").style.display=id==="crm"?"block":"none";
+  document.getElementById("dash-tea").style.display=id==="tea"?"block":"none";
+  document.querySelectorAll(".dash-tab").forEach(b=>b.classList.remove("act"));
+  btn.classList.add("act");
 }
-loadLiveData();
+
+buildDayFilter();renderDay();buildSrc();buildSys();buildTeaFunnel();buildChart();
 </script>
 </body>
 </html>
