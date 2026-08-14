@@ -357,84 +357,140 @@ canvas { max-height:155px; }
 
 <!-- v9 original styles (scoped to TEA tab) -->
 <style id="v9-styles">
-#tab-tea .card { background:var(--surface-1); border:1px solid var(--border); border-radius:var(--r-card); padding:18px 20px; margin-bottom:14px; box-shadow:var(--shadow); }
-#tab-tea h2 { font-size:14px; font-weight:700; color:var(--text-1); margin:0 0 10px; }
-#tab-tea h3 { font-size:11px; font-weight:600; color:var(--text-2); margin:14px 0 8px; }
-#tab-tea .note { font-size:10px; color:var(--text-3); line-height:1.6; margin-top:6px; }
-#tab-tea .flag { padding:8px 12px; border-radius:var(--r-xs); font-size:11px; margin:8px 0; line-height:1.6; }
-#tab-tea .flag.good { background:var(--green-dim); color:var(--green); border:1px solid rgba(13,122,62,.2); }
-#tab-tea .flag.bad  { background:var(--red-dim);   color:var(--red);   border:1px solid rgba(192,38,46,.2); }
-#tab-tea .flag.warn { background:var(--amber-dim); color:var(--amber); border:1px solid rgba(154,90,0,.2); }
-#tab-tea .stat      { font-size:10px; color:var(--text-3); }
-#tab-tea table { width:100%; border-collapse:collapse; font-size:11px; }
-#tab-tea table thead th { font-size:9px; font-weight:600; color:var(--text-3); text-transform:uppercase; letter-spacing:.08em; padding:6px 8px; text-align:right; border-bottom:1px solid var(--border-med); background:var(--surface-2); }
+/* ══════════════════════════════════════════════
+   TEA FUNNEL TAB — design unified with master
+   All rules scoped to #tab-tea
+══════════════════════════════════════════════ */
+
+/* Layout */
+#tab-tea                 { background:var(--bg); }
+#tab-tea .card           { background:var(--surface-1); border:1px solid var(--border);
+                           border-radius:var(--r-card); padding:18px 20px; margin-bottom:12px;
+                           box-shadow:var(--shadow); }
+#tab-tea h2              { font-size:13px; font-weight:700; color:var(--text-1); margin:0 0 10px; line-height:1.3; }
+#tab-tea h3              { font-size:11px; font-weight:600; color:var(--text-2); margin:14px 0 8px; }
+
+/* Controls bar */
+#tab-tea .controls-row   { display:flex; flex-wrap:wrap; gap:10px; align-items:flex-start;
+                           padding:12px 14px; background:var(--surface-1);
+                           border:1px solid var(--border); border-radius:var(--r-card);
+                           margin-bottom:12px; box-shadow:var(--shadow); }
+#tab-tea .ctrl           { display:flex; flex-direction:column; gap:3px; }
+#tab-tea label           { font-size:9px; font-weight:700; color:var(--text-3);
+                           text-transform:uppercase; letter-spacing:.08em; }
+#tab-tea select          { background:var(--surface-1); border:1px solid var(--border-med);
+                           border-radius:var(--r-xs); color:var(--text-1);
+                           font-family:var(--font); font-size:11px; padding:5px 8px; cursor:pointer; }
+#tab-tea select:focus    { outline:none; border-color:var(--accent); }
+#tab-tea .info-banner    { background:var(--accent-dim); border:1px solid rgba(26,95,212,.2);
+                           border-radius:var(--r-sm); padding:8px 12px;
+                           font-size:10px; color:#0d3a8a; margin-bottom:10px; line-height:1.6; }
+
+/* Status pills (linklike buttons for period picker) */
+#tab-tea .linklike       { background:var(--surface-1); border:1px solid var(--border-med);
+                           border-radius:20px; color:var(--text-2); cursor:pointer;
+                           font-family:var(--font); font-size:11px; font-weight:500;
+                           padding:4px 11px; transition:all .1s; }
+#tab-tea .linklike:hover { border-color:var(--border-str); color:var(--text-1); }
+#tab-tea .linklike.active{ background:var(--accent-dim); color:var(--accent);
+                           border-color:rgba(26,95,212,.3); font-weight:600; }
+
+/* Flags / alerts */
+#tab-tea .flag           { padding:8px 12px; border-radius:var(--r-xs);
+                           font-size:11px; margin:8px 0; line-height:1.6;
+                           display:flex; gap:8px; align-items:flex-start; }
+#tab-tea .flag.good      { background:var(--green-dim); color:#064020;
+                           border:1px solid rgba(13,122,62,.2); }
+#tab-tea .flag.bad       { background:var(--red-dim);   color:#6b1215;
+                           border:1px solid rgba(192,38,46,.2); }
+#tab-tea .flag.warn      { background:var(--amber-dim); color:#5c3600;
+                           border:1px solid rgba(154,90,0,.2); }
+
+/* Notes */
+#tab-tea .note           { font-size:10px; color:var(--text-3); line-height:1.6; margin-top:6px; }
+#tab-tea .stat           { font-size:10px; color:var(--text-3); }
+
+/* ALL tables in TEA tab get unified data-table styling */
+#tab-tea table           { width:100%; border-collapse:collapse; font-size:11px; }
+#tab-tea table thead th  { font-size:9px; font-weight:700; color:var(--text-3);
+                           text-transform:uppercase; letter-spacing:.07em;
+                           padding:7px 10px; text-align:right;
+                           border-bottom:2px solid var(--border-med);
+                           background:var(--surface-2); white-space:nowrap; }
 #tab-tea table thead th:first-child { text-align:left; }
-#tab-tea table tbody td { padding:6px 8px; text-align:right; border-bottom:1px solid var(--border); color:var(--text-2); font-variant-numeric:tabular-nums; }
+#tab-tea table tbody td  { padding:6px 10px; text-align:right;
+                           border-bottom:1px solid var(--border);
+                           color:var(--text-2); font-variant-numeric:tabular-nums; }
 #tab-tea table tbody td:first-child { text-align:left; color:var(--text-1); }
-#tab-tea table tbody tr:hover { background:rgba(255,255,255,.025); }
-#tab-tea table tfoot td { padding:6px 8px; text-align:right; font-weight:600; color:var(--text-1); border-top:1px solid var(--border-med); }
+#tab-tea table tbody tr:hover       { background:var(--surface-2); }
+#tab-tea table tfoot td  { padding:7px 10px; text-align:right;
+                           font-weight:600; color:var(--text-1);
+                           border-top:2px solid var(--border-med); }
 #tab-tea table tfoot td:first-child { text-align:left; }
-#tab-tea .num { font-family:var(--mono); font-size:11px; }
-#tab-tea .delta-up   { color:var(--green); }
-#tab-tea .delta-down { color:var(--red); }
-#tab-tea .delta-flat { color:var(--text-3); }
-#tab-tea .linklike { background:none; border:1px solid var(--border-med); border-radius:20px; color:var(--text-2); cursor:pointer; font-family:var(--font); font-size:11px; font-weight:500; padding:4px 11px; }
-#tab-tea .linklike.active { background:var(--accent-dim); color:var(--accent); border-color:rgba(61,126,255,.4); }
-#tab-tea select { background:var(--surface-1); border:1px solid var(--border-med); border-radius:var(--r-xs); color:var(--text-1); font-family:var(--font); font-size:11px; padding:5px 8px; }
-#tab-tea .ctrl { display:flex; flex-direction:column; gap:3px; }
-#tab-tea label { font-size:9px; color:var(--text-3); font-weight:600; text-transform:uppercase; letter-spacing:.06em; }
-#tab-tea .controls-row { display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start; padding:12px 14px; background:var(--surface-2); border:1px solid var(--border); border-radius:var(--r-card); margin-bottom:14px; box-shadow:var(--shadow); }
-#tab-tea .info-banner { background:var(--accent-dim); border:1px solid rgba(61,126,255,.3); border-radius:var(--r-sm); padding:8px 12px; font-size:10px; color:#93c5fd; margin-bottom:10px; line-height:1.6; }
-#tab-tea .tbl-expand-btn { color:var(--accent); background:none; border:none; font-family:var(--font); font-size:10px; font-weight:500; cursor:pointer; padding:2px 8px; }
-#tab-tea .tbl-expand-foot td { background:var(--surface-2)!important; border-top:1px solid var(--border-med)!important; text-align:center!important; padding:7px!important; }
+#tab-tea .num            { font-family:var(--mono); font-size:11px; }
+#tab-tea .delta-up       { color:var(--green); font-weight:500; }
+#tab-tea .delta-down     { color:var(--red); font-weight:500; }
+#tab-tea .delta-flat     { color:var(--text-3); }
 
-  
-  *{box-sizing:border-box;}
-  #tab-tea{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--page);color:var(--text-1);margin:0;padding:24px;}
-  h1{font-size:22px;margin:0 0 4px;}
-  h2{font-size:16px;margin:0 0 10px;border-bottom:2px solid var(--line-strong);padding-bottom:6px;}
-  h3{font-size:13.5px;margin:16px 0 6px;color:var(--text-2);}
-  .sub{color:var(--text-2);font-size:13px;margin-bottom:18px;}
-  .card{background:var(--surface-1);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:18px;}
-  .controls{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;position:sticky;top:0;z-index:50;background:var(--page);padding:10px 0 14px;border-bottom:1px solid var(--line-strong);margin-bottom:18px;}
-  .ctrl{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--text-2);}
-  .ctrl select,.ctrl input{font-size:13px;padding:5px 7px;border:1px solid var(--line-strong);border-radius:6px;background:#fff;color:var(--text-1);}
-  .ctrl.grow{flex:1;min-width:220px;}
-  .pill{display:inline-block;background:var(--head-bg);border:1px solid var(--line-strong);border-radius:20px;padding:3px 10px;font-size:12px;margin-right:6px;}
-  table{width:100%;border-collapse:collapse;font-size:13px;}
-  th,td{padding:6px 8px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;}
-  th:first-child,td:first-child{text-align:left;white-space:normal;}
-  thead th{background:var(--head-bg);color:var(--text-2);font-weight:600;position:sticky;top:0;}
-  tbody tr:hover{background:#f7f7f4;}
-  tfoot td{font-weight:700;border-top:2px solid var(--line-strong);}
-  .num{font-variant-numeric:tabular-nums;}
-  .delta-up{color:var(--good);}
-  .delta-down{color:var(--bad);}
-  .delta-flat{color:var(--muted);}
-  .note{font-size:12.5px;color:var(--text-2);margin-top:8px;line-height:1.5;}
-  .flag{background:#fff3d6;border:1px solid #eda100;border-radius:6px;padding:8px 10px;font-size:12.5px;margin:8px 0;}
-  .flag.good{background:#e9f7e9;border-color:var(--good);}
-  .flag.bad{background:#fde8e8;border-color:var(--bad);}
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
-  @media (max-width:900px){.grid2{grid-template-columns:1fr;}}
-  details{border:1px solid var(--line);border-radius:8px;margin-bottom:6px;background:#fff;}
-  details[open]{background:#fdfdfc;}
-  summary{cursor:pointer;padding:8px 10px;font-size:13px;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center;}
-  summary::-webkit-details-marker{display:none;}
-  summary::before{content:"▸";margin-right:8px;display:inline-block;transition:transform .1s;color:var(--muted);}
-  details[open]>summary::before{transform:rotate(90deg);}
-  .tree-#tab-tea{padding:4px 10px 10px 28px;}
-  .tree-row{display:flex;justify-content:space-between;font-size:12.5px;padding:3px 0;border-bottom:1px dotted var(--line);color:var(--text-2);}
-  .tree-row b{color:var(--text-1);}
-  .stat{font-size:11px;color:var(--muted);}
-  .btnrow{margin-bottom:10px;}
-  button.linklike{background:none;border:1px solid var(--line-strong);border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;color:var(--text-2);margin-right:6px;}
-  button.linklike:hover{background:var(--head-bg);}
-  .toc{font-size:12.5px;display:flex;flex-wrap:wrap;gap:10px 16px;margin-bottom:16px;}
-  .toc a{color:var(--accent);text-decoration:none;}
-  .scope-banner{font-size:12.5px;background:var(--head-bg);border:1px solid var(--line-strong);border-radius:8px;padding:8px 12px;margin-bottom:14px;}
-  code{background:#f0efeb;padding:1px 5px;border-radius:4px;font-size:12px;}
+/* Collapsible tables — expand button */
+#tab-tea .tbl-expand-foot td     { text-align:center!important; padding:7px!important;
+                                   background:var(--surface-2);
+                                   border-top:1px solid var(--border-med)!important; }
+#tab-tea .tbl-collapsible.collapsed tbody tr:nth-child(n+8) { display:none; }
+#tab-tea .tbl-expand-btn         { font-family:var(--font); font-size:10px; font-weight:500;
+                                   color:var(--accent); background:none; border:none;
+                                   cursor:pointer; padding:2px 8px; border-radius:4px; }
+#tab-tea .tbl-expand-btn:hover   { text-decoration:underline; }
 
+/* Row highlights */
+#tab-tea .hi-green { color:var(--green); font-weight:600; }
+#tab-tea .hi-red   { color:var(--red); }
+#tab-tea .hi-amber { color:var(--amber); }
+
+/* Section 15 & 16 inner cards */
+#tab-tea .crm-card        { background:var(--surface-1); border:1px solid var(--border);
+                            border-radius:var(--r-card); padding:14px 16px; margin-bottom:10px;
+                            box-shadow:var(--shadow); }
+#tab-tea .crm-card-title  { font-size:11px; font-weight:600; color:var(--text-1); margin-bottom:9px; }
+#tab-tea .crm-stamp       { font-size:9px; color:var(--text-3); text-align:right; margin-top:5px; }
+#tab-tea .crm-section-label { font-size:9px; font-weight:700; color:var(--text-3);
+                              text-transform:uppercase; letter-spacing:.1em;
+                              margin:18px 0 8px; padding-bottom:6px;
+                              border-bottom:1px solid var(--border); }
+#tab-tea .crm-table       { width:100%; border-collapse:collapse; font-size:11px; }
+#tab-tea .crm-table thead th { font-size:9px; font-weight:700; color:var(--text-3);
+                               text-transform:uppercase; letter-spacing:.07em;
+                               padding:6px 8px; text-align:right;
+                               border-bottom:2px solid var(--border-med);
+                               background:var(--surface-2); }
+#tab-tea .crm-table thead th:first-child { text-align:left; }
+#tab-tea .crm-table tbody td { padding:6px 8px; text-align:right;
+                               border-bottom:1px solid var(--border); color:var(--text-2); }
+#tab-tea .crm-table tbody td:first-child { text-align:left; color:var(--text-1); }
+#tab-tea .crm-table tbody tr:hover { background:var(--surface-2); }
+#tab-tea .crm-table tfoot td { font-weight:600; border-top:2px solid var(--border-med); padding:6px 8px; }
+
+/* Section 16 specific */
+#tab-tea .s16btn          { background:var(--surface-1); border:1px solid var(--border-med);
+                            border-radius:20px; color:var(--text-2); cursor:pointer;
+                            font-family:var(--font); font-size:11px; font-weight:500;
+                            padding:4px 11px; transition:all .1s; }
+#tab-tea .s16btn.active   { background:var(--accent-dim); color:var(--accent);
+                            border-color:rgba(26,95,212,.3); font-weight:600; }
+#tab-tea .s16btn:hover    { border-color:var(--border-str); }
+#tab-tea .ck              { background:var(--surface-1); border:1px solid var(--border);
+                            border-radius:var(--r-card); padding:12px 14px;
+                            box-shadow:var(--shadow); }
+#tab-tea .ck-l            { font-size:10px; color:var(--text-3); margin-bottom:4px; }
+#tab-tea .ck-v            { font-size:20px; font-weight:700; color:var(--text-1);
+                            font-variant-numeric:tabular-nums; line-height:1; }
+#tab-tea .ck-s            { font-size:10px; color:var(--text-3); margin-top:4px; line-height:1.4; }
+#tab-tea .ck.good         { border-top:2px solid var(--green); }
+#tab-tea .ck.bad          { border-top:2px solid var(--red); }
+#tab-tea .ck.warn         { border-top:2px solid var(--amber); }
+#tab-tea .ck-v.good       { color:var(--green); }
+#tab-tea .ck-v.bad        { color:var(--red); }
+#tab-tea .ck-v.warn       { color:var(--amber); }
 </style>
 </head>
 <body>
@@ -763,13 +819,50 @@ canvas { max-height:155px; }
 
 <!-- ═══════════════════════ TAB 2 — TEA ═══════════════════════ -->
 <div id="tab-tea" class="tab-panel">
-  <div style="padding:20px 24px 0">
-    <p style="font-size:12px;color:#52514e;margin:0 0 12px">
-      Full TEA funnel dashboard — all 14 original sections preserved verbatim. Section 15 (CRM deep-dive) appended at the end.
-    </p>
+  <div style="padding:16px 24px 0;max-width:1280px">
+
+  <!-- Source / data window banner -->
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;
+              padding:10px 14px;background:var(--surface-1);
+              border:1px solid var(--border);border-radius:var(--r-card);
+              box-shadow:var(--shadow)">
+    <span class="chip chip-live">LIVE</span>
+    <span style="font-size:11px;color:var(--text-2)">
+      <code style="font-size:10px">simple.crud.percept_event_agg</code> +
+      <code style="font-size:10px">rds_main.scapiadb.orders</code>
+    </span>
+    <span style="font-size:10px;color:var(--text-3)">·</span>
+    <span style="font-size:10px;color:var(--text-3)">Data window: Oct 2025 → Aug 11 2026 (COHORT lag)</span>
+    <span style="font-size:10px;color:var(--text-3)">·</span>
+    <span style="font-size:10px;color:var(--text-3)">Orders to Aug 14 (live)</span>
+    <div style="flex:1"></div>
+    <span style="font-size:10px;color:var(--text-3)">14 sections · use the date controls to filter all metrics</span>
+  </div>
+
+  <!-- Section index -->
+  <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:16px">
+    <a href="#kpis"         style="text-decoration:none;padding:7px 10px;background:var(--surface-1);border:1px solid var(--border);border-radius:var(--r-sm);font-size:10px;color:var(--text-2);text-align:center;box-shadow:var(--shadow)">1 · KPIs</a>
+    <a href="#buckets"      style="text-decoration:none;padding:7px 10px;background:var(--surface-1);border:1px solid var(--border);border-radius:var(--r-sm);font-size:10px;color:var(--text-2);text-align:center;box-shadow:var(--shadow)">2 · Attribution</a>
+    <a href="#tree"         style="text-decoration:none;padding:7px 10px;background:var(--surface-1);border:1px solid var(--border);border-radius:var(--r-sm);font-size:10px;color:var(--text-2);text-align:center;box-shadow:var(--shadow)">3 · Funnel tree</a>
+    <a href="#trend"        style="text-decoration:none;padding:7px 10px;background:var(--surface-1);border:1px solid var(--border);border-radius:var(--r-sm);font-size:10px;color:var(--text-2);text-align:center;box-shadow:var(--shadow)">4 · Trend</a>
+    <a href="#stagetiming"  style="text-decoration:none;padding:7px 10px;background:var(--surface-1);border:1px solid var(--border);border-radius:var(--r-sm);font-size:10px;color:var(--text-2);text-align:center;box-shadow:var(--shadow)">5 · Stage timing</a>
+    <a href="#merch"        style="text-decoration:none;padding:7px 10px;background:var(--surface-1);border:1px solid var(--border);border-radius:var(--r-sm);font-size:10px;color:var(--text-2);text-align:center;box-shadow:var(--shadow)">6 · Merch</a>
+    <a href="#unattributed" style="text-decoration:none;padding:7px 10px;background:var(--surface-1);border:1px solid var(--border);border-radius:var(--r-sm);font-size:10px;color:var(--text-2);text-align:center;box-shadow:var(--shadow)">7 · Unattrib.</a>
+    <a href="#campaigns"    style="text-decoration:none;padding:7px 10px;background:var(--surface-1);border:1px solid var(--border);border-radius:var(--r-sm);font-size:10px;color:var(--text-2);text-align:center;box-shadow:var(--shadow)">8 · Campaigns</a>
+    <a href="#intrip"       style="text-decoration:none;padding:7px 10px;background:var(--surface-1);border:1px solid var(--border);border-radius:var(--r-sm);font-size:10px;color:var(--text-2);text-align:center;box-shadow:var(--shadow)">9 · In-trip</a>
+    <a href="#pretrip"      style="text-decoration:none;padding:7px 10px;background:var(--surface-1);border:1px solid var(--border);border-radius:var(--r-sm);font-size:10px;color:var(--text-2);text-align:center;box-shadow:var(--shadow)">10 · Pre-trip</a>
+    <a href="#cities"       style="text-decoration:none;padding:7px 10px;background:var(--surface-1);border:1px solid var(--border);border-radius:var(--r-sm);font-size:10px;color:var(--text-2);text-align:center;box-shadow:var(--shadow)">11 · Cities</a>
+    <a href="#aovdow"       style="text-decoration:none;padding:7px 10px;background:var(--surface-1);border:1px solid var(--border);border-radius:var(--r-sm);font-size:10px;color:var(--text-2);text-align:center;box-shadow:var(--shadow)">12 · AOV/DoW</a>
+    <a href="#mixpanel"     style="text-decoration:none;padding:7px 10px;background:var(--surface-1);border:1px solid var(--border);border-radius:var(--r-sm);font-size:10px;color:var(--text-2);text-align:center;box-shadow:var(--shadow)">13 · Mixpanel</a>
+    <a href="#methodology"  style="text-decoration:none;padding:7px 10px;background:var(--surface-1);border:1px solid var(--border);border-radius:var(--r-sm);font-size:10px;color:var(--text-2);text-align:center;box-shadow:var(--shadow)">14 · Method.</a>
+    <a href="#crm-deepdive" style="text-decoration:none;padding:7px 10px;background:var(--accent-dim);border:1px solid rgba(26,95,212,.2);border-radius:var(--r-sm);font-size:10px;color:var(--accent);text-align:center;font-weight:600">15 · CRM</a>
+    <a href="#live-tracker" style="text-decoration:none;padding:7px 10px;background:var(--green-dim);border:1px solid rgba(13,122,62,.2);border-radius:var(--r-sm);font-size:10px;color:var(--green);text-align:center;font-weight:600">16 · Live</a>
+    <a href="#live-tracker" style="text-decoration:none;padding:7px 10px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-sm);font-size:10px;color:var(--text-3);text-align:center">↑ Back to top</a>
   </div>
 
 
+<div style="padding:0 24px 40px;max-width:1280px">
+</div>
 <h1>Scapia Experiences (TEA) — Funnel, Attribution &amp; Bookings</h1>
 <div class="sub">Every number below is computed live, in your browser, from the query results embedded in this file (Databricks Unity Catalog, cross-checked against Mixpanel project 4019263) · no charts, tables only · <b>every section responds to the Date range / Grain / Compare / Display controls below</b> unless a section explicitly says otherwise (and explains why)</div>
 
@@ -2219,6 +2312,40 @@ s16WoW();
 s16Products();
 s16Cities();
 s16TodayOrders();
+
+
+/* ── V9 TEA table collapsible sweep ───────────────────────────────────
+   Runs after every renderAll() in the v9 IIFE fires, and on tab switch.
+   Collapses all tables in #tab-tea with more than 7 body rows.
+────────────────────────────────────────────────────────────────────── */
+function sweepV9Tables() {
+  const teaTab = document.getElementById('tab-tea');
+  if (!teaTab) return;
+  teaTab.querySelectorAll('table').forEach(tbl => {
+    // Skip tables that already have the collapsible tfoot (already processed)
+    if (tbl.querySelector('tfoot.tbl-expand-foot')) return;
+    const tbody = tbl.querySelector('tbody');
+    if (!tbody) return;
+    const rows = tbody.querySelectorAll('tr');
+    if (rows.length > 7) makeCollapsible(tbl, 7);
+  });
+}
+
+// Hook into the tab switcher so v9 tables get collapsed when TEA tab is opened
+const _origSwTab = swTab;
+function swTab(id, el) {
+  _origSwTab(id, el);
+  if (id === 'tea') {
+    // Give the IIFE a tick to render, then sweep
+    setTimeout(sweepV9Tables, 50);
+  }
+}
+
+// Also sweep on page load (in case TEA is the default tab)
+setTimeout(sweepV9Tables, 500);
 </script>
 </body>
 </html>
+</div>
+
+
