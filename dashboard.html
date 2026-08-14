@@ -793,7 +793,7 @@ body {
   <div class="note">
     <b>Two different dates are used, on purpose, never mixed within one number:</b> Entering/Browse/Product/Checkout columns are keyed by <i>entry date</i> (when the user's TEA journey started). Orders/GMV columns are keyed by <i>booking date</i> (when the order was actually placed), attributed back to that user's original entry bucket. Column headers say which. Booking date is used for orders because a user who enters on a given day usually books days later — showing orders by entry date instead makes any recent single day look almost empty even when actual bookings that day were normal, which is why the previous version undercounted "yesterday's" bookings.<br><br>
     <b>Source tables:</b> <code>simple.crud.percept_event_agg</code> (daily aggregated TEA events, source of the entry/funnel cube), <code>rds_main.scapiadb.orders</code> (bookings, filtered to <code>product_category='EXPERIENCE'</code> and <code>status='COMPLETE'</code>), <code>simple.crud.crm_campaign_content</code> joined on <code>campaign_name = source_attribute_id</code> (the join key that actually works — <code>campaign_id</code> in that table is an internal MoEngage object id, not the human-readable name used elsewhere), <code>simple.crud.user_location</code> and <code>simple.crud.event_location_agg</code> (in-trip/pre-trip signals, both fresh through 2026-08-11; the sibling table <code>percept_location_agg</code> is stale since 2026-07-09 and was not used).<br><br>
-    <b>Entry-window:</b> full available history, 2025-10-16 to 2026-08-13 (300 days). The first week of tracking (Oct 16–23, 2025) contains an anomalous single-day spike consistent with a backfill/test burst — left in for transparency, flagged here rather than silently removed.<br><br>
+    <b>Entry-window:</b> full available history, 2025-10-16 to 2026-08-11 (300 days). The first week of tracking (Oct 16–23, 2025) contains an anomalous single-day spike consistent with a backfill/test burst — left in for transparency, flagged here rather than silently removed.<br><br>
     <b>Booking traceability:</b> 4,035 of 4,058 total completed Experience orders (99.4%) are traced to a specific entry bucket and date. Of the 2,883 distinct users who ever completed an Experience booking, 8 (0.28%) have no TEA funnel event anywhere in the tracked history — most likely booked through a channel this event set doesn't instrument (e.g. web/CX-assisted checkout) or under a different user id than the one that browsed.<br><br>
     <b>Excluded as junk:</b> a small number of <code>source_attribute_type</code> values (each appearing exactly once, all-time) are SQL-injection / SSRF security-probe payloads against the tracking endpoint, not real user activity. They are excluded from every bucket above rather than silently folded into "Unattributed".<br><br>
     <b>"Unattributed" (formerly labelled "Organic/Direct"):</b> renamed because the old label overstated what's known. It means the attribution field was empty AND the deeplink/page_id/widget_id trace fields were also empty, checked directly — not that no interaction occurred. See section 7 for the breakdown of which screen these users actually land on first.<br><br>
@@ -828,12 +828,12 @@ function iso(d){ return d.toISOString().slice(0,10); }
 function parseISO(s){ return new Date(s+'T00:00:00Z'); }
 function addDays(d,n){ const r=new Date(d); r.setUTCDate(r.getUTCDate()+n); return r; }
 
-const ALL_DATES = [...new Set([...COHORT.map(r=>r.d), ...BOOKINGS.map(r=>r.d)])];
+const ALL_DATES = COHORT.map(r=>r.d); // MAX_DATE = Aug 11 — last day all datasets (COHORT/MERCH/CAMPAIGNS/INTRIP) are complete
 const MIN_DATE = ALL_DATES.reduce((a,b)=>a<b?a:b);
 const MAX_DATE = ALL_DATES.reduce((a,b)=>a>b?a:b);
 
 const PRESETS = [
-  {id:'today', label:'Today (last available day)'},
+  {id:'today', label:'Today (2026-08-11 · last date with full data)'},
   {id:'yesterday', label:'Yesterday'},
   {id:'7d', label:'Last 7 days'},
   {id:'30d', label:'Last 30 days'},
@@ -1310,8 +1310,6 @@ function renderAll(){
   renderPretrip();
   renderCities();
   renderAOVDow(cur);
-  // Re-apply collapsible after every full render
-  initCollapsibleTables();
 }
 
 // sections with no dependency on the date controls (fixed by design — see methodology)
@@ -1611,42 +1609,33 @@ initCollapsibleTables();
 
   <!-- ── Countries MTD ── -->
   <h3>16i · Bookings by country — Aug 1–13 MTD (38 countries)</h3>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-    <div>
-      <table data-collapsible="5">
-        <thead><tr><th>Country</th><th>Bookings</th><th>Share</th><th>GMV</th><th>AOV</th></tr></thead>
-        <tbody>
-          <tr><td>Singapore</td><td class="num" style="font-weight:700">105</td><td class="num">24.8%</td><td class="num" style="font-weight:700">₹12.84 L</td><td class="num">₹12,228</td></tr>
-          <tr><td>United Arab Emirates</td><td class="num">40</td><td class="num">9.4%</td><td class="num">₹7.82 L</td><td class="num" style="color:#0ca30c;font-weight:600">₹19,562</td></tr>
-          <tr><td>Malaysia</td><td class="num">31</td><td class="num">7.3%</td><td class="num">₹1.49 L</td><td class="num">₹4,795</td></tr>
-          <tr><td>Switzerland</td><td class="num">28</td><td class="num">6.6%</td><td class="num">₹10.30 L</td><td class="num" style="color:#0ca30c;font-weight:600">₹36,776</td></tr>
-          <tr><td>Thailand</td><td class="num">24</td><td class="num">5.7%</td><td class="num">₹2.05 L</td><td class="num">₹8,550</td></tr>
-          <tr><td>Vietnam</td><td class="num">20</td><td class="num">4.7%</td><td class="num">₹2.53 L</td><td class="num">₹12,645</td></tr>
-          <tr><td>United States</td><td class="num">19</td><td class="num">4.5%</td><td class="num">₹2.15 L</td><td class="num">₹11,330</td></tr>
-          <tr><td>Japan</td><td class="num">19</td><td class="num">4.5%</td><td class="num">₹1.54 L</td><td class="num">₹8,124</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div>
-      <table data-collapsible="5">
-        <thead><tr><th>Country</th><th>Bookings</th><th>Share</th><th>GMV</th><th>AOV</th></tr></thead>
-        <tbody>
-          <tr><td>United Kingdom</td><td class="num">17</td><td class="num">4.0%</td><td class="num">₹2.08 L</td><td class="num">₹12,226</td></tr>
-          <tr><td>France</td><td class="num">15</td><td class="num">3.5%</td><td class="num">₹2.18 L</td><td class="num">₹14,558</td></tr>
-          <tr><td>Indonesia</td><td class="num">15</td><td class="num">3.5%</td><td class="num">₹75,019</td><td class="num">₹5,001</td></tr>
-          <tr><td>Portugal</td><td class="num">12</td><td class="num">2.8%</td><td class="num">₹13,692</td><td class="num">₹1,141</td></tr>
-          <tr><td>Türkiye</td><td class="num">9</td><td class="num">2.1%</td><td class="num">₹1.10 L</td><td class="num">₹12,254</td></tr>
-          <tr><td>Australia</td><td class="num">8</td><td class="num">1.9%</td><td class="num">₹1.46 L</td><td class="num">₹18,272</td></tr>
-          <tr><td>Spain</td><td class="num">7</td><td class="num">1.7%</td><td class="num">₹67,378</td><td class="num">₹9,625</td></tr>
-          <tr><td>Other (23 more)</td><td class="num">56</td><td class="num">13.2%</td><td class="num">~₹5 L</td><td class="num">—</td></tr>
-        </tbody>
-      </table>
-      <div class="note" style="margin-top:8px">Switzerland: highest AOV at ₹36,776 (driven by Swiss Travel Pass ₹62k avg). UAE: ₹19,562 AOV. Portugal: low AOV (₹1,141) driven by Frigate Museum ticket (₹692 × 11). 38 countries total.</div>
-    </div>
+  <div style="overflow-x:auto">
+  <table data-collapsible="5">
+    <thead><tr><th>Country</th><th>Bookings</th><th>Share</th><th>GMV</th><th>AOV</th></tr></thead>
+    <tbody>
+      <tr><td>Singapore</td><td class="num" style="font-weight:700">105</td><td class="num">24.8%</td><td class="num" style="font-weight:700">₹12.84 L</td><td class="num">₹12,228</td></tr>
+      <tr><td>United Arab Emirates</td><td class="num">40</td><td class="num">9.4%</td><td class="num">₹7.82 L</td><td class="num" style="color:var(--good);font-weight:600">₹19,562</td></tr>
+      <tr><td>Malaysia</td><td class="num">31</td><td class="num">7.3%</td><td class="num">₹1.49 L</td><td class="num">₹4,795</td></tr>
+      <tr><td>Switzerland</td><td class="num">28</td><td class="num">6.6%</td><td class="num">₹10.30 L</td><td class="num" style="color:var(--good);font-weight:600">₹36,776</td></tr>
+      <tr><td>Thailand</td><td class="num">24</td><td class="num">5.7%</td><td class="num">₹2.05 L</td><td class="num">₹8,550</td></tr>
+      <tr><td>Vietnam</td><td class="num">20</td><td class="num">4.7%</td><td class="num">₹2.53 L</td><td class="num">₹12,645</td></tr>
+      <tr><td>United States</td><td class="num">19</td><td class="num">4.5%</td><td class="num">₹2.15 L</td><td class="num">₹11,330</td></tr>
+      <tr><td>Japan</td><td class="num">19</td><td class="num">4.5%</td><td class="num">₹1.54 L</td><td class="num">₹8,124</td></tr>
+      <tr><td>United Kingdom</td><td class="num">17</td><td class="num">4.0%</td><td class="num">₹2.08 L</td><td class="num">₹12,226</td></tr>
+      <tr><td>France</td><td class="num">15</td><td class="num">3.5%</td><td class="num">₹2.18 L</td><td class="num">₹14,558</td></tr>
+      <tr><td>Indonesia</td><td class="num">15</td><td class="num">3.5%</td><td class="num">₹75,019</td><td class="num">₹5,001</td></tr>
+      <tr><td>Portugal</td><td class="num">12</td><td class="num">2.8%</td><td class="num">₹13,692</td><td class="num">₹1,141</td></tr>
+      <tr><td>Türkiye</td><td class="num">9</td><td class="num">2.1%</td><td class="num">₹1.10 L</td><td class="num">₹12,254</td></tr>
+      <tr><td>Australia</td><td class="num">8</td><td class="num">1.9%</td><td class="num">₹1.46 L</td><td class="num">₹18,272</td></tr>
+      <tr><td>Spain</td><td class="num">7</td><td class="num">1.7%</td><td class="num">₹67,378</td><td class="num">₹9,625</td></tr>
+      <tr><td>Other (23 countries)</td><td class="num">56</td><td class="num">13.2%</td><td class="num">~₹5 L</td><td class="num">—</td></tr>
+    </tbody>
+    <tfoot><tr><td><strong>Total (top 15 + other)</strong></td><td class="num"><strong>424</strong></td><td class="num"><strong>100%</strong></td><td class="num"><strong>₹54.93 L</strong></td><td class="num"><strong>₹12,956</strong></td></tr></tfoot>
+  </table>
   </div>
+  <div class="note" style="margin-top:6px">Switzerland: highest AOV ₹36,776 (Swiss Travel Pass avg ₹62k). UAE: ₹19,562 AOV. Portugal: low AOV ₹1,141 (Frigate Museum ticket ₹692). 38 countries total, 16 shown + aggregated other.</div>
 
-  <!-- ── Funnel conversions yesterday ── -->
-  <h3>16j · Conversion funnel — 2026-08-13 (yesterday)</h3>
+<h3>16j · Conversion funnel — 2026-08-13 (yesterday)</h3>
   <div style="max-width:600px">
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
       <div style="width:8px;height:8px;border-radius:2px;background:#2a78d6"></div>
@@ -1893,6 +1882,9 @@ function buildCities() {
   document.getElementById('cf-tc').textContent = N(tc);
   document.getElementById('cf-tv').textContent = N(tv);
   document.getElementById('cf-tb').textContent = N(tb);
+  // Collapse after data fills
+  const _ct = document.querySelector('table[data-collapsible] #cityFunnelBody');
+  if(_ct) makeCollapsible(_ct.closest('table'));
 }
 
 /* slot table */
@@ -1915,6 +1907,9 @@ function buildSlot() {
   document.getElementById('sl-c').textContent = N(tc);
   document.getElementById('sl-ctr').textContent = (tc/tr*100).toFixed(2)+'%';
   document.getElementById('sl-b').textContent = N(tb);
+  // Collapse after data fills
+  const _st = document.querySelector('#slotBody');
+  if(_st) makeCollapsible(_st.closest('table'));
 }
 
 /* bar chart */
@@ -1958,7 +1953,8 @@ function makeCollapsible(tbl, defaultRows) {
   if (!tbody) return;
   const rows = tbody.querySelectorAll('tr');
   const total = rows.length;
-  if (total <= defaultRows) return; // nothing to collapse
+  if (total === 0) return; // empty tbody — table filled by JS later, skip
+  if (total <= defaultRows) return; // short enough, no collapse needed
   tbl.classList.add('tbl-collapsible', 'collapsed');
 
   // Add or reuse tfoot
