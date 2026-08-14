@@ -106,7 +106,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <!-- CRM DASHBOARD -->
 <div id="dash-crm">
-  <div class="day-filter" id="dayFilter"></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+  <div class="day-filter" id="dayFilter" style="margin-bottom:0"></div>
+  <button class="day-btn" id="todayBtn" onclick="goToday()" style="background:#1a7a4a;color:#fff;border-color:#1a7a4a;font-weight:600">Today</button>
+  <div style="display:flex;align-items:center;gap:6px;margin-left:4px">
+    <label style="font-size:11px;color:#6c757d">Custom date:</label>
+    <input type="date" id="customDate" min="2026-08-01" max="2026-08-14" value="2026-08-10"
+      style="font-size:11px;padding:3px 8px;border:1px solid #dee2e6;border-radius:6px;color:#212529;background:#fff;cursor:pointer"
+      onchange="goCustomDate(this.value)">
+  </div>
+</div>
 
   <div class="slabel">CRM delivery — <span id="crm-day-lbl">Aug 10</span></div>
   <div class="kpi-grid g4">
@@ -265,7 +274,7 @@ function setDay(k,el){
 }
 
 function buildDayFilter(){
-  document.getElementById("dayFilter").innerHTML=Object.keys(DAYS).map(k=>`<button class="day-btn${k===curDay?" act":""}" onclick="setDay('${k}',this)">${DAYS[k].lbl}${DAYS[k].spike?" ⚡":""}</button>`).join("");
+  document.getElementById("dayFilter").innerHTML=Object.keys(DAYS).filter(k=>k!=="aug14").map(k=>`<button class="day-btn${k===curDay?" act":""}" onclick="setDay('${k}',this)">${DAYS[k].lbl}${DAYS[k].spike?" ⚡":""}</button>`).join("");
 }
 
 function renderDay(){
@@ -318,6 +327,44 @@ function switchDash(id,btn){
 }
 
 buildDayFilter();renderDay();buildSrc();buildSys();buildTeaFunnel();buildChart();
+
+function goToday(){
+  // Aug 14 is today — add it to DAYS and select it
+  if(!DAYS.aug14){
+    DAYS.aug14={lbl:"Aug 14 (today)",p1:0,p2:0,wa:0,fp:0,c:[0,0,0,0],ppl:0,gcg:0,city:null,today:true};
+  }
+  // Show a prompt to refresh
+  const banner=document.getElementById("updateBanner");
+  document.getElementById("bannerMsg").textContent="Showing Aug 14 (today). Press Refresh live data to pull latest numbers from MoEngage.";
+  banner.style.display="flex";
+  curDay="aug14";
+  buildDayFilter();
+  renderDay();
+  document.getElementById("customDate").value="2026-08-14";
+}
+
+function goCustomDate(val){
+  // Map YYYY-MM-DD to our day key
+  const parts=val.split("-");
+  const day=parseInt(parts[2]);
+  const key="aug"+String(day).padStart(2,"0");
+  if(DAYS[key]){
+    curDay=key;
+    buildDayFilter();
+    renderDay();
+    document.getElementById("todayBtn").style.background="";
+    document.getElementById("todayBtn").style.color="";
+    document.getElementById("todayBtn").style.borderColor="";
+  } else {
+    const banner=document.getElementById("updateBanner");
+    document.getElementById("bannerMsg").textContent="No data for "+val+" yet. Press Refresh live data to pull it.";
+    banner.style.display="flex";
+    banner.style.background="#fffbeb";
+    banner.style.borderColor="#fcd34d";
+    banner.querySelector("span").style.color="#d97706";
+    banner.querySelector("i").style.color="#d97706";
+  }
+}
 </script>
 </body>
 </html>
