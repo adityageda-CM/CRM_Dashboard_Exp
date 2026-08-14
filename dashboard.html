@@ -3,822 +3,719 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Scapia TEA Experiences — Dashboard</title>
+<title>Scapia TEA — Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300..700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+/* ══════════════════════════════════════════════════════
+   SCAPIA TEA — MASTER DASHBOARD v5
+   Design: internal analytics tool, client-presentable
+   Palette: cool white base, slate accents, indigo CTA
+   Type: DM Sans (body) + DM Mono (data)
+   Signature: a razor-thin indigo rule on every active element
+══════════════════════════════════════════════════════ */
 
-/* ═══════════════════════════════════════════════════════════
-   SCAPIA TEA EXPERIENCES — MASTER DASHBOARD
-   Design system: clean light, professional, data-forward
-═══════════════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=DM+Mono:wght@400;500&display=swap');
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..800&family=JetBrains+Mono:wght@400;500&display=swap');
-
-/* ── Tokens ── */
 :root {
-  --bg:          #f5f4f1;
-  --surface-1:   #ffffff;
-  --surface-2:   #f9f8f6;
-  --surface-3:   #f0ede8;
+  /* Surfaces */
+  --bg:        #f8f9fb;
+  --s0:        #ffffff;
+  --s1:        #f2f4f7;
+  --s2:        #e8eaed;
 
-  --border:      #e4e1da;
-  --border-med:  #cac6bc;
-  --border-str:  #b0ab9e;
+  /* Borders */
+  --b0:        #e2e5ea;
+  --b1:        #c8cdd6;
+  --b2:        #9aa0ad;
 
-  --text-1:      #111110;
-  --text-2:      #4a4845;
-  --text-3:      #898580;
+  /* Text */
+  --t0:        #0e1117;
+  --t1:        #3c4253;
+  --t2:        #6b7385;
+  --t3:        #9aa0ad;
 
-  --accent:      #1a5fd4;
-  --accent-dim:  rgba(26,95,212,.08);
-  --accent-dim2: rgba(26,95,212,.04);
+  /* Accent – indigo */
+  --ac:        #4f46e5;
+  --ac-lt:     #eef2ff;
+  --ac-b:      rgba(79,70,229,.18);
 
-  --green:       #0d7a3e;
-  --green-dim:   rgba(13,122,62,.08);
-  --red:         #c0262e;
-  --red-dim:     rgba(192,38,46,.07);
-  --amber:       #9a5a00;
-  --amber-dim:   rgba(154,90,0,.08);
-  --purple:      #5b3fa6;
+  /* Semantic */
+  --gr:        #16a34a;
+  --gr-lt:     #f0fdf4;
+  --gr-b:      rgba(22,163,74,.15);
+  --rd:        #dc2626;
+  --rd-lt:     #fef2f2;
+  --rd-b:      rgba(220,38,38,.14);
+  --am:        #d97706;
+  --am-lt:     #fffbeb;
+  --am-b:      rgba(217,119,6,.14);
 
-  --font:        'Inter', system-ui, sans-serif;
-  --mono:        'JetBrains Mono', 'Menlo', monospace;
-  --r-card:      10px;
-  --r-sm:        7px;
-  --r-xs:        5px;
-  --shadow:      0 1px 3px rgba(0,0,0,.06), 0 2px 8px rgba(0,0,0,.04);
+  /* Type */
+  --font:      'DM Sans', system-ui, sans-serif;
+  --mono:      'DM Mono', 'Menlo', monospace;
+
+  /* Geometry */
+  --r:         8px;
+  --r-sm:      6px;
+  --r-xs:      4px;
+  --sh:        0 1px 2px rgba(0,0,0,.04), 0 2px 6px rgba(0,0,0,.04);
+  --sh-md:     0 2px 6px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.06);
 }
 
-/* ── Reset ── */
-*, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 13px; }
 body {
   font-family: var(--font);
   background: var(--bg);
-  color: var(--text-1);
-  margin: 0; padding: 0;
-  font-size: 13px;
+  color: var(--t0);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
 
-/* ── Live pulse bar ── */
-.live-bar {
-  background: var(--accent);
-  padding: 6px 24px;
-  display: flex; align-items: center; gap: 18px;
-  font-size: 11px; font-weight: 500; color: #fff;
-  letter-spacing: .015em;
-}
-.live-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: rgba(255,255,255,.9);
-  animation: pulse 2s ease-in-out infinite;
-  flex-shrink: 0;
-}
-@keyframes pulse {
-  0%,100% { opacity: 1; transform: scale(1); }
-  50%      { opacity: .5; transform: scale(.7); }
-}
-.live-bar .sep { opacity: .35; }
-.live-bar b { opacity: 1; }
-
-/* ── Master header ── */
-.master-header {
-  background: var(--surface-1);
-  border-bottom: 1px solid var(--border);
-  padding: 0 24px;
-  position: sticky; top: 0; z-index: 100;
-  box-shadow: var(--shadow);
-}
-.header-top {
+/* ── Live banner ── */
+.lb {
+  height: 34px;
+  background: var(--ac);
   display: flex; align-items: center; gap: 16px;
-  padding: 13px 0 11px;
-  border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+  font-size: 11.5px; font-weight: 500; color: #fff;
+  letter-spacing: .01em;
 }
-.logo-mark {
-  width: 30px; height: 30px; border-radius: 7px;
-  background: var(--accent);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; font-weight: 700; color: #fff;
+.lb-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255,255,255,.85);
+  animation: blink 2s ease-in-out infinite;
   flex-shrink: 0;
 }
-.header-title  { font-size: 14px; font-weight: 650; color: var(--text-1); }
-.header-sub    { font-size: 10px; color: var(--text-3); margin-top: 1px; }
-.header-spacer { flex: 1; }
-.header-meta   { font-size: 10px; color: var(--text-3); display: flex; align-items: center; gap: 10px; }
-.header-meta .dot {
-  width: 5px; height: 5px; border-radius: 50%;
-  background: var(--green); flex-shrink: 0;
-  animation: pulse 2.5s ease-in-out infinite;
-}
-.refresh-btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-family: var(--font); font-size: 11px; font-weight: 500;
-  padding: 6px 13px; border-radius: var(--r-xs);
-  border: 1px solid var(--border-med);
-  background: var(--surface-1); color: var(--text-2);
-  cursor: pointer; transition: all .12s;
-}
-.refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
-.refresh-btn svg { width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.35} }
+.lb-sep { color: rgba(255,255,255,.35); }
+.lb b   { font-weight: 600; }
+.lb-note { font-size: 10.5px; opacity: .65; }
 
-/* ── Tabs ── */
-.master-tabs { display: flex; gap: 0; }
-.mtab {
+/* ── Header / nav ── */
+.hdr {
+  background: var(--s0);
+  border-bottom: 1px solid var(--b0);
+  position: sticky; top: 0; z-index: 200;
+  box-shadow: var(--sh);
+}
+.hdr-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 0 20px;
+  height: 52px;
+  border-bottom: 1px solid var(--b0);
+}
+.logo {
+  width: 28px; height: 28px; border-radius: 6px;
+  background: var(--ac);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: #fff;
+  flex-shrink: 0;
+}
+.hdr-title  { font-size: 13.5px; font-weight: 650; color: var(--t0); }
+.hdr-sub    { font-size: 10.5px; color: var(--t2); margin-top: 1px; }
+.hdr-gap    { flex: 1; }
+.hdr-meta   { font-size: 11px; color: var(--t3); display: flex; align-items: center; gap: 8px; }
+.hdr-live   { display: flex; align-items: center; gap: 5px; }
+.hdr-live-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--gr); flex-shrink: 0;
+  animation: blink 2.5s ease-in-out infinite;
+}
+.hdr-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--font); font-size: 11.5px; font-weight: 500;
+  padding: 6px 13px; border-radius: var(--r-sm);
+  border: 1px solid var(--b0);
+  background: transparent; color: var(--t1);
+  cursor: pointer; transition: border-color .12s, color .12s;
+}
+.hdr-btn:hover { border-color: var(--ac); color: var(--ac); }
+
+/* Tab row */
+.tab-row    { display: flex; padding: 0 20px; gap: 0; }
+.tab-btn {
   font-family: var(--font); font-size: 12px; font-weight: 500;
-  padding: 11px 18px 10px; cursor: pointer;
-  color: var(--text-3); border: none; background: transparent;
+  padding: 10px 16px 9px;
+  border: none; background: transparent;
+  color: var(--t2); cursor: pointer;
   border-bottom: 2px solid transparent;
-  transition: all .12s; letter-spacing: .005em;
+  transition: color .1s, border-color .1s;
 }
-.mtab:hover { color: var(--text-2); }
-.mtab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
-
-.tab-panel { display: none; }
-.tab-panel.active { display: block; }
-
-/* ── Chips ── */
-.chip {
-  display: inline-block; font-size: 9px; font-weight: 600;
-  padding: 2px 6px; border-radius: 4px; letter-spacing: .04em; text-transform: uppercase;
-}
-.chip-live    { background: var(--green-dim); color: var(--green); border: 1px solid rgba(13,122,62,.2); }
-.chip-warn    { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(154,90,0,.2); }
-.chip-error   { background: var(--red-dim);   color: var(--red);   border: 1px solid rgba(192,38,46,.2); }
-.chip-info    { background: var(--accent-dim);color: var(--accent);border: 1px solid rgba(26,95,212,.2); }
-.chip-partial { background: rgba(91,63,166,.08);color:var(--purple);border:1px solid rgba(91,63,166,.2); }
-
-/* ══════════════════════════════════════════
-   CRM TAB
-══════════════════════════════════════════ */
-.crm-page { padding: 20px 24px 48px; max-width: 1280px; }
-
-.crm-label {
-  font-size: 9px; font-weight: 700; color: var(--text-3);
-  text-transform: uppercase; letter-spacing: .1em;
-  margin: 22px 0 10px; padding-bottom: 7px;
-  border-bottom: 1px solid var(--border);
-}
-.crm-label:first-child { margin-top: 0; }
-
-.crm-controls {
-  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-  margin-bottom: 16px;
-}
-.crm-title-text { font-size: 18px; font-weight: 700; color: var(--text-1); }
-
-/* day pills */
-.day-picker { display: flex; gap: 4px; flex-wrap: wrap; }
-.dpill {
-  font-family: var(--font); font-size: 11px; font-weight: 500;
-  padding: 4px 10px; border-radius: 20px;
-  border: 1px solid var(--border-med);
-  background: var(--surface-1); color: var(--text-2);
-  cursor: pointer; transition: all .1s; white-space: nowrap;
-}
-.dpill:hover { border-color: var(--border-str); color: var(--text-1); }
-.dpill.active {
-  background: var(--accent-dim); color: var(--accent);
-  border-color: rgba(26,95,212,.3); font-weight: 600;
-}
-.dpill.today-pill {
-  background: var(--green-dim); color: var(--green);
-  border-color: rgba(13,122,62,.25); font-weight: 600;
+.tab-btn:hover { color: var(--t1); }
+.tab-btn.on {
+  color: var(--ac); border-bottom-color: var(--ac);
+  font-weight: 600;
 }
 
-/* KPI grids */
-.kpi-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 12px; }
-.kpi-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 12px; }
-.kpi-5 { display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; margin-bottom: 12px; }
+.tp { display: none; }
+.tp.on { display: block; }
 
-/* stat card */
-.stat-card {
-  background: var(--surface-1);
-  border: 1px solid var(--border);
-  border-radius: var(--r-card);
-  padding: 13px 15px;
-  box-shadow: var(--shadow);
+/* ── Layout helpers ── */
+.pg  { max-width: 1260px; padding: 20px 20px 56px; }
+.g4  { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 10px; }
+.g3  { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 10px; }
+.g2  { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.g2a { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-bottom: 10px; }
+
+/* Section divider */
+.sec {
+  font-size: 9.5px; font-weight: 700; color: var(--t3);
+  text-transform: uppercase; letter-spacing: .09em;
+  margin: 22px 0 9px;
+  display: flex; align-items: center; gap: 8px;
 }
-.stat-card.green  { border-top: 2px solid var(--green); }
-.stat-card.red    { border-top: 2px solid var(--red); }
-.stat-card.amber  { border-top: 2px solid var(--amber); }
-.stat-card.accent { border-top: 2px solid var(--accent); }
+.sec::after { content:''; flex:1; height:1px; background:var(--b0); }
+.sec:first-child { margin-top: 0; }
 
-.stat-label { font-size: 10px; font-weight: 500; color: var(--text-3); margin-bottom: 5px; }
-.stat-val {
-  font-size: 22px; font-weight: 700; color: var(--text-1);
-  font-variant-numeric: tabular-nums; line-height: 1;
-  font-feature-settings: "tnum";
+/* Card */
+.card {
+  background: var(--s0);
+  border: 1px solid var(--b0);
+  border-radius: var(--r);
+  padding: 14px 15px;
+  box-shadow: var(--sh);
 }
-.stat-val.green  { color: var(--green); }
-.stat-val.red    { color: var(--red); }
-.stat-val.amber  { color: var(--amber); }
-.stat-val.accent { color: var(--accent); }
-.stat-sub { font-size: 10px; color: var(--text-3); margin-top: 5px; line-height: 1.4; }
-
-/* alerts */
-.alert {
-  display: flex; gap: 10px; align-items: flex-start;
-  border: 1px solid; border-radius: var(--r-sm);
-  padding: 10px 13px; margin-bottom: 14px;
-  font-size: 11px; line-height: 1.6;
-}
-.alert-red    { border-color: rgba(192,38,46,.25);  background: var(--red-dim);   color: #7a1a1d; }
-.alert-amber  { border-color: rgba(154,90,0,.25);   background: var(--amber-dim); color: #6b3e00; }
-.alert-green  { border-color: rgba(13,122,62,.25);  background: var(--green-dim); color: #064020; }
-.alert-accent { border-color: rgba(26,95,212,.25);  background: var(--accent-dim);color: #0d3a8a; }
-.alert-icon   { font-size: 13px; flex-shrink: 0; margin-top: 1px; }
-
-/* layout */
-.col-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-.col-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-
-/* panel */
-.panel {
-  background: var(--surface-1);
-  border: 1px solid var(--border);
-  border-radius: var(--r-card);
-  padding: 15px;
-  box-shadow: var(--shadow);
-  margin-bottom: 12px;
-}
-.panel-title {
-  font-size: 11px; font-weight: 600; color: var(--text-1);
+.card-hd {
+  font-size: 11px; font-weight: 600; color: var(--t0);
+  display: flex; align-items: flex-start; justify-content: space-between;
   margin-bottom: 11px;
-  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px;
 }
-.panel-stamp { font-size: 9px; color: var(--text-3); font-weight: 400; }
+.card-stamp { font-size: 10px; color: var(--t3); font-weight: 400; flex-shrink: 0; }
 
-/* funnel */
-.fnl-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
-.fnl-lbl { font-size: 10px; color: var(--text-2); width: 148px; text-align: right; flex-shrink: 0; }
-.fnl-track { flex: 1; background: var(--surface-3); border-radius: 3px; height: 13px; overflow: hidden; }
-.fnl-fill  { height: 100%; border-radius: 3px; }
-.fnl-n     { font-size: 10px; font-weight: 600; color: var(--text-1); width: 48px; text-align: right; font-variant-numeric: tabular-nums; }
-.fnl-pct   { font-size: 9px; color: var(--text-3); width: 32px; text-align: right; }
-.fnl-drop  { font-size: 9px; color: var(--red); opacity:.7; margin-left:158px; margin-bottom:2px; }
+/* KPI card variants */
+.kpi { position: relative; overflow: hidden; }
+.kpi::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background: var(--b0);
+}
+.kpi.ind::before { background:var(--ac); }
+.kpi.grn::before { background:var(--gr); }
+.kpi.red::before { background:var(--rd); }
+.kpi.amb::before { background:var(--am); }
 
-/* source rows */
-.src-row { display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border); }
+.kpi-lbl { font-size: 10px; font-weight: 500; color: var(--t2); margin-bottom: 5px; }
+.kpi-val {
+  font-size: 24px; font-weight: 700; color: var(--t0);
+  font-variant-numeric: tabular-nums;
+  line-height: 1; font-feature-settings: "tnum";
+  font-family: var(--font);
+}
+.kpi-val.ind { color: var(--ac); }
+.kpi-val.grn { color: var(--gr); }
+.kpi-val.red { color: var(--rd); }
+.kpi-val.amb { color: var(--am); }
+.kpi-sub { font-size: 10px; color: var(--t2); margin-top: 5px; line-height: 1.4; }
+
+/* Alert boxes */
+.alert {
+  display: flex; gap: 9px; align-items: flex-start;
+  padding: 10px 12px; border-radius: var(--r-sm);
+  font-size: 11px; line-height: 1.6;
+  margin-bottom: 10px;
+  border: 1px solid;
+}
+.alert.rd { background:var(--rd-lt); border-color:rgba(220,38,38,.25); color:#991b1b; }
+.alert.am { background:var(--am-lt); border-color:rgba(217,119,6,.25); color:#92400e; }
+.alert.gr { background:var(--gr-lt); border-color:rgba(22,163,74,.25); color:#166534; }
+.alert.in { background:var(--ac-lt); border-color:var(--ac-b); color:#3730a3; }
+.alert-ic { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+/* Funnel bars */
+.fnl-row  { display:flex; align-items:center; gap:7px; margin-bottom:6px; }
+.fnl-lbl  { font-size:10px; color:var(--t1); width:140px; text-align:right; flex-shrink:0; }
+.fnl-track{ flex:1; background:var(--s1); border-radius:3px; height:12px; overflow:hidden; }
+.fnl-bar  { height:100%; border-radius:3px; }
+.fnl-n    { font-size:10px; font-weight:600; color:var(--t0); width:46px; text-align:right;
+            font-variant-numeric:tabular-nums; font-family:var(--mono); }
+.fnl-pct  { font-size:9px; color:var(--t2); width:30px; text-align:right; }
+.fnl-drop { font-size:9px; color:var(--rd); margin-left:149px; margin-bottom:2px; opacity:.75; }
+/* aliases for CRM JS which uses f-* names */
+.f-row    { display:flex; align-items:center; gap:7px; margin-bottom:6px; }
+.f-lbl    { font-size:10px; color:var(--t1); width:140px; text-align:right; flex-shrink:0; }
+.f-track  { flex:1; background:var(--s1); border-radius:3px; height:12px; overflow:hidden; }
+.f-bar    { height:100%; border-radius:3px; }
+.f-ct     { font-size:10px; font-weight:600; color:var(--t0); width:46px; text-align:right;
+            font-variant-numeric:tabular-nums; font-family:var(--mono); }
+.f-pct    { font-size:9px; color:var(--t2); width:30px; text-align:right; }
+.f-drop   { font-size:9px; color:var(--rd); margin-left:149px; margin-bottom:2px; opacity:.75; }
+
+/* Source rows */
+.src-row { display:flex; align-items:center; gap:7px; padding:6px 0; border-bottom:1px solid var(--b0); }
 .src-row:last-child { border:none; }
-.src-dot { width:7px;height:7px;border-radius:2px;flex-shrink:0; }
-.src-lbl { flex:1;font-size:11px; }
-.src-bar-bg { width:56px;height:4px;background:var(--surface-3);border-radius:2px;overflow:hidden; }
-.src-bar-fill { height:100%;border-radius:2px; }
-.src-n { font-size:11px;font-weight:600;width:30px;text-align:right;font-variant-numeric:tabular-nums; }
-.src-pct { font-size:10px;color:var(--text-3);width:32px;text-align:right; }
+.src-dot { width:7px; height:7px; border-radius:2px; flex-shrink:0; }
+.src-lbl { flex:1; font-size:11px; }
+.src-bar-bg { width:52px; height:4px; background:var(--s1); border-radius:2px; overflow:hidden; }
+.src-bar-fill{ height:100%; border-radius:2px; }
+.src-n   { font-size:11px; font-weight:600; width:28px; text-align:right; font-family:var(--mono); }
+.src-pct { font-size:10px; color:var(--t2); width:30px; text-align:right; }
 
-/* sys/chan rows */
-.sys-row { display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:11px; }
+/* Sys/chan rows */
+.sys-row { display:flex; align-items:center; gap:7px; padding:6px 0; border-bottom:1px solid var(--b0); font-size:11px; }
 .sys-row:last-child { border:none; }
-.chan-row { display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border); }
+.chan-row { display:flex; align-items:center; gap:7px; padding:5px 0; border-bottom:1px solid var(--b0); }
 .chan-row:last-child { border:none; }
 
-/* ── Tables ── */
-.data-table { width:100%;border-collapse:collapse;font-size:11px; }
-.data-table thead th {
-  font-size:9px;font-weight:600;color:var(--text-3);
-  text-transform:uppercase;letter-spacing:.08em;
-  padding:6px 10px;text-align:right;
-  border-bottom:2px solid var(--border-med);
-  background:var(--surface-2);white-space:nowrap;
+/* Day pills */
+.pills    { display:flex; gap:4px; flex-wrap:wrap; }
+.pill {
+  font-family: var(--font); font-size: 11px; font-weight: 500;
+  padding: 4px 10px; border-radius: 20px;
+  border: 1px solid var(--b0);
+  background: var(--s0); color: var(--t1);
+  cursor: pointer; transition: all .1s; white-space: nowrap;
 }
-.data-table thead th:first-child { text-align:left; }
-.data-table tbody td {
-  padding:6px 10px;text-align:right;
-  border-bottom:1px solid var(--border);
-  color:var(--text-2);font-variant-numeric:tabular-nums;
+.pill:hover { border-color: var(--b1); color: var(--t0); }
+.pill.on {
+  background: var(--ac-lt); color: var(--ac);
+  border-color: rgba(79,70,229,.3); font-weight: 600;
 }
-.data-table tbody td:first-child { text-align:left;color:var(--text-1); }
-.data-table tbody tr:hover { background:var(--surface-2); }
-.data-table tfoot td {
-  padding:6px 10px;text-align:right;
-  font-weight:600;color:var(--text-1);
-  border-top:2px solid var(--border-med);
-}
-.data-table tfoot td:first-child { text-align:left; }
-.data-table .num { font-family:var(--mono);font-size:11px; }
-.data-table .hi-green { color:var(--green);font-weight:600; }
-.data-table .hi-red   { color:var(--red); }
-.data-table .hi-amber { color:var(--amber); }
-.data-table .hi-dim   { color:var(--text-3);font-style:italic; }
-
-/* ── Collapsible tables ── */
-.tbl-collapsible.collapsed tbody tr:nth-child(n+8) { display:none; }
-.tbl-expand-foot td {
-  text-align:center!important;padding:7px!important;
-  background:var(--surface-2);border-top:1px solid var(--border-med)!important;
-}
-.tbl-expand-btn {
-  font-family:var(--font);font-size:10px;font-weight:500;
-  color:var(--accent);background:none;border:none;
-  cursor:pointer;padding:2px 8px;border-radius:4px;
-}
-.tbl-expand-btn:hover { text-decoration:underline; }
-
-/* delta */
-.up   { color:var(--green); }
-.dn   { color:var(--red); }
-.flat { color:var(--text-3); }
-
-.note { font-size:10px;color:var(--text-3);line-height:1.6;margin-top:6px; }
-.check-list { margin:0;padding-left:14px; }
-.check-list li { font-size:11px;color:var(--text-2);line-height:1.8; }
-.check-list li strong { color:var(--text-1); }
-
-canvas { max-height:155px; }
-
-@media (max-width:900px) {
-  .kpi-4,.kpi-5 { grid-template-columns:1fr 1fr; }
-  .col-2,.col-3 { grid-template-columns:1fr; }
-}
-@media (max-width:600px) {
-  .kpi-4,.kpi-3 { grid-template-columns:1fr 1fr; }
-  .crm-page { padding:12px 12px 40px; }
+.pill.today-p {
+  background: var(--gr-lt); color: var(--gr);
+  border-color: rgba(22,163,74,.3); font-weight: 600;
 }
 
-/* ── TEA tab overrides ── */
-#tab-tea { background:var(--bg); color:var(--text-1); }
+/* Tables */
+.tbl { width:100%; border-collapse:collapse; font-size:11px; }
+.tbl thead th {
+  font-size: 9.5px; font-weight: 700; color: var(--t2);
+  text-transform: uppercase; letter-spacing: .07em;
+  padding: 7px 9px; text-align: right;
+  border-bottom: 1px solid var(--b1);
+  background: var(--s1);
+  white-space: nowrap;
+}
+.tbl thead th:first-child { text-align: left; }
+.tbl tbody td {
+  padding: 6px 9px; text-align: right;
+  border-bottom: 1px solid var(--b0);
+  color: var(--t1);
+  font-variant-numeric: tabular-nums;
+}
+.tbl tbody td:first-child { text-align:left; color:var(--t0); }
+.tbl tbody tr:last-child td { border-bottom:none; }
+.tbl tbody tr:hover { background: var(--s1); }
+.tbl tfoot td {
+  padding: 7px 9px; text-align: right;
+  font-weight: 600; color: var(--t0);
+  border-top: 1px solid var(--b1);
+}
+.tbl tfoot td:first-child { text-align: left; }
+.tbl .n { font-family: var(--mono); font-size: 11px; }
+.tbl .g { color: var(--gr); font-weight: 600; }
+.tbl .r { color: var(--rd); }
+.tbl .a { color: var(--am); }
+.tbl .d { color: var(--t3); font-style: italic; }
 
+/* Collapsible */
+.tbl-col.col tbody tr:nth-child(n+8) { display: none; }
+.tbl-exp-ft td {
+  text-align:center !important; padding:7px !important;
+  background: var(--s1);
+  border-top: 1px solid var(--b0) !important;
+}
+.tbl-exp-btn {
+  font-family: var(--font); font-size: 10px; font-weight: 500;
+  color: var(--ac); background: none; border: none;
+  cursor: pointer; padding: 1px 8px; border-radius: 4px;
+}
+.tbl-exp-btn:hover { text-decoration: underline; }
 
-/* ── Funnel bar class aliases (CRM JS uses f-* names) ── */
-.f-row  { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
-.f-lbl  { font-size:10px; color:var(--text-2); width:148px; text-align:right; flex-shrink:0; }
-.f-track { flex:1; background:var(--surface-3); border-radius:3px; height:13px; overflow:hidden; }
-.f-bar  { height:100%; border-radius:3px; transition:width .3s; }
-.f-ct   { font-size:10px; font-weight:600; color:var(--text-1); width:48px; text-align:right; font-variant-numeric:tabular-nums; }
-.f-pct  { font-size:9px; color:var(--text-3); width:32px; text-align:right; }
-.f-drop { font-size:9px; color:var(--red); opacity:.7; margin-left:158px; margin-bottom:2px; }
-</style>
+/* Note */
+.note { font-size: 10px; color: var(--t2); line-height: 1.6; margin-top: 6px; }
 
-<!-- v9 original styles (scoped to TEA tab) -->
-<style id="v9-styles">
-/* ══════════════════════════════════════════════
-   TEA FUNNEL TAB — design unified with master
-   All rules scoped to #tab-tea
-══════════════════════════════════════════════ */
+/* Badges */
+.badge {
+  display: inline-block; font-size: 9px; font-weight: 600;
+  padding: 1px 6px; border-radius: 3px; letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.badge.rd { background:var(--rd-lt); color:var(--rd); border:1px solid rgba(220,38,38,.2); }
+.badge.gr { background:var(--gr-lt); color:var(--gr); border:1px solid rgba(22,163,74,.2); }
+.badge.am { background:var(--am-lt); color:var(--am); border:1px solid rgba(217,119,6,.2); }
+.badge.in { background:var(--ac-lt); color:var(--ac); border:1px solid var(--ac-b); }
+.badge.pt { background:rgba(168,85,247,.08); color:#7c3aed; border:1px solid rgba(168,85,247,.2); }
 
-/* Layout */
-#tab-tea                 { background:var(--bg); padding-bottom:60px; }
-#tab-tea .card           { background:var(--surface-1); border:1px solid var(--border);
-                           border-radius:var(--r-card); padding:18px 20px; margin-bottom:12px;
-                           box-shadow:var(--shadow); }
-#tab-tea h2              { font-size:13px; font-weight:700; color:var(--text-1); margin:0 0 10px; line-height:1.3; }
-#tab-tea h3              { font-size:11px; font-weight:600; color:var(--text-2); margin:14px 0 8px; }
+/* Check list */
+.chk  { margin:0; padding-left:14px; }
+.chk li { font-size:11px; color:var(--t1); line-height:1.85; }
+.chk li strong { color:var(--t0); }
 
-/* Controls bar */
-#tab-tea .controls-row   { display:flex; flex-wrap:wrap; gap:10px; align-items:flex-start;
-                           padding:12px 14px; background:var(--surface-1);
-                           border:1px solid var(--border); border-radius:var(--r-card);
-                           margin-bottom:12px; box-shadow:var(--shadow); }
-#tab-tea .ctrl           { display:flex; flex-direction:column; gap:3px; }
-#tab-tea label           { font-size:9px; font-weight:700; color:var(--text-3);
-                           text-transform:uppercase; letter-spacing:.08em; }
-#tab-tea select          { background:var(--surface-1); border:1px solid var(--border-med);
-                           border-radius:var(--r-xs); color:var(--text-1);
-                           font-family:var(--font); font-size:11px; padding:5px 8px; cursor:pointer; }
-#tab-tea select:focus    { outline:none; border-color:var(--accent); }
-#tab-tea .info-banner    { background:var(--accent-dim); border:1px solid rgba(26,95,212,.2);
-                           border-radius:var(--r-sm); padding:8px 12px;
-                           font-size:10px; color:#0d3a8a; margin-bottom:10px; line-height:1.6; }
+canvas { max-height: 152px; }
 
-/* Status pills (linklike buttons for period picker) */
-#tab-tea .linklike       { background:var(--surface-1); border:1px solid var(--border-med);
-                           border-radius:20px; color:var(--text-2); cursor:pointer;
-                           font-family:var(--font); font-size:11px; font-weight:500;
-                           padding:4px 11px; transition:all .1s; }
-#tab-tea .linklike:hover { border-color:var(--border-str); color:var(--text-1); }
-#tab-tea .linklike.active{ background:var(--accent-dim); color:var(--accent);
-                           border-color:rgba(26,95,212,.3); font-weight:600; }
-
-/* Flags / alerts */
-#tab-tea .flag           { padding:8px 12px; border-radius:var(--r-xs);
-                           font-size:11px; margin:8px 0; line-height:1.6;
-                           display:flex; gap:8px; align-items:flex-start; }
-#tab-tea .flag.good      { background:var(--green-dim); color:#064020;
-                           border:1px solid rgba(13,122,62,.2); }
-#tab-tea .flag.bad       { background:var(--red-dim);   color:#6b1215;
-                           border:1px solid rgba(192,38,46,.2); }
-#tab-tea .flag.warn      { background:var(--amber-dim); color:#5c3600;
-                           border:1px solid rgba(154,90,0,.2); }
-
-/* Notes */
-#tab-tea .note           { font-size:10px; color:var(--text-3); line-height:1.6; margin-top:6px; }
-#tab-tea .stat           { font-size:10px; color:var(--text-3); }
-
-/* ALL tables in TEA tab get unified data-table styling */
-#tab-tea table           { width:100%; border-collapse:collapse; font-size:11px; }
-#tab-tea table thead th  { font-size:9px; font-weight:700; color:var(--text-3);
-                           text-transform:uppercase; letter-spacing:.07em;
-                           padding:7px 10px; text-align:right;
-                           border-bottom:2px solid var(--border-med);
-                           background:var(--surface-2); white-space:nowrap; }
+/* TEA tab scoping */
+#tab-tea { background:var(--bg); padding-bottom:60px; }
+#tab-tea .card { background:var(--s0); border:1px solid var(--b0); border-radius:var(--r); padding:16px 17px; margin-bottom:10px; box-shadow:var(--sh); }
+#tab-tea h2 { font-size:12.5px; font-weight:700; color:var(--t0); margin:0 0 10px; }
+#tab-tea h3 { font-size:11px; font-weight:600; color:var(--t1); margin:13px 0 7px; }
+#tab-tea .note { font-size:10px; color:var(--t2); line-height:1.6; margin-top:6px; }
+#tab-tea .flag { padding:8px 11px; border-radius:var(--r-xs); font-size:11px; margin:7px 0; line-height:1.6; border:1px solid; display:flex; gap:7px; align-items:flex-start; }
+#tab-tea .flag.good { background:var(--gr-lt); border-color:rgba(22,163,74,.2); color:#166534; }
+#tab-tea .flag.bad  { background:var(--rd-lt); border-color:rgba(220,38,38,.2); color:#991b1b; }
+#tab-tea .flag.warn { background:var(--am-lt); border-color:rgba(217,119,6,.2); color:#92400e; }
+#tab-tea .controls-row { display:flex; flex-wrap:wrap; gap:10px; align-items:flex-start; padding:11px 13px; background:var(--s0); border:1px solid var(--b0); border-radius:var(--r); margin-bottom:10px; box-shadow:var(--sh); }
+#tab-tea .ctrl  { display:flex; flex-direction:column; gap:3px; }
+#tab-tea label  { font-size:9.5px; font-weight:700; color:var(--t2); text-transform:uppercase; letter-spacing:.08em; }
+#tab-tea select { background:var(--s0); border:1px solid var(--b0); border-radius:var(--r-sm); color:var(--t0); font-family:var(--font); font-size:11px; padding:5px 8px; cursor:pointer; }
+#tab-tea select:focus { outline:none; border-color:var(--ac); }
+#tab-tea .info-banner { background:var(--ac-lt); border:1px solid var(--ac-b); border-radius:var(--r-sm); padding:8px 11px; font-size:10px; color:#3730a3; margin-bottom:9px; line-height:1.6; }
+#tab-tea .linklike { background:var(--s0); border:1px solid var(--b0); border-radius:20px; color:var(--t1); cursor:pointer; font-family:var(--font); font-size:11px; font-weight:500; padding:4px 10px; transition:all .1s; }
+#tab-tea .linklike:hover { border-color:var(--b1); }
+#tab-tea .linklike.active { background:var(--ac-lt); color:var(--ac); border-color:rgba(79,70,229,.3); font-weight:600; }
+#tab-tea .stat { font-size:10px; color:var(--t2); }
+#tab-tea .delta-up   { color:var(--gr); font-weight:500; }
+#tab-tea .delta-down { color:var(--rd); font-weight:500; }
+#tab-tea .delta-flat { color:var(--t2); }
+#tab-tea table { width:100%; border-collapse:collapse; font-size:11px; }
+#tab-tea table thead th { font-size:9.5px; font-weight:700; color:var(--t2); text-transform:uppercase; letter-spacing:.07em; padding:6px 9px; text-align:right; border-bottom:1px solid var(--b1); background:var(--s1); white-space:nowrap; }
 #tab-tea table thead th:first-child { text-align:left; }
-#tab-tea table tbody td  { padding:6px 10px; text-align:right;
-                           border-bottom:1px solid var(--border);
-                           color:var(--text-2); font-variant-numeric:tabular-nums; }
-#tab-tea table tbody td:first-child { text-align:left; color:var(--text-1); }
-#tab-tea table tbody tr:hover       { background:var(--surface-2); }
-#tab-tea table tfoot td  { padding:7px 10px; text-align:right;
-                           font-weight:600; color:var(--text-1);
-                           border-top:2px solid var(--border-med); }
+#tab-tea table tbody td { padding:6px 9px; text-align:right; border-bottom:1px solid var(--b0); color:var(--t1); font-variant-numeric:tabular-nums; }
+#tab-tea table tbody td:first-child { text-align:left; color:var(--t0); }
+#tab-tea table tbody tr:hover { background:var(--s1); }
+#tab-tea table tfoot td { padding:6px 9px; text-align:right; font-weight:600; color:var(--t0); border-top:1px solid var(--b1); }
 #tab-tea table tfoot td:first-child { text-align:left; }
-#tab-tea .num            { font-family:var(--mono); font-size:11px; }
-#tab-tea .delta-up       { color:var(--green); font-weight:500; }
-#tab-tea .delta-down     { color:var(--red); font-weight:500; }
-#tab-tea .delta-flat     { color:var(--text-3); }
+#tab-tea .num { font-family:var(--mono); font-size:11px; }
+#tab-tea .tbl-exp-ft td { text-align:center !important; padding:7px !important; background:var(--s1); border-top:1px solid var(--b0) !important; }
+#tab-tea .tbl-col.col tbody tr:nth-child(n+8) { display:none; }
+#tab-tea .tbl-exp-btn { color:var(--ac); background:none; border:none; font-family:var(--font); font-size:10px; font-weight:500; cursor:pointer; padding:1px 8px; border-radius:4px; }
+#tab-tea .tbl-exp-btn:hover { text-decoration:underline; }
+#tab-tea .s16btn { background:var(--s0); border:1px solid var(--b0); border-radius:20px; color:var(--t1); cursor:pointer; font-family:var(--font); font-size:11px; font-weight:500; padding:4px 10px; transition:all .1s; }
+#tab-tea .s16btn.active { background:var(--ac-lt); color:var(--ac); border-color:rgba(79,70,229,.3); font-weight:600; }
+#tab-tea .ck { background:var(--s0); border:1px solid var(--b0); border-radius:var(--r); padding:12px 13px; box-shadow:var(--sh); }
+#tab-tea .ck-l { font-size:10px; color:var(--t2); margin-bottom:4px; }
+#tab-tea .ck-v { font-size:20px; font-weight:700; color:var(--t0); font-variant-numeric:tabular-nums; line-height:1; }
+#tab-tea .ck-s { font-size:10px; color:var(--t2); margin-top:4px; line-height:1.4; }
+#tab-tea .badge.rd { background:var(--rd-lt); color:var(--rd); border:1px solid rgba(220,38,38,.2); font-size:9px; font-weight:600; padding:1px 6px; border-radius:3px; text-transform:uppercase; letter-spacing:.04em; }
+#tab-tea .badge.gr { background:var(--gr-lt); color:var(--gr); border:1px solid rgba(22,163,74,.2); font-size:9px; font-weight:600; padding:1px 6px; border-radius:3px; text-transform:uppercase; letter-spacing:.04em; }
 
-/* Collapsible tables — expand button */
-#tab-tea .tbl-expand-foot td     { text-align:center!important; padding:7px!important;
-                                   background:var(--surface-2);
-                                   border-top:1px solid var(--border-med)!important; }
-#tab-tea .tbl-collapsible.collapsed tbody tr:nth-child(n+8) { display:none; }
-#tab-tea .tbl-expand-btn         { font-family:var(--font); font-size:10px; font-weight:500;
-                                   color:var(--accent); background:none; border:none;
-                                   cursor:pointer; padding:2px 8px; border-radius:4px; }
-#tab-tea .tbl-expand-btn:hover   { text-decoration:underline; }
+/* Section nav pills */
+.sec-nav {
+  display: flex; flex-wrap: wrap; gap: 5px;
+  padding: 12px 0 0;
+  margin-bottom: 14px;
+}
+.sec-nav a {
+  text-decoration: none; font-size: 10.5px; font-weight: 500;
+  padding: 5px 11px; border-radius: 20px;
+  border: 1px solid var(--b0);
+  background: var(--s0); color: var(--t1);
+  transition: all .1s;
+}
+.sec-nav a:hover { border-color: var(--b1); color: var(--t0); }
+.sec-nav a.live { background:var(--gr-lt); color:var(--gr); border-color:rgba(22,163,74,.25); font-weight:600; }
+.sec-nav a.crm  { background:var(--ac-lt); color:var(--ac); border-color:var(--ac-b); font-weight:600; }
 
-/* Row highlights */
-#tab-tea .hi-green { color:var(--green); font-weight:600; }
-#tab-tea .hi-red   { color:var(--red); }
-#tab-tea .hi-amber { color:var(--amber); }
+/* ── Responsive ── */
+@media(max-width:900px){
+  .g4,.g3 { grid-template-columns:1fr 1fr; }
+  .g2,.g2a { grid-template-columns:1fr; }
+}
+@media(max-width:560px){
+  .g4,.g3,.g2 { grid-template-columns:1fr 1fr; }
+  .pg { padding:12px 12px 48px; }
+}
 
-/* Section 15 & 16 inner cards */
-#tab-tea .crm-card        { background:var(--surface-1); border:1px solid var(--border);
-                            border-radius:var(--r-card); padding:14px 16px; margin-bottom:10px;
-                            box-shadow:var(--shadow); }
-#tab-tea .crm-card-title  { font-size:11px; font-weight:600; color:var(--text-1); margin-bottom:9px; }
-#tab-tea .crm-stamp       { font-size:9px; color:var(--text-3); text-align:right; margin-top:5px; }
-#tab-tea .crm-section-label { font-size:9px; font-weight:700; color:var(--text-3);
-                              text-transform:uppercase; letter-spacing:.1em;
-                              margin:18px 0 8px; padding-bottom:6px;
-                              border-bottom:1px solid var(--border); }
-#tab-tea .crm-table       { width:100%; border-collapse:collapse; font-size:11px; }
-#tab-tea .crm-table thead th { font-size:9px; font-weight:700; color:var(--text-3);
-                               text-transform:uppercase; letter-spacing:.07em;
-                               padding:6px 8px; text-align:right;
-                               border-bottom:2px solid var(--border-med);
-                               background:var(--surface-2); }
-#tab-tea .crm-table thead th:first-child { text-align:left; }
-#tab-tea .crm-table tbody td { padding:6px 8px; text-align:right;
-                               border-bottom:1px solid var(--border); color:var(--text-2); }
-#tab-tea .crm-table tbody td:first-child { text-align:left; color:var(--text-1); }
-#tab-tea .crm-table tbody tr:hover { background:var(--surface-2); }
-#tab-tea .crm-table tfoot td { font-weight:600; border-top:2px solid var(--border-med); padding:6px 8px; }
-
-/* Section 16 specific */
-#tab-tea .s16btn          { background:var(--surface-1); border:1px solid var(--border-med);
-                            border-radius:20px; color:var(--text-2); cursor:pointer;
-                            font-family:var(--font); font-size:11px; font-weight:500;
-                            padding:4px 11px; transition:all .1s; }
-#tab-tea .s16btn.active   { background:var(--accent-dim); color:var(--accent);
-                            border-color:rgba(26,95,212,.3); font-weight:600; }
-#tab-tea .s16btn:hover    { border-color:var(--border-str); }
-#tab-tea .ck              { background:var(--surface-1); border:1px solid var(--border);
-                            border-radius:var(--r-card); padding:12px 14px;
-                            box-shadow:var(--shadow); }
-#tab-tea .ck-l            { font-size:10px; color:var(--text-3); margin-bottom:4px; }
-#tab-tea .ck-v            { font-size:20px; font-weight:700; color:var(--text-1);
-                            font-variant-numeric:tabular-nums; line-height:1; }
-#tab-tea .ck-s            { font-size:10px; color:var(--text-3); margin-top:4px; line-height:1.4; }
-#tab-tea .ck.good         { border-top:2px solid var(--green); }
-#tab-tea .ck.bad          { border-top:2px solid var(--red); }
-#tab-tea .ck.warn         { border-top:2px solid var(--amber); }
-#tab-tea .ck-v.good       { color:var(--green); }
-#tab-tea .ck-v.bad        { color:var(--red); }
-#tab-tea .ck-v.warn       { color:var(--amber); }
 </style>
 </head>
 <body>
 
-<!-- ── Live pulse bar ── -->
-<div class="live-bar">
-  <span class="live-dot"></span>
-  <span><b>LIVE</b></span>
-  <span class="sep">|</span>
-  <span>Today Aug 14 &nbsp;·&nbsp; <b id="pulse-today">15 bookings · ₹3.60L GMV</b> &nbsp;<span style="opacity:.6;font-size:10px">(as of 14:52 IST · day running)</span></span>
-  <span class="sep">|</span>
-  <span>MTD Aug 1–14: <b>411 bookings · ₹57.03L GMV</b></span>
-  <span class="sep">|</span>
+<!-- Live banner -->
+<div class="lb">
+  <span class="lb-dot"></span>
+  <b>LIVE</b>
+  <span class="lb-sep">|</span>
+  <span>Today Aug 14 &nbsp;·&nbsp; <b>15 bookings · ₹3.60L GMV</b> <span class="lb-note">(as of 14:52 IST · day still running)</span></span>
+  <span class="lb-sep">|</span>
+  <span>Aug MTD: <b>411 bookings · ₹57.03L GMV</b></span>
+  <span class="lb-sep">|</span>
   <span>Flow: <b>3k–14k msgs/day</b></span>
 </div>
 
-<!-- ── Header ── -->
-<div class="master-header">
-  <div class="header-top">
-    <div class="header-logo">
-      <div class="logo-mark">S</div>
-      <div>
-        <div class="header-title">Scapia TEA Experiences</div>
-        <div class="header-sub">CRM flow dashboard &nbsp;·&nbsp; TEA organic funnel &nbsp;·&nbsp; Live data</div>
-      </div>
+<!-- Header -->
+<div class="hdr">
+  <div class="hdr-row">
+    <div class="logo">S</div>
+    <div>
+      <div class="hdr-title">Scapia TEA Experiences</div>
+      <div class="hdr-sub">CRM flow &nbsp;·&nbsp; TEA organic funnel &nbsp;·&nbsp; Live data · Databricks</div>
     </div>
-    <div class="header-spacer"></div>
-    <div class="header-meta">
-      <span class="dot"></span>
-      <span id="hdr-timestamp">Databricks · queried 14 Aug 2026</span>
+    <div class="hdr-gap"></div>
+    <div class="hdr-meta">
+      <span class="hdr-live"><span class="hdr-live-dot"></span> Queried 14 Aug 2026</span>
     </div>
-    <button class="refresh-btn" onclick="doRefresh()">
-      <svg viewBox="0 0 24 24"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
-      Refresh data
+    <button class="hdr-btn" id="rfBtn" onclick="doRefresh()">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+      Refresh
     </button>
   </div>
-  <div class="master-tabs">
-    <button class="mtab active" onclick="swTab('crm',this)">CRM flow dashboard</button>
-    <button class="mtab" onclick="swTab('tea',this)">TEA organic funnel (v9 · 14 sections)</button>
+  <div class="tab-row">
+    <button class="tab-btn on"  onclick="swTab('crm',this)">CRM flow dashboard</button>
+    <button class="tab-btn"     onclick="swTab('tea',this)">TEA organic funnel (v9 · 14 sections + live tracker)</button>
   </div>
 </div>
 
-<!-- ═══════════════════════ TAB 1 — CRM ═══════════════════════ -->
-<div id="tab-crm" class="tab-panel active">
-<div class="crm-page">
+<!-- ═══ TAB 1 — CRM ═══ -->
+<div id="tab-crm" class="tp on">
+<div class="pg">
 
   <!-- Controls -->
-  <div class="crm-controls">
-    <div style="flex:1">
-      <div class="crm-title-text" id="crm-slbl">CRM delivery — Aug 10</div>
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+    <div>
+      <div style="font-size:17px;font-weight:700;color:var(--t0)" id="crm-slbl">CRM delivery — Aug 13</div>
     </div>
-    <div class="day-picker" id="dayBar"></div>
+    <div class="hdr-gap"></div>
+    <div class="pills" id="dayBar"></div>
     <input type="date" id="dp" min="2026-08-01" max="2026-08-14" value="2026-08-13"
            onchange="crm_pickDate(this.value)"
-           style="font-size:11px;padding:5px 9px;border:1px solid var(--border-med);border-radius:var(--r-xs);background:var(--surface-2);color:var(--text-1);cursor:pointer;font-family:var(--font)">
+           style="font-size:11px;padding:5px 8px;border:1px solid var(--b0);border-radius:var(--r-sm);background:var(--s0);color:var(--t0);cursor:pointer;font-family:var(--font)">
   </div>
 
-  <div id="today14-banner" class="alert alert-accent" style="display:none">
-    <span class="alert-icon">ℹ</span>
-    <div><strong>Today is Aug 14</strong> — MoEngage Aug 14 data not yet in flow analytics. Showing Aug 13 (last confirmed). Live orders: 15 bookings ₹3.60L as of 14:52 IST.</div>
+  <div id="today14-banner" class="alert in" style="display:none">
+    <span class="alert-ic">ℹ</span>
+    <div><b>Today is Aug 14</b> — MoEngage Aug 14 delivery data not yet available. Showing Aug 13 (last confirmed day). Live DB: 15 bookings ₹3.60L as of 14:52 IST.</div>
   </div>
 
-  <!-- Flow performance KPIs -->
-  <div class="crm-label">Flow performance</div>
-  <div class="kpi-4">
-    <div class="stat-card accent">
-      <div class="stat-label">Messages sent</div>
-      <div class="stat-val accent" id="k-tot">—</div>
-      <div class="stat-sub">P1 + P2 + WhatsApp + Final Push</div>
+  <!-- KPIs row 1 -->
+  <div class="sec">Flow performance</div>
+  <div class="g4">
+    <div class="card kpi ind">
+      <div class="kpi-lbl">Messages sent</div>
+      <div class="kpi-val ind" id="k-tot">—</div>
+      <div class="kpi-sub">P1 + P2 + WhatsApp + Final Push</div>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">New entrants today</div>
-      <div class="stat-val" id="k-ppl">—</div>
-      <div class="stat-sub">Triggered USER_CITY_CHANGE_EVENT</div>
+    <div class="card kpi">
+      <div class="kpi-lbl">New entrants</div>
+      <div class="kpi-val" id="k-ppl">—</div>
+      <div class="kpi-sub">Triggered USER_CITY_CHANGE_EVENT</div>
     </div>
-    <div class="stat-card amber">
-      <div class="stat-label">Click-throughs</div>
-      <div class="stat-val amber" id="k-cl">—</div>
-      <div class="stat-sub" id="k-ctr">—</div>
+    <div class="card kpi amb">
+      <div class="kpi-lbl">Click-throughs</div>
+      <div class="kpi-val amb" id="k-cl">—</div>
+      <div class="kpi-sub" id="k-ctr">—</div>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">P1 estimated seen</div>
-      <div class="stat-val" id="k-seen">—</div>
-      <div class="stat-sub" id="k-seensub">~52% foreground rate</div>
-    </div>
-  </div>
-  <div class="kpi-4">
-    <div class="stat-card red">
-      <div class="stat-label">Clicks → city view (DB)</div>
-      <div class="stat-val red" id="k-cv">—</div>
-      <div class="stat-sub">0.01% — deep link broken</div>
-    </div>
-    <div class="stat-card red">
-      <div class="stat-label">MoEngage CVR (13 days)</div>
-      <div class="stat-val red">0.0%</div>
-      <div class="stat-sub">tea_city_view — confirmed zero</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Held out (GCG)</div>
-      <div class="stat-val" id="k-gcg">—</div>
-      <div class="stat-sub">Received nothing — control group</div>
-    </div>
-    <div class="stat-card" style="border-color:rgba(61,126,255,.2)">
-      <div class="stat-label">Flow design</div>
-      <div class="stat-val accent" style="font-size:18px">4 msgs</div>
-      <div class="stat-sub">Max 1/day over 3 days per trip</div>
+    <div class="card kpi">
+      <div class="kpi-lbl">P1 estimated seen</div>
+      <div class="kpi-val" id="k-seen">—</div>
+      <div class="kpi-sub" id="k-seensub">~52% foreground rate</div>
     </div>
   </div>
-
-  <!-- Deep link alert -->
-  <div class="alert alert-red">
-    <span class="alert-icon">⚠</span>
-    <div><strong>P0 bug — deep link broken:</strong> Push click → app opens → mpin screen → post-auth routes to <em>home screen</em> instead of TEA city page. Result: 1,467 app opens on Aug 8, only 1 city view. Booking CVR = 0%. Fix: persist deep link destination across mpin auth. Every other CRM optimisation has near-zero impact until this is fixed.</div>
+  <div class="g4" style="margin-top:0">
+    <div class="card kpi red">
+      <div class="kpi-lbl">Click → city view (DB)</div>
+      <div class="kpi-val red" id="k-cv">—</div>
+      <div class="kpi-sub">0.01% — deep link broken</div>
+    </div>
+    <div class="card kpi red">
+      <div class="kpi-lbl">MoEngage CVR (13 days)</div>
+      <div class="kpi-val red">0.0%</div>
+      <div class="kpi-sub">tea_city_view — confirmed zero</div>
+    </div>
+    <div class="card kpi">
+      <div class="kpi-lbl">Held out (GCG)</div>
+      <div class="kpi-val" id="k-gcg">—</div>
+      <div class="kpi-sub">Control group — received nothing</div>
+    </div>
+    <div class="card kpi">
+      <div class="kpi-lbl">Flow design</div>
+      <div class="kpi-val ind" style="font-size:20px">4 msgs</div>
+      <div class="kpi-sub">Max 1/day over 3 days per trip</div>
+    </div>
   </div>
 
-  <!-- Channel + Funnel -->
-  <div class="col-2">
-    <div class="panel">
-      <div class="panel-title">
-        Channel breakdown — <span id="chan-lbl">Aug 10</span>
-        <span class="panel-stamp">MoEngage flow v11 ACTIVE</span>
-      </div>
+  <!-- P0 alert -->
+  <div class="alert rd">
+    <span class="alert-ic">⚠</span>
+    <div><b>P0 — deep link broken:</b> Push click → app opens → mpin screen → routes to <em>home screen</em> instead of TEA city page. 1,467 app opens on Aug 8 produced only 1 city view. Booking CVR = 0%. Fix: persist destination across mpin auth. Every other optimisation has near-zero impact until this is fixed.</div>
+  </div>
+
+  <!-- Channel + funnel -->
+  <div class="sec">Post-click funnel &amp; channel breakdown</div>
+  <div class="g2">
+    <div class="card">
+      <div class="card-hd">Channel breakdown — <span id="chan-lbl">Aug 13</span> <span class="card-stamp">MoEngage flow v11 ACTIVE</span></div>
       <div id="chan-grid"></div>
     </div>
-    <div class="panel">
-      <div class="panel-title">
-        Post-click DB funnel
-        <span class="panel-stamp" id="fnl-stamp">percept_event_all · Push</span>
-      </div>
+    <div class="card">
+      <div class="card-hd">Post-click DB funnel <span class="card-stamp" id="fnl-stamp">percept_event_all · Push attribution</span></div>
       <div id="crm-fnl"></div>
       <div id="fnl-day-lbl" class="note" style="margin-top:8px"></div>
     </div>
   </div>
 
   <!-- Vignes 3 questions -->
-  <div class="crm-label">Vignes's 3 questions — Aug 10 ground truth (Databricks confirmed)</div>
-  <div class="kpi-3">
-    <div class="stat-card green">
-      <div class="stat-label">Q1 · CRM × organic overlap</div>
-      <div class="stat-val green">4.2%</div>
-      <div class="stat-sub">Only 15 of 357 organic city-view users also got a push that day. 95.8% of CRM reach is incremental — no cannibalisation.</div>
+  <div class="sec">Vignes's 3 questions — Aug 10 DB confirmed</div>
+  <div class="g3">
+    <div class="card kpi grn">
+      <div class="kpi-lbl">Q1 · CRM × organic overlap</div>
+      <div class="kpi-val grn">4.2%</div>
+      <div class="kpi-sub">Only 15 of 357 organic city-view users also received a push. 95.8% of CRM reach is incremental — no cannibalisation.</div>
     </div>
-    <div class="stat-card red">
-      <div class="stat-label">Q2 · System 2 pipeline leak</div>
-      <div class="stat-val red">63–66%</div>
-      <div class="stat-sub">DB qualifies ~1,700–2,100 users/day. MoEngage receives only 570–782. ~1,100 eligible users/day lost in the ETL before entering the flow.</div>
+    <div class="card kpi red">
+      <div class="kpi-lbl">Q2 · System 2 pipeline leak</div>
+      <div class="kpi-val red">63–66%</div>
+      <div class="kpi-sub">DB qualifies ~1,700–2,100 users/day. MoEngage receives 570–782. ~1,100 eligible users/day lost in ETL before entering the flow.</div>
     </div>
-    <div class="stat-card amber">
-      <div class="stat-label">Q3 · CRM-pool EXPERIENCE orders</div>
-      <div class="stat-val amber">4 orders</div>
-      <div class="stat-sub">₹41k GMV Aug 1–13. Loose attribution — users in CRM pool who later booked. Cannot directly attribute to push click.</div>
+    <div class="card kpi amb">
+      <div class="kpi-lbl">Q3 · CRM-pool bookings</div>
+      <div class="kpi-val amb">4 orders</div>
+      <div class="kpi-sub">₹41k GMV Aug 1–13. Loose attribution — users in CRM pool who later booked (not necessarily from push click).</div>
     </div>
   </div>
 
-  <!-- Source attribution + system 1 vs 2 -->
-  <div class="col-2">
-    <div class="panel">
-      <div class="panel-title">
-        tea_city_view source — Aug 10 · 357 unique users
-        <span class="panel-stamp">DB confirmed</span>
-      </div>
+  <!-- Source + sys -->
+  <div class="sec">Attribution &amp; system pipeline</div>
+  <div class="g2">
+    <div class="card">
+      <div class="card-hd">tea_city_view source — Aug 10 · 357 users <span class="card-stamp">DB confirmed</span></div>
       <div id="src-bkdn"></div>
-      <div class="note">372 events → 357 users. 15 users in both organic + CRM — reconciles exactly.</div>
+      <div class="note">372 events → 357 users. 15 users in both organic + CRM pools — reconciles exactly.</div>
     </div>
-    <div class="panel">
-      <div class="panel-title">
-        System 1 (DB qualifying) vs System 2 (MoEngage entries)
-        <span class="panel-stamp">Aug 8–13</span>
-      </div>
+    <div class="card">
+      <div class="card-hd">System 1 (DB qualifying) vs System 2 (MoEngage entries) <span class="card-stamp">Aug 8–13</span></div>
       <div id="sys-cmp"></div>
-      <div class="note">S1 = simple.crud.user_location · S2 = MoEngage flow entrants. Consistent 63–66% pipeline loss.</div>
+      <div class="note">S1 = simple.crud.user_location. S2 = MoEngage flow entrants. Consistent 63–66% pipeline loss.</div>
     </div>
   </div>
 
-  <!-- 3-day cohort matrix -->
-  <div class="crm-label">3-day cohort matrix — messages per trip</div>
-  <div class="panel">
-    <div class="panel-title">One user's journey through the flow (max 4 messages, max 1 per day)</div>
+  <!-- Cohort matrix -->
+  <div class="sec">3-day cohort matrix — messages per trip</div>
+  <div class="card">
+    <div class="card-hd">One user's journey through the flow (max 4 messages, max 1 per day) <span class="card-stamp">MoEngage flow v11</span></div>
     <div style="overflow-x:auto">
-    <table class="data-table">
-      <thead><tr>
-        <th style="text-align:left">Message</th>
-        <th>Day 0 (entry)</th><th>Day 1</th><th>Day 1 +30min</th><th>Day 3</th><th>Total</th>
-      </tr></thead>
+    <table class="tbl">
+      <thead><tr><th>Message</th><th>Day 0 (entry)</th><th>Day 1</th><th>Day 1 +30min</th><th>Day 3</th><th>Total</th></tr></thead>
       <tbody>
-        <tr><td>P1 Push — Personalised 80% / Simple 20%</td>
-            <td class="hi-green">✓ T+20min</td><td></td><td></td><td></td><td class="num">1</td></tr>
-        <tr><td>P2 Push — Personalised 80% / Simple 20%</td>
-            <td></td><td class="hi-green">✓ 24h after P1</td><td></td><td></td><td class="num">1</td></tr>
-        <tr><td>WhatsApp — Personalised 50% / Simple 50%</td>
-            <td></td><td></td><td style="color:var(--green)">✓ 30min after P2</td><td></td><td class="num">1</td></tr>
-        <tr><td>Final Push — Personalised 80% / Simple 20%</td>
-            <td></td><td></td><td></td><td style="color:var(--purple)">✓ 48h after WA</td><td class="num">1</td></tr>
+        <tr><td>P1 Push — Personalised 80% / Simple 20%</td><td class="g">✓ T+20min</td><td></td><td></td><td></td><td class="n">1</td></tr>
+        <tr><td>P2 Push — Personalised 80% / Simple 20%</td><td></td><td class="g">✓ 24h after P1</td><td></td><td></td><td class="n">1</td></tr>
+        <tr><td>WhatsApp — Personalised 50% / Simple 50%</td><td></td><td></td><td class="g">✓ 30min after P2</td><td></td><td class="n">1</td></tr>
+        <tr><td>Final Push — Personalised 80% / Simple 20%</td><td></td><td></td><td></td><td style="color:#7c3aed">✓ 48h after WA</td><td class="n">1</td></tr>
       </tbody>
-      <tfoot><tr>
-        <td><strong>Total msgs per user</strong></td>
-        <td class="num">1</td><td class="num">1</td><td class="num">1</td><td class="num">1</td>
-        <td class="num hi-green">4</td>
-      </tfoot>
+      <tfoot><tr><td><b>Total msgs per user</b></td><td class="n">1</td><td class="n">1</td><td class="n">1</td><td class="n">1</td><td class="n g">4</td></tr></tfoot>
     </table>
     </div>
-    <div class="alert alert-accent" style="margin-top:10px">
-      <span class="alert-icon">ℹ</span>
-      <div><strong>Why "6.1 msgs/person" is wrong:</strong> On Aug 10 — P1 sent to today's 1,657 new entrants; P2+WA to Aug 9's 1,966 entrants; FP to Aug 7's 939 entrants. Total 10,071 msgs spans 3 cohort batches simultaneously. Dividing 10,071 by 1,657 gives 6.1 — a meaningless cross-batch ratio. Each user always receives exactly 4 messages over their trip.</div>
+    <div class="alert in" style="margin-top:10px">
+      <span class="alert-ic">ℹ</span>
+      <div><b>Why "6.1 msgs/person" is wrong:</b> On Aug 10 — P1 to today's 1,657 new entrants; P2+WA to Aug 9's 1,966; FP to Aug 7's 939. Total 10,071 msgs spans 3 cohort batches simultaneously. 10,071 ÷ 1,657 = 6.1 — a meaningless cross-batch ratio. Each user always receives exactly 4 messages over their trip.</div>
     </div>
   </div>
 
-  <!-- City × funnel matrix -->
-  <div class="crm-label">City × funnel matrix — Aug 1–13 aggregate</div>
-  <div class="panel">
-    <div class="panel-title">CRM flow entries, clicks, city views and bookings by nearestTeaCity
-      <span class="panel-stamp">MoEngage entrants · DB city views · loose order attribution</span>
-    </div>
+  <!-- City × funnel -->
+  <div class="sec">City × funnel matrix — Aug 1–13 aggregate</div>
+  <div class="card">
+    <div class="card-hd">CRM entries, clicks, city views and bookings by nearestTeaCity <span class="card-stamp">MoEngage entrants · DB city views · loose order attribution</span></div>
     <div style="overflow-x:auto">
-    <table class="data-table" data-collapsible="7" id="cityFunnelTable">
-      <thead><tr>
-        <th style="text-align:left">#</th>
-        <th style="text-align:left">City</th>
-        <th>Entered flow</th><th>Clicked</th><th>City viewed (DB)</th><th>Booked</th><th>Click rate</th>
-      </tr></thead>
+    <table class="tbl" id="cityFunnelTable">
+      <thead><tr><th style="text-align:left">#</th><th style="text-align:left">City</th><th>Entered flow</th><th>Clicked</th><th>City viewed (DB)</th><th>Booked</th><th>Click rate</th></tr></thead>
       <tbody id="cityFunnelBody"></tbody>
-      <tfoot><tr>
-        <td colspan="2"><strong>Total</strong></td>
-        <td id="cf-te" class="num"></td>
-        <td id="cf-tc" class="num"></td>
-        <td id="cf-tv" class="num"></td>
-        <td id="cf-tb" class="num"></td>
-        <td></td>
-      </tfoot>
+      <tfoot><tr><td colspan="2"><b>Total</b></td><td id="cf-te" class="n"></td><td id="cf-tc" class="n"></td><td id="cf-tv" class="n"></td><td id="cf-tb" class="n"></td><td></td></tfoot>
     </table>
     </div>
   </div>
 
   <!-- Slot broadcasts -->
-  <div class="crm-label">Slot broadcasts — 10 scheduled one-time blasts since Jun 2026</div>
-  <div class="alert alert-amber">
-    <span class="alert-icon">⚠</span>
-    <div>TINA blast (Jul 31) reached <strong>2,11,172 people</strong> — only ~3 bookings. Targeted segments (Cohort 1-3) outperform on CTR (0.81–0.91% vs 0.51%). Blasts drive awareness; the location flow earns more per message because it fires at the moment of travel.</div>
+  <div class="sec">Slot broadcasts — 10 scheduled blasts since Jun 2026</div>
+  <div class="alert am">
+    <span class="alert-ic">⚠</span>
+    <div>TINA blast (Jul 31) reached <b>2,11,172 people</b> — only ~3 bookings. Targeted segments (Cohort 1–3) outperform on CTR (0.81–0.91% vs 0.51%). Blasts drive awareness; the location flow earns more per message because it fires at the moment of travel.</div>
   </div>
-  <div class="panel">
+  <div class="card">
     <div style="overflow-x:auto">
-    <table class="data-table" data-collapsible="7" id="slotTable">
-      <thead><tr>
-        <th style="text-align:left">Date</th>
-        <th style="text-align:left">Segment</th>
-        <th>Reach</th><th>Clicks</th><th>CTR</th><th>Bookings</th><th style="text-align:left">Note</th>
-      </tr></thead>
+    <table class="tbl" id="slotTable">
+      <thead><tr><th style="text-align:left">Date</th><th style="text-align:left">Segment</th><th>Reach</th><th>Clicks</th><th>CTR</th><th>Bookings</th><th style="text-align:left">Note</th></tr></thead>
       <tbody id="slotBody"></tbody>
-      <tfoot><tr>
-        <td colspan="2"><strong>Total</strong></td>
-        <td id="sl-r" class="num"></td>
-        <td id="sl-c" class="num"></td>
-        <td id="sl-ctr" class="num"></td>
-        <td id="sl-b" class="num"></td>
-        <td></td>
-      </tfoot>
+      <tfoot><tr><td colspan="2"><b>Total</b></td><td id="sl-r" class="n"></td><td id="sl-c" class="n"></td><td id="sl-ctr" class="n"></td><td id="sl-b" class="n"></td><td></td></tfoot>
     </table>
     </div>
     <div class="note">MoEngage campaign export + DB orders (loose attribution, not same-session).</div>
   </div>
 
   <!-- Daily bar chart -->
-  <div class="crm-label">Daily CRM delivery — Aug 1–13</div>
-  <div class="panel">
-    <div class="panel-title">
-      Total messages sent per day
-      <span class="panel-stamp">⚡ Aug 11 = user spike (5,465 new entrants vs 1,000–2,000 typical)</span>
-    </div>
-    <div style="position:relative;height:150px">
-      <canvas id="crmChart"></canvas>
-    </div>
+  <div class="sec">Daily CRM delivery — Aug 1–13</div>
+  <div class="card">
+    <div class="card-hd">Total messages sent per day <span class="card-stamp">⚡ Aug 11 = user spike (5,465 new entrants vs 1,000–2,000 typical)</span></div>
+    <div style="position:relative;height:148px"><canvas id="crmChart"></canvas></div>
   </div>
 
-  <!-- A/B results -->
-  <div class="crm-label">A/B test — Personalised vs Simple copy (all-time, MoEngage)</div>
-  <div class="kpi-4">
-    <div class="stat-card">
-      <div class="stat-label">P1 Personalised (80%)</div>
-      <div class="stat-val">17,894</div>
-      <div class="stat-sub">247 clicks · 1.4% CTR</div>
+  <!-- A/B -->
+  <div class="sec">A/B test — Personalised vs Simple copy</div>
+  <div class="g4">
+    <div class="card kpi">
+      <div class="kpi-lbl">P1 Personalised (80%)</div>
+      <div class="kpi-val" style="font-size:18px">17,894</div>
+      <div class="kpi-sub">247 clicks · 1.4% CTR</div>
     </div>
-    <div class="stat-card green">
-      <div class="stat-label">P1 Simple (20%) ↑ winner</div>
-      <div class="stat-val green">4,149</div>
-      <div class="stat-sub">81 clicks · <strong>2.0% CTR</strong> · +43%</div>
+    <div class="card kpi grn">
+      <div class="kpi-lbl">P1 Simple (20%) ↑ winner</div>
+      <div class="kpi-val grn" style="font-size:18px">4,149</div>
+      <div class="kpi-sub">81 clicks · <b>2.0% CTR</b> · +43%</div>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">WA Personalised (50%)</div>
-      <div class="stat-val">4,991</div>
-      <div class="stat-sub">70 clicks · 1.4% CTR</div>
+    <div class="card kpi">
+      <div class="kpi-lbl">WA Personalised (50%)</div>
+      <div class="kpi-val" style="font-size:18px">4,991</div>
+      <div class="kpi-sub">70 clicks · 1.4% CTR</div>
     </div>
-    <div class="stat-card green">
-      <div class="stat-label">WA Simple (50%) ↑ winner</div>
-      <div class="stat-val green">5,575</div>
-      <div class="stat-sub">82 clicks · <strong>1.5% CTR</strong> · +7%</div>
+    <div class="card kpi grn">
+      <div class="kpi-lbl">WA Simple (50%) ↑ winner</div>
+      <div class="kpi-val grn" style="font-size:18px">5,575</div>
+      <div class="kpi-sub">82 clicks · <b>1.5% CTR</b> · +7%</div>
     </div>
   </div>
-  <div class="note">Simple wins both channels. P1 gap is largest (+43%). Fix deep link first — until booking CVR > 0%, CTR optimisation is secondary. After fix: reallocate P1 to 50/50 in favour of Simple.</div>
+  <div class="note" style="margin-top:-4px">Simple wins both channels. Fix deep link first — until booking CVR > 0%, CTR optimisation is secondary. After fix: shift P1 to 50/50.</div>
 
-  <!-- What's working -->
-  <div class="crm-label">Summary</div>
-  <div class="col-2">
-    <div class="panel" style="border-color:rgba(34,197,94,.2)">
-      <div class="panel-title" style="color:var(--green)">✓ Working</div>
-      <ul class="check-list">
-        <li><strong>CRM reach is substantial</strong> — 3k–14k msgs/day</li>
+  <!-- Summary -->
+  <div class="sec">Summary</div>
+  <div class="g2">
+    <div class="card" style="border-color:rgba(22,163,74,.25)">
+      <div class="card-hd" style="color:var(--gr)">✓ Working</div>
+      <ul class="chk">
+        <li><strong>CRM reach substantial</strong> — 3k–14k msgs/day</li>
         <li><strong>No cannibalisation</strong> — 95.8% CRM users not organic same day</li>
-        <li><strong>System 1 (DB) correct</strong> — 1,700–2,100 eligible users/day identified</li>
-        <li><strong>A/B running</strong> — Simple beats Personalised (2.0% vs 1.4% P1 CTR)</li>
-        <li><strong>Frequency capping bypassed</strong> — every eligible user receives messages</li>
+        <li><strong>System 1 (DB) correct</strong> — 1,700–2,100 eligible users/day</li>
+        <li><strong>A/B running</strong> — Simple beats Personalised (2.0% vs 1.4%)</li>
+        <li><strong>Frequency capping</strong> — every eligible user gets messages</li>
       </ul>
     </div>
-    <div class="panel" style="border-color:rgba(244,63,94,.2)">
-      <div class="panel-title" style="color:var(--red)">✗ Needs fixing</div>
-      <ul class="check-list">
-        <li>🔴 <strong>Deep link post-mpin [P0]</strong> — 0.01% click→city rate. Persist destination across mpin auth.</li>
-        <li>🔴 <strong>System 2 pipeline [P1]</strong> — 63–66% of DB-qualified users never enter MoEngage.</li>
+    <div class="card" style="border-color:rgba(220,38,38,.25)">
+      <div class="card-hd" style="color:var(--rd)">✗ Needs fixing</div>
+      <ul class="chk">
+        <li>🔴 <strong>Deep link post-mpin [P0]</strong> — 0.01% click→city. Persist destination across mpin auth.</li>
+        <li>🔴 <strong>Pipeline leak [P1]</strong> — 63–66% of DB-qualified users never enter MoEngage.</li>
         <li>🔴 <strong>0% booking CVR</strong> — direct consequence of deep link bug.</li>
-        <li>🟡 <strong>Simple reallocation</strong> — currently 80/20 Personalised; test 50/50.</li>
+        <li>🟡 <strong>A/B reallocation</strong> — currently 80/20 Personalised; test 50/50.</li>
       </ul>
     </div>
   </div>
 
-</div><!-- .crm-page -->
+</div><!-- .pg -->
 </div><!-- #tab-crm -->
 
-<!-- ═══════════════════════ TAB 2 — TEA ═══════════════════════ -->
-<div id="tab-tea" class="tab-panel">
+<!-- ═══ TAB 2 — TEA ═══ -->
+<div id="tab-tea" class="tp">
+<div class="pg" style="padding-top:14px">
+
+  <!-- Source + section nav -->
+  <div style="display:flex;align-items:center;gap:8px;padding:9px 11px;background:var(--s0);border:1px solid var(--b0);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:10px">
+    <span class="badge in">LIVE</span>
+    <span style="font-size:10.5px;color:var(--t1)"><code style="font-size:10px">percept_event_agg</code> + <code style="font-size:10px">rds_main.scapiadb.orders</code></span>
+    <span style="color:var(--t3);font-size:10px">·</span>
+    <span style="font-size:10px;color:var(--t2)">COHORT window: Oct 2025 → Aug 11 2026 (1-day lag) · Orders: to Aug 14</span>
+    <div style="flex:1"></div>
+    <span style="font-size:10px;color:var(--t2)">14 sections · date controls filter all metrics</span>
+  </div>
+
+  <div class="sec-nav">
+    <a href="#kpis">1 · KPIs</a><a href="#buckets">2 · Attribution</a><a href="#tree">3 · Funnel</a>
+    <a href="#trend">4 · Trend</a><a href="#stagetiming">5 · Stage timing</a><a href="#merch">6 · Merch</a>
+    <a href="#unattributed">7 · Unattrib.</a><a href="#campaigns">8 · CRM/Push</a><a href="#intrip">9 · In-trip</a>
+    <a href="#pretrip">10 · Pre-trip</a><a href="#cities">11 · Cities</a><a href="#aovdow">12 · AOV/DoW</a>
+    <a href="#mixpanel">13 · Mixpanel</a><a href="#methodology">14 · Method.</a>
+    <a href="#crm-deepdive" class="crm">15 · CRM deep-dive</a>
+    <a href="#live-tracker" class="live">16 · Live DB tracker</a>
+  </div>
+
   <div style="padding:16px 24px 0;max-width:1280px">
 
   <!-- Source / data window banner -->
@@ -1030,7 +927,13 @@ canvas { max-height:155px; }
 </div>
 
 
+
+
+</div><!-- .pg -->
+</div><!-- #tab-tea -->
+
 <script>
+
 
 
 (function(){
@@ -1548,11 +1451,10 @@ initCollapsibleTables();
 })();
 
 
+
 </script>
-<!-- ══════════════════════════════════════════════
-     SECTION 15 · CRM LOCATION FLOW DEEP-DIVE
-══════════════════════════════════════════════ -->
-<div class="card" id="crm-deepdive">
+
+ss="card" id="crm-deepdive">
   <h2>15 · CRM location flow — deep-dive (Aug 1–13, all confirmed)</h2>
   <div class="note">Flow: <strong>Experimental — Travel_Experiences_Location_based</strong> (ID: 6a295838b4cecb7392eeb7a5, Version 11 ACTIVE, event-triggered on USER_CITY_CHANGE_EVENT). Numbers from MoEngage API + Databricks percept_event_all. For the full interactive CRM dashboard see Tab 1.</div>
 
@@ -1605,7 +1507,8 @@ initCollapsibleTables();
      Queried live: 14 Aug 2026, 14:52 IST
      Sources: rds_main.scapiadb.orders + percept_event_agg
 ══════════════════════════════════════════════════════════ -->
-<div class="card" id="live-tracker">
+<div cla
+ss="card" id="live-tracker">
   <h2>16 · Live TEA funnel tracker — Databricks ground truth</h2>
   <div class="note" style="margin-bottom:10px">
     <code>rds_main.scapiadb.orders</code> (status=COMPLETE, product_category=EXPERIENCE) + <code>simple.crud.percept_event_agg</code> SUM(event_count) · Queried live 14 Aug 2026.
@@ -1688,18 +1591,24 @@ initCollapsibleTables();
 
 
 </div>
-</div><!-- #tab-tea -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
+function doRefresh() {
+  const b = document.getElementById('rfBtn');
+  b.disabled = true; b.textContent = 'Refreshing…';
+  setTimeout(() => { b.disabled = false; b.textContent = 'Refresh'; }, 1200);
+}
+
+
 /* ─────────────────────────────────────────────
    MASTER CONTROLLER
 ───────────────────────────────────────────── */
 function swTab(id, el) {
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.mtab').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-' + id).classList.add('active');
-  el.classList.add('active');
+  document.querySelectorAll('.tp').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('on'));
+  document.getElementById('tab-' + id).classList.add('on');
+  el.classList.add('on');
   if (id === 'tea') { setTimeout(sweepV9Tables, 80); }
 }
 
@@ -1763,7 +1672,7 @@ const SLOTS = [
   {dt:'Jun 8', seg:'Travel actives',          r:41200, cl:212, b:0, note:''},
 ];
 
-let cur = 'aug13'; // Default: Aug 13 = last confirmed MoEngage day
+let cur = 'aug13';
 const N = v => typeof v === 'number' ? v.toLocaleString() : v;
 const P = (a, b) => b > 0 ? (a / b * 100).toFixed(1) + '%' : '—';
 
@@ -2149,8 +2058,8 @@ const S16_FILTERS = {
 let s16cur = "today";
 
 function s16Pick(btn) {
-  document.querySelectorAll('.s16btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
+  document.querySelectorAll('.s16btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
   s16cur = btn.dataset.p;
   s16Render();
 }
@@ -2334,9 +2243,30 @@ function sweepV9Tables() {
 // Sweep on page load
 setTimeout(sweepV9Tables, 500);
 
+
+
+
+function sweepV9Tables() {
+  const tt = document.getElementById('tab-tea');
+  if (!tt) return;
+  tt.querySelectorAll('table').forEach(tbl => {
+    if (tbl.querySelector('tfoot.tbl-exp-ft')) return;
+    const tb = tbl.querySelector('tbody');
+    if (!tb) return;
+    const rows = tb.querySelectorAll('tr');
+    if (rows.length > 7) {
+      tbl.classList.add('tbl-col');
+      tbl.classList.add('col');
+      const cols = tbl.querySelector('thead tr') ? tbl.querySelector('thead tr').cells.length : (rows[0]?rows[0].cells.length:1);
+      const tf = document.createElement('tfoot');
+      tf.className = 'tbl-exp-ft';
+      tf.innerHTML = '<tr><td colspan="'+cols+'"><button class="tbl-exp-btn" onclick="var t=this.closest('table');t.classList.toggle('col');this.textContent=t.classList.contains('col')?'▼ Show all '+rows.length+' rows':'▲ Show less'">▼ Show all '+rows.length+' rows</button></td></tr>';
+      tbl.appendChild(tf);
+    }
+  });
+}
+setTimeout(sweepV9Tables, 500);
+
 </script>
 </body>
 </html>
-</div>
-
-
