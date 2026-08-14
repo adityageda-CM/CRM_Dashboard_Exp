@@ -1700,6 +1700,7 @@ function swTab(id, el) {
   document.querySelectorAll('.mtab').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-' + id).classList.add('active');
   el.classList.add('active');
+  if (id === 'tea') { setTimeout(sweepV9Tables, 80); }
 }
 
 function doRefresh() {
@@ -2330,17 +2331,9 @@ function sweepV9Tables() {
 }
 
 // Hook into the tab switcher so v9 tables get collapsed when TEA tab is opened
-const _origSwTab = swTab;
-function swTab(id, el) {
-  _origSwTab(id, el);
-  if (id === 'tea') {
-    // Give the IIFE a tick to render, then sweep
-    setTimeout(sweepV9Tables, 50);
-  }
-}
-
-// Also sweep on page load (in case TEA is the default tab)
+// Sweep on page load
 setTimeout(sweepV9Tables, 500);
+
 </script>
 </body>
 </html>
