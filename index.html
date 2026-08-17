@@ -175,6 +175,11 @@ canvas{max-height:160px}
 .mpill{font-family:var(--font);font-size:12.5px;font-weight:600;color:var(--t1);background:transparent;border:none;border-radius:7px;padding:6px 16px;cursor:pointer;transition:all .12s}
 .mpill:hover{background:var(--s0);color:var(--t0)}
 .mpill.active{background:var(--ac);color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+
+.mf-div{width:1px;height:20px;background:var(--b0);margin:0 4px}
+.mf-arrow{color:var(--t2);font-size:13px;margin:0 1px}
+.date-inp{font-family:var(--font);font-size:12px;padding:5px 9px;border:1px solid var(--b0);border-radius:7px;background:var(--s0);color:var(--t0);cursor:pointer}
+.date-inp:focus{outline:2px solid var(--ac);outline-offset:-1px}
 </style>
 </head>
 <body>
@@ -249,6 +254,12 @@ canvas{max-height:160px}
         <button class="mpill" data-m="jul" onclick="setMonth('jul',this)">Jul</button>
         <button class="mpill active" data-m="aug" onclick="setMonth('aug',this)">Aug</button>
       </div>
+      <span class="mf-div"></span>
+      <span class="mf-lbl">Custom range</span>
+      <input type="date" id="dpFrom" min="2026-08-08" max="2026-08-16" value="2026-08-08" class="date-inp">
+      <span class="mf-arrow">→</span>
+      <input type="date" id="dpTo" min="2026-08-08" max="2026-08-16" value="2026-08-16" class="date-inp">
+      <button class="mpill" id="applyRange" onclick="applyRange()">Apply</button>
     </div>
   </div>
   <div id="today14-banner" class="alert in" style="display:none"><span class="alert-ic">ℹ</span><div><b>Today Aug 17</b> — MoEngage delivery for today not yet in analytics. Showing Aug 16 (last confirmed). Live DB: 10 bookings · ₹1.06L today.</div></div>
@@ -901,6 +912,30 @@ function crm_pickDate(v) {
 }
 
 function fmtGmv(n){ return n>=100000 ? '₹'+(n/100000).toFixed(2)+'L' : '₹'+(n/1000).toFixed(0)+'k'; }
+function applyRange(){
+  const from = document.getElementById('dpFrom').value;
+  const to   = document.getElementById('dpTo').value;
+  if(!from || !to || from > to){ alert('Pick a valid range (From must be on or before To).'); return; }
+  const fd = parseInt(from.split('-')[2]), td = parseInt(to.split('-')[2]);
+  // gather in-range daily keys that exist in D
+  const keys = [];
+  for(let d=fd; d<=td; d++){ const k='aug'+String(d).padStart(2,'0'); if(D[k]) keys.push(k); }
+  if(!keys.length){ alert('No daily data in that range (daily detail exists for Aug 8–16).'); return; }
+  // aggregate
+  const agg = {l:'Aug '+fd+'–'+td, p1:0,p2:0,wa:0,fp:0, cl:[0,0,0,0], ppl:0, gcg:0, db:null};
+  keys.forEach(k=>{ const d=D[k]; agg.p1+=d.p1; agg.p2+=d.p2; agg.wa+=d.wa; agg.fp+=d.fp;
+    for(let i=0;i<4;i++) agg.cl[i]+=(d.cl[i]||0); agg.ppl+=d.ppl; agg.gcg+=(d.gcg||0);
+    if(d.db){ if(!agg.db) agg.db={app:0,home:0,trav:0,tea:0,city:0,pdp:0}; ['app','home','trav','tea','city','pdp'].forEach(f=>agg.db[f]+=(d.db[f]||0)); }
+  });
+  // clear month active state (we're in custom mode now)
+  document.querySelectorAll('#monthFilter .mpill').forEach(b=>b.classList.remove('active'));
+  // stash and render via a temporary override of D[cur]
+  D.__range = agg; cur = '__range'; renderDay();
+  // also refresh the month-summary title to reflect the range
+  const t=document.getElementById('ms-title'); if(t) t.textContent = agg.l;
+  const note=document.getElementById('detail-scope-note'); if(note) note.style.display='none';
+}
+
 function setMonth(m, btn){
   curMonth = m;
   const mo = MONTHS[m];
@@ -921,6 +956,11 @@ function setMonth(m, btn){
   // Detailed daily sections below are August-only; flag when another month is picked
   const note = document.getElementById('detail-scope-note');
   if(note) note.style.display = (m==='aug') ? 'none' : 'block';
+  // If August, make sure the daily detail shows a real day (not a stale custom range)
+  if(m==='aug' && (cur==='__range' || !D[cur])){ cur='aug16'; renderDay(); }
+  // reset custom range inputs to the month bounds for convenience
+  const bounds = {apr:['2026-04-01','2026-04-30'],may:['2026-05-01','2026-05-31'],jun:['2026-06-01','2026-06-30'],jul:['2026-07-01','2026-07-31'],aug:['2026-08-08','2026-08-16']}[m];
+  if(bounds){ const f=document.getElementById('dpFrom'), t=document.getElementById('dpTo'); if(f) f.value=bounds[0]; if(t) t.value=bounds[1]; }
 }
 
 function renderVignes() {
@@ -959,7 +999,7 @@ function renderDay() {
   document.getElementById('k-seen').textContent = '~' + N(p1s);
   document.getElementById('k-seensub').textContent = 'of ' + N(d.p1) + ' P1 sent (~52%)';
   document.getElementById('k-cv').textContent = d.db ? N(d.db.city) : '—';
-  document.getElementById('dp').value = '2026-08-' + String(parseInt(cur.replace('aug',''))).padStart(2,'0');
+  const dpEl = document.getElementById('dp'); if(dpEl && cur.startsWith('aug')) dpEl.value = '2026-08-' + String(parseInt(cur.replace('aug',''))).padStart(2,'0');
 
   /* channel grid */
   const chans = [
