@@ -213,29 +213,29 @@ canvas{max-height:160px}
     <div class="sb-meta">Databricks · 14 Aug 2026<br>MoEngage flow v11 ACTIVE</div>
   </div>
   <div class="sb-nav" id="sb-tea-nav" style="display:none">
-    <div class="sb-sec">14 sections</div>
+    <div class="sb-sec">22 sections</div>
     <a href="#kpis" class="sb-link"><span class="sb-n">1</span>Headline KPIs</a>
-    <a href="#momfunnel" class="sb-link"><span class="sb-n">1b</span>MoM funnel</a>
-    <a href="#trafficsrc" class="sb-link"><span class="sb-n">1c</span>Traffic sources</a>
-    <a href="#homeicon" class="sb-link"><span class="sb-n">1d</span>Home icon</a>
-    <a href="#buckets" class="sb-link"><span class="sb-n">2</span>Attribution</a>
-    <a href="#tree" class="sb-link"><span class="sb-n">3</span>Funnel tree</a>
-    <a href="#trend" class="sb-link"><span class="sb-n">4</span>Trend</a>
-    <a href="#reengagement" class="sb-link"><span class="sb-n">4b</span>Return behaviour</a>
-    <a href="#stagetiming" class="sb-link"><span class="sb-n">5</span>Stage timing</a>
-    <a href="#stagetime" class="sb-link"><span class="sb-n">5b</span>Time matrix</a>
-    <a href="#merch" class="sb-link"><span class="sb-n">6</span>Merch</a>
-    <a href="#unattributed" class="sb-link"><span class="sb-n">7</span>Unattributed</a>
-    <a href="#campaigns" class="sb-link"><span class="sb-n">8</span>CRM / Push</a>
-    <a href="#intrip" class="sb-link"><span class="sb-n">9</span>In-trip</a>
-    <a href="#pretrip" class="sb-link"><span class="sb-n">10</span>Pre-trip</a>
-    <a href="#cities" class="sb-link"><span class="sb-n">11</span>Cities</a>
-    <a href="#aovdow" class="sb-link"><span class="sb-n">12</span>AOV / DoW</a>
-    <a href="#mixpanel" class="sb-link"><span class="sb-n">13</span>Mixpanel</a>
-    <a href="#methodology" class="sb-link"><span class="sb-n">14</span>Methodology</a>
-    <div class="sb-sec" style="margin-top:6px">Live data</div>
-    <a href="#crm-deepdive" class="sb-link hi"><span class="sb-n">15</span>CRM deep-dive</a>
-    <a href="#live-tracker" class="sb-link live"><span class="sb-n">16</span>Live DB tracker</a>
+    <a href="#momfunnel" class="sb-link"><span class="sb-n">2</span>MoM funnel</a>
+    <a href="#trafficsrc" class="sb-link"><span class="sb-n">3</span>Traffic sources</a>
+    <a href="#homeicon" class="sb-link"><span class="sb-n">4</span>Home icon</a>
+    <a href="#buckets" class="sb-link"><span class="sb-n">5</span>Attribution</a>
+    <a href="#tree" class="sb-link"><span class="sb-n">6</span>Funnel tree</a>
+    <a href="#trend" class="sb-link"><span class="sb-n">7</span>Trend</a>
+    <a href="#reengagement" class="sb-link"><span class="sb-n">8</span>Return behaviour</a>
+    <a href="#stagetiming" class="sb-link"><span class="sb-n">9</span>Stage timing</a>
+    <a href="#stagetime" class="sb-link"><span class="sb-n">10</span>Time matrix</a>
+    <a href="#merch" class="sb-link"><span class="sb-n">11</span>Merch</a>
+    <a href="#unattributed" class="sb-link"><span class="sb-n">12</span>Unattributed</a>
+    <a href="#campaigns" class="sb-link"><span class="sb-n">13</span>CRM / Push</a>
+    <a href="#intrip" class="sb-link"><span class="sb-n">14</span>In-trip</a>
+    <a href="#pretrip" class="sb-link"><span class="sb-n">15</span>Pre-trip</a>
+    <a href="#cities" class="sb-link"><span class="sb-n">16</span>Cities</a>
+    <a href="#aovdow" class="sb-link"><span class="sb-n">17</span>AOV / DoW</a>
+    <a href="#mixpanel" class="sb-link"><span class="sb-n">18</span>Mixpanel</a>
+    <a href="#deeplinksrc" class="sb-link"><span class="sb-n">19</span>Deep-link sources</a>
+    <a href="#crm-deepdive" class="sb-link"><span class="sb-n">20</span>CRM location flow</a>
+    <a href="#methodology" class="sb-link"><span class="sb-n">21</span>Methodology</a>
+    <a href="#live-tracker" class="sb-link live"><span class="sb-n">22</span>Live DB tracker</a>
   </div>
   <div class="sb-foot"><div class="sb-meta"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--gr);margin-right:5px;vertical-align:middle;animation:blink 2s infinite"></span>Live · Aug 17 2026</div></div>
 </div>
@@ -350,21 +350,28 @@ canvas{max-height:160px}
 
 <div class="toc">
   <a href="#controls-anchor">Controls</a>
-  <a href="#kpis">1 · KPIs</a>
-  <a href="#buckets">2 · Entry attribution (MECE)</a>
-  <a href="#tree">3 · Funnel tree</a>
-  <a href="#trend">4 · Trend by period</a>
-  <a href="#stagetiming">5 · Time between stages</a>
-  <a href="#merch">6 · Merchandising placement impact</a>
-  <a href="#unattributed">7 · Unattributed entries</a>
-  <a href="#campaigns">8 · CRM / Push / WhatsApp campaigns</a>
-  <a href="#intrip">9 · In-trip behavior</a>
-  <a href="#pretrip">10 · Pre-trip search intent</a>
-  <a href="#cities">11 · Booking cities</a>
-  <a href="#aovdow">12 · AOV &amp; day-of-week patterns</a>
-  <a href="#mixpanel">13 · Mixpanel cross-check</a>
-  <a href="#methodology">14 · Methodology &amp; data-quality notes</a>
-    <a href="#live-tracker">16 · Live TEA funnel tracker (Databricks, Aug 17)</a>
+  <a href="#kpis">1 · Headline KPIs</a>
+  <a href="#momfunnel">2 · MoM funnel</a>
+  <a href="#trafficsrc">3 · Traffic sources</a>
+  <a href="#homeicon">4 · Home icon</a>
+  <a href="#buckets">5 · Entry attribution (MECE)</a>
+  <a href="#tree">6 · Funnel tree</a>
+  <a href="#trend">7 · Trend by period</a>
+  <a href="#reengagement">8 · Return behaviour</a>
+  <a href="#stagetiming">9 · Time between stages</a>
+  <a href="#stagetime">10 · Time matrix</a>
+  <a href="#merch">11 · Merchandising placement impact</a>
+  <a href="#unattributed">12 · Unattributed entries</a>
+  <a href="#campaigns">13 · CRM / Push / WhatsApp campaigns</a>
+  <a href="#intrip">14 · In-trip behavior</a>
+  <a href="#pretrip">15 · Pre-trip search intent</a>
+  <a href="#cities">16 · Booking cities</a>
+  <a href="#aovdow">17 · AOV &amp; day-of-week patterns</a>
+  <a href="#mixpanel">18 · Mixpanel cross-check</a>
+  <a href="#deeplinksrc">19 · Deep-link sources &amp; CRM routing bug</a>
+  <a href="#crm-deepdive">20 · CRM location flow</a>
+  <a href="#methodology">21 · Methodology &amp; data-quality notes</a>
+  <a href="#live-tracker">22 · Live TEA funnel tracker</a>
 </div>
 
 <a id="controls-anchor"></a>
@@ -418,7 +425,7 @@ canvas{max-height:160px}
 </div>
 
 <div class="card" id="momfunnel">
-  <h2>1b · Month-over-month entry funnel — Apr → Aug <span style="font-size:10px;font-weight:600;color:var(--t3);background:var(--s1);border:1px solid var(--b0);border-radius:10px;padding:2px 8px;vertical-align:middle;white-space:nowrap">📌 Apr–Aug · fixed window</span></h2>
+  <h2>2 · Month-over-month entry funnel — Apr → Aug <span style="font-size:10px;font-weight:600;color:var(--t3);background:var(--s1);border:1px solid var(--b0);border-radius:10px;padding:2px 8px;vertical-align:middle;white-space:nowrap">📌 Apr–Aug · fixed window</span></h2>
   <p class="note" style="margin-bottom:10px">Users bucketed by <b>entry month</b> (first-ever TEA touchpoint). Each stage = distinct users from that entry cohort who reached that step, ever. Orders/GMV = all bookings ever placed by that cohort. Aug is month-to-date (Aug 1–16 funnel, orders to Aug 17).</p>
   <div style="overflow-x:auto">
   <table class="tbl">
@@ -430,7 +437,7 @@ canvas{max-height:160px}
 </div>
 
 <div class="card" id="trafficsrc">
-  <h2>1c · Traffic sources into Experiences — Aug MTD <span style="font-size:10px;font-weight:600;color:var(--t3);background:var(--s1);border:1px solid var(--b0);border-radius:10px;padding:2px 8px;vertical-align:middle;white-space:nowrap">📌 Aug MTD · fixed window</span></h2>
+  <h2>3 · Traffic sources into Experiences — Aug MTD <span style="font-size:10px;font-weight:600;color:var(--t3);background:var(--s1);border:1px solid var(--b0);border-radius:10px;padding:2px 8px;vertical-align:middle;white-space:nowrap">📌 Aug MTD · fixed window</span></h2>
   <p class="note" style="margin-bottom:12px">Unique users whose <code>tea_module_view</code> carried each source (Aug 1–16). Rows marked <span style="color:var(--gr);font-weight:600">RECOVERED</span> had a blank <code>source_attribute_type</code> but a usable <code>source_attribute_page</code> — recovering them cuts the true-untagged gap from ~4,490 users to <b>1,604</b>.</p>
   <div class="src-row"><span class="src-dot" style="background:#4f46e5"></span><span class="src-lbl">Home page icon <span style="color:var(--t3);font-size:10px">(HomePageEntry)</span></span><span class="src-bar-bg"><span class="src-bar-fill" style="width:100%;background:#4f46e5"></span></span><span class="src-n">11,660</span><span class="src-pct">50%</span></div><div class="src-row"><span class="src-dot" style="background:#0ea5e9"></span><span class="src-lbl">Travel page icon <span style="color:var(--t3);font-size:10px">(TravelHomeIcon)</span></span><span class="src-bar-bg"><span class="src-bar-fill" style="width:28%;background:#0ea5e9"></span></span><span class="src-n">3,227</span><span class="src-pct">14%</span></div><div class="src-row"><span class="src-dot" style="background:#059669"></span><span class="src-lbl">Merchandising <span style="color:var(--t3);font-size:10px">(merch)</span></span><span class="src-bar-bg"><span class="src-bar-fill" style="width:23%;background:#059669"></span></span><span class="src-n">2,739</span><span class="src-pct">12%</span></div><div class="src-row"><span class="src-dot" style="background:#8b5cf6"></span><span class="src-lbl">Coins / explore page <span style="color:var(--t3);font-size:10px">(COINS_PAGE)</span> <span style="font-size:9px;color:var(--gr);font-weight:600">RECOVERED</span></span><span class="src-bar-bg"><span class="src-bar-fill" style="width:10%;background:#8b5cf6"></span></span><span class="src-n">1,194</span><span class="src-pct">5%</span></div><div class="src-row"><span class="src-dot" style="background:#f59e0b"></span><span class="src-lbl">Paid advertising <span style="color:var(--t3);font-size:10px">(paid advertising)</span> <span style="font-size:9px;color:var(--gr);font-weight:600">RECOVERED</span></span><span class="src-bar-bg"><span class="src-bar-fill" style="width:10%;background:#f59e0b"></span></span><span class="src-n">1,155</span><span class="src-pct">5%</span></div><div class="src-row"><span class="src-dot" style="background:#6366f1"></span><span class="src-lbl">Home page (untyped) <span style="color:var(--t3);font-size:10px">(SCAPIA_HOME)</span> <span style="font-size:9px;color:var(--gr);font-weight:600">RECOVERED</span></span><span class="src-bar-bg"><span class="src-bar-fill" style="width:5%;background:#6366f1"></span></span><span class="src-n">628</span><span class="src-pct">3%</span></div><div class="src-row"><span class="src-dot" style="background:#d97706"></span><span class="src-lbl">Push <span style="color:var(--t3);font-size:10px">(Push)</span></span><span class="src-bar-bg"><span class="src-bar-fill" style="width:4%;background:#d97706"></span></span><span class="src-n">425</span><span class="src-pct">2%</span></div><div class="src-row"><span class="src-dot" style="background:#dc2626"></span><span class="src-lbl">CRM <span style="color:var(--t3);font-size:10px">(CRM)</span></span><span class="src-bar-bg"><span class="src-bar-fill" style="width:3%;background:#dc2626"></span></span><span class="src-n">325</span><span class="src-pct">1%</span></div><div class="src-row"><span class="src-dot" style="background:#16a34a"></span><span class="src-lbl">WhatsApp <span style="color:var(--t3);font-size:10px">(Whatsapp)</span></span><span class="src-bar-bg"><span class="src-bar-fill" style="width:1%;background:#16a34a"></span></span><span class="src-n">138</span><span class="src-pct">1%</span></div><div class="src-row"><span class="src-dot" style="background:#7c3aed"></span><span class="src-lbl">CRM-PN <span style="color:var(--t3);font-size:10px">(CRM-PN)</span></span><span class="src-bar-bg"><span class="src-bar-fill" style="width:0%;background:#7c3aed"></span></span><span class="src-n">10</span><span class="src-pct">0%</span></div><div class="src-row"><span class="src-dot" style="background:#9ca3af"></span><span class="src-lbl">Truly untagged <span style="color:var(--t3);font-size:10px">((blank))</span></span><span class="src-bar-bg"><span class="src-bar-fill" style="width:14%;background:#9ca3af"></span></span><span class="src-n">1,604</span><span class="src-pct">7%</span></div>
   <div class="flag warn" style="margin-top:12px"><span>⚠</span><div><b>Untagged is largely recoverable.</b> Of the ~4,490 "direct/untagged" module views, only 1,604 (36%) are genuinely untagged. The rest carry a page signal: <b>1,194 from the coins/explore page</b>, <b>1,155 from paid advertising</b> (external acquisition landing in Experiences — previously invisible), and 628 from the home page without a type tag. The <code>deeplink</code>, <code>widget_id</code> and <code>page_id</code> fields are 100% empty on every untagged row, so page is the only recovery lever — a clean fix would be to have the app always stamp <code>source_attribute_type</code>, not just <code>source_attribute_page</code>.</div></div>
@@ -439,7 +446,7 @@ canvas{max-height:160px}
 </div>
 
 <div class="card" id="homeicon">
-  <h2>1d · Home icon performance — Jun 1 → Aug 16 <span style="font-size:10px;font-weight:600;color:var(--t3);background:var(--s1);border:1px solid var(--b0);border-radius:10px;padding:2px 8px;vertical-align:middle;white-space:nowrap">📌 Jun–Aug · fixed window</span></h2>
+  <h2>4 · Home icon performance — Jun 1 → Aug 16 <span style="font-size:10px;font-weight:600;color:var(--t3);background:var(--s1);border:1px solid var(--b0);border-radius:10px;padding:2px 8px;vertical-align:middle;white-space:nowrap">📌 Jun–Aug · fixed window</span></h2>
   <p class="note" style="margin-bottom:12px">The home-page Experiences icon is the single biggest entry point. prior analysis referenced ~450 bookings from icon clickers over a 70-day window — refreshed live below.</p>
   <div class="g4">
     <div class="kstat ind"><div class="k-lbl">Unique icon clickers</div><div class="k-val ind">13,068</div><div class="k-sub">tea_icon_clicked · 77-day window</div></div>
@@ -451,13 +458,13 @@ canvas{max-height:160px}
 </div>
 
 <div class="card" id="buckets">
-  <h2>2 · Entry attribution — MECE (every entrant counted in exactly one row)</h2>
+  <h2>5 · Entry attribution — MECE (every entrant counted in exactly one row)</h2>
   <div id="bucketTableWrap"></div>
   <div class="note">Buckets are assigned from the user's true first TEA touchpoint (any event, not just icon clicks), using that event's own attribution tag. Rows sum to 100% of entrants in the period by construction.</div>
 </div>
 
 <div class="card" id="tree">
-  <h2>3 · Funnel tree (collapsible)</h2>
+  <h2>6 · Funnel tree (collapsible)</h2>
   <div class="btnrow">
     <span class="stat">Click any branch to expand or collapse it. Percentages are of the branch directly above (not of total entrants), except the top level.</span>
   </div>
@@ -465,13 +472,13 @@ canvas{max-height:160px}
 </div>
 
 <div class="card" id="trend">
-  <h2>4 · Trend by period</h2>
+  <h2>7 · Trend by period</h2>
   <div id="trendTableWrap"></div>
   <div class="note">Period length follows the Grain control above. Δ column compares each period to the comparison rule selected above, evaluated for that period specifically.</div>
 </div>
 
 <div class="card" id="reengagement">
-  <h2>4b · Drop-off &amp; return behaviour — do users come back? (30-day window) <span style="font-size:10px;font-weight:600;color:var(--t3);background:var(--s1);border:1px solid var(--b0);border-radius:10px;padding:2px 8px;vertical-align:middle;white-space:nowrap">📌 30-day · fixed window</span></h2>
+  <h2>8 · Drop-off &amp; return behaviour — do users come back? (30-day window) <span style="font-size:10px;font-weight:600;color:var(--t3);background:var(--s1);border:1px solid var(--b0);border-radius:10px;padding:2px 8px;vertical-align:middle;white-space:nowrap">📌 30-day · fixed window</span></h2>
   <p class="note" style="margin-bottom:12px">A user rarely books in one sitting — they browse, close the app, and return later. This tracks the <b>same user across multiple days</b> (Jul 16 – Aug 16) to size how many re-engage after dropping off, and how long the gap is. Measured on the daily-aggregated table, so "return" = active on a later calendar day.</p>
   <div class="g4">
     <div class="kstat ind"><div class="k-lbl">Users active in window</div><div class="k-val ind">45,140</div><div class="k-sub">fired any TEA event</div></div>
@@ -489,12 +496,12 @@ canvas{max-height:160px}
 </div>
 
 <div class="card" id="stagetiming">
-  <h2>5 · Time between funnel stages (average by selected range; median all-time — see note)</h2>
+  <h2>9 · Time between funnel stages (average by selected range; median all-time — see note)</h2>
   <div id="stageTimingWrap"></div>
 </div>
 
 <div class="card" id="stagetime">
-  <h2>5b · Time between funnel stages &amp; time on page — median, live <span style="font-size:10px;font-weight:600;color:var(--t3);background:var(--s1);border:1px solid var(--b0);border-radius:10px;padding:2px 8px;vertical-align:middle;white-space:nowrap">📌 Aug 14–16 · fixed window</span></h2>
+  <h2>10 · Time between funnel stages &amp; time on page — median, live <span style="font-size:10px;font-weight:600;color:var(--t3);background:var(--s1);border:1px solid var(--b0);border-radius:10px;padding:2px 8px;vertical-align:middle;white-space:nowrap">📌 Aug 14–16 · fixed window</span></h2>
   <p class="note" style="margin-bottom:10px">Measured from <b>raw timestamped events</b> (<code>simple.custom.percept_event_all</code>, millisecond precision) over Aug 14–16 — not the daily-aggregated table, so these are real sub-minute durations. Each row is the median gap between a user first reaching one stage and first reaching the next. <b>DWELL</b> = time spent on a page before moving on; <b>TRANSITION</b> = time to move between screens. Gaps over 60 min are excluded as new sessions.</p>
   <div style="overflow-x:auto">
   <table class="tbl">
@@ -512,18 +519,18 @@ canvas{max-height:160px}
 </div>
 
 <div class="card" id="merch">
-  <h2>6 · Merchandising — placement impact (entering → orders → GMV, by hosting screen)</h2>
+  <h2>11 · Merchandising — placement impact (entering → orders → GMV, by hosting screen)</h2>
   <div id="merchTableWrap"></div>
   <div class="note">"Hosted on" is derived directly from a live join against <code>source_attribute_type</code>/<code>source_attribute_page</code> in <code>simple.crud.percept_event_agg</code> (run this session) — where a tag's underlying page varies, the split observed in that join is stated rather than picking one. The raw tag itself is shown as-is (Scapia owns the naming convention for the segment-prefixed codes nu_/ta_/tina_/th_/sp_/fp_/cp_), never guessed at. <b>Orders/GMV here use entry-date attribution</b> — every order ever placed by a user who entered via that placement in the selected window, however long after entry the order actually closed — rather than the booking-date filter used in every other Orders/GMV column in this dashboard (there, "orders in the selected range" means bookings that closed in that range). This is a deliberate, different, and equally valid cut (it answers "how much did this placement's entrants eventually spend," not "how much closed this week"), but the two will not sum to identical totals for the same date range and should not be compared cell-for-cell against Section 2/3/12 — a small persistent gap (roughly ~2% of orders and ~1% of GMV, all-time) is expected and comes from exactly this different date basis, not from an error.</div>
 </div>
 
 <div class="card" id="unattributed">
-  <h2>7 · Unattributed entries — what they actually are</h2>
+  <h2>12 · Unattributed entries — what they actually are</h2>
   <div id="unattributedWrap"></div>
 </div>
 
 <div class="card" id="campaigns">
-  <h2>8 · CRM / Push / WhatsApp — campaign decode</h2>
+  <h2>13 · CRM / Push / WhatsApp — campaign decode</h2>
   <div id="campaignTableWrap"></div>
   <div class="note" id="campaignNote"></div>
 </div>
@@ -532,33 +539,33 @@ canvas{max-height:160px}
   
 
 <div class="card" id="intrip">
-    <h2>9 · In-trip behavior (users abroad who opened TEA)</h2>
+    <h2>14 · In-trip behavior (users abroad who opened TEA)</h2>
     <div id="intripWrap"></div>
   </div>
   <div class="card" id="pretrip">
-    <h2>10 · Pre-trip search intent</h2>
+    <h2>15 · Pre-trip search intent</h2>
     <div id="pretripWrap"></div>
   </div>
 </div>
 
 <div class="card" id="cities">
-  <h2>11 · Booking cities</h2>
+  <h2>16 · Booking cities</h2>
   <div id="citiesWrap"></div>
 </div>
 
 <div class="card" id="aovdow">
-  <h2>12 · Average order value &amp; day-of-week patterns</h2>
+  <h2>17 · Average order value &amp; day-of-week patterns</h2>
   <div id="aovDowWrap"></div>
 </div>
 
 <div class="card" id="mixpanel">
-  <h2>13 · Mixpanel cross-check</h2>
+  <h2>18 · Mixpanel cross-check</h2>
   <div id="mixpanelWrap"></div>
 </div>
 
 <div id="crm-moved">
 <div class="card" id="deeplinksrc">
-  <h2>8b · Deep-link sources &amp; the CRM routing bug — raw-event evidence (P0)</h2>
+  <h2>19 · Deep-link sources &amp; the CRM routing bug — raw-event evidence (P0)</h2>
   <p class="note" style="margin-bottom:12px">You asked whether the untagged deep-link entries are actually your CRM links (push / WhatsApp / email). The raw log confirms it: every <code>dynamic_link_executed</code> event carries a <code>dynamic_link_source</code> and a <code>dynamic_link_type</code> (destination). Aug 16, app-wide.</p>
 
   <h3>Deep links fired by CRM channel (all destinations, Aug 16)</h3>
@@ -577,12 +584,12 @@ canvas{max-height:160px}
 </div>
 
 <div class="card" id="crm-deepdive">
-  <h2>15 · CRM location flow — deep-dive (Aug 1–13, all confirmed)</h2>
+  <h2>20 · CRM location flow — deep-dive (Aug 1–13, all confirmed)</h2>
   <div class="note">Flow: <strong>Experimental — Travel_Experiences_Location_based</strong> (ID: 6a295838b4cecb7392eeb7a5, Version 11 ACTIVE, event-triggered on USER_CITY_CHANGE_EVENT). Numbers from MoEngage API + Databricks percept_event_all. For the full interactive CRM dashboard see Tab 1.</div>
 
   <div class="flag bad" style="margin:12px 0">🔴 <strong>Deep link broken — root cause of 0% CVR:</strong> Push click → app opens → mpin screen → post-auth routes to home, not TEA city page. Only 4 total city views from CRM over 5 days (Aug 8–12). Fix: persist deep link destination across mpin auth.</div>
 
-  <h3>15a · Daily delivery Aug 1–13</h3>
+  <h3>20a · Daily delivery Aug 1–13</h3>
   <div style="overflow-x:auto">
   <table><thead><tr>
     <th>Date</th><th>P1 Push</th><th>P2 Push</th><th>WhatsApp</th><th>Final Push</th><th>Total msgs</th><th>Clicks</th><th>CTR</th>
@@ -605,7 +612,7 @@ canvas{max-height:160px}
   </table>
   </div>
 
-  <h3 style="margin-top:18px">15b · Post-click funnel — DB confirmed Aug 8–12 (source_attribute_type = 'Push')</h3>
+  <h3 style="margin-top:18px">20b · Post-click funnel — DB confirmed Aug 8–12 (source_attribute_type = 'Push')</h3>
   <div style="overflow-x:auto">
   <table><thead><tr>
     <th>Stage</th><th>Aug 8</th><th>Aug 9</th><th>Aug 10</th><th>Aug 11</th><th>Aug 12</th>
@@ -624,7 +631,7 @@ canvas{max-height:160px}
 </div>
 
 <div class="card" id="methodology">
-  <h2>14 · Methodology &amp; data-quality notes — read before presenting</h2>
+  <h2>21 · Methodology &amp; data-quality notes — read before presenting</h2>
   <div class="note">
     <b>Two different dates are used, on purpose, never mixed within one number:</b> Entering/Browse/Product/Checkout columns are keyed by <i>entry date</i> (when the user's TEA journey started). Orders/GMV columns are keyed by <i>booking date</i> (when the order was actually placed), attributed back to that user's original entry bucket. Column headers say which. Booking date is used for orders because a user who enters on a given day usually books days later — showing orders by entry date instead makes any recent single day look almost empty even when actual bookings that day were normal, which is why the previous version undercounted "yesterday's" bookings.<br><br>
     <b>Source tables:</b> <code>simple.crud.percept_event_agg</code> (daily aggregated TEA events, source of the entry/funnel cube), <code>rds_main.scapiadb.orders</code> (bookings, filtered to <code>product_category='EXPERIENCE'</code> and <code>status='COMPLETE'</code>), <code>simple.crud.crm_campaign_content</code> joined on <code>campaign_name = source_attribute_id</code> (the join key that actually works — <code>campaign_id</code> in that table is an internal MoEngage object id, not the human-readable name used elsewhere), <code>simple.crud.user_location</code> and <code>simple.crud.event_location_agg</code> (in-trip/pre-trip signals, both fresh through 2026-08-11; the sibling table <code>percept_location_agg</code> is stale since 2026-07-09 and was not used).<br><br>
@@ -654,7 +661,7 @@ canvas{max-height:160px}
 ══════════════════════════════════════════════════════════ -->
 <div cla
 ss="card" id="live-tracker">
-  <h2>16 · Live TEA funnel tracker — Databricks ground truth</h2>
+  <h2>22 · Live TEA funnel tracker — Databricks ground truth</h2>
   
 <div class="note" style="margin-bottom:10px">
     <code>rds_main.scapiadb.orders</code> (status=COMPLETE, product_category=EXPERIENCE) + <code>simple.crud.percept_event_agg</code> SUM(event_count) · Queried live 14 Aug 2026.
