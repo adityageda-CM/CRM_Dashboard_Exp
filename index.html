@@ -257,16 +257,16 @@ canvas{max-height:160px}
     <div class="card"><div class="card-hd">Channel breakdown — <span id="chan-lbl">Aug 13</span><span class="card-stamp">MoEngage v11</span></div><div id="chan-grid"></div></div>
     <div class="card"><div class="card-hd">Post-click DB funnel<span class="card-stamp" id="fnl-stamp">percept_event_all · push attr</span></div><div id="crm-fnl"></div><div id="fnl-day-lbl" class="note" style="margin-top:8px"></div></div>
   </div>
-  <div class="sec">Vignes's 3 questions — Aug 10 DB confirmed</div>
+  <div class="sec">Vignes's 3 questions — <span id="vignes-day">Aug 16</span> (DB confirmed, recomputes with date)</div>
   <div class="g3">
-    <div class="kstat grn"><div class="k-lbl">Q1 · CRM × organic overlap</div><div class="k-val grn">4.2%</div><div class="k-sub">15 of 357 organic users also got a push. 95.8% of CRM reach is incremental.</div></div>
-    <div class="kstat red"><div class="k-lbl">Q2 · System 2 pipeline leak</div><div class="k-val red">63–66%</div><div class="k-sub">DB qualifies ~2,100 users/day. MoEngage receives 570–782. ~1,100 lost in ETL.</div></div>
-    <div class="kstat amb"><div class="k-lbl">Q3 · CRM-pool orders</div><div class="k-val amb" style="font-size:22px">4 orders</div><div class="k-sub">₹41k GMV Aug 1–13. Loose attribution.</div></div>
+    <div class="kstat grn"><div class="k-lbl">Q1 · CRM × organic overlap</div><div class="k-val grn" id="v-q1">—</div><div class="k-sub" id="v-q1-sub">—</div></div>
+    <div class="kstat red"><div class="k-lbl">Q2 · System 2 pipeline leak</div><div class="k-val red" id="v-q2">—</div><div class="k-sub" id="v-q2-sub">—</div></div>
+    <div class="kstat amb"><div class="k-lbl">Q3 · CRM-pool orders</div><div class="k-val amb" id="v-q3" style="font-size:22px">—</div><div class="k-sub" id="v-q3-sub">—</div></div>
   </div>
   <div class="sec">Attribution &amp; pipeline</div>
   <div class="g2">
     <div class="card"><div class="card-hd">tea_city_view source — Aug 10 · 357 users<span class="card-stamp">DB confirmed</span></div><div id="src-bkdn"></div><div class="note">372 events → 357 users. 15 in both organic + CRM — reconciles exactly.</div></div>
-    <div class="card"><div class="card-hd">System 1 (DB) vs System 2 (MoEngage)<span class="card-stamp">Aug 8–13</span></div><div id="sys-cmp"></div><div class="note">Consistent 63–66% pipeline loss every day.</div></div>
+    <div class="card"><div class="card-hd">System 1 (DB) vs System 2 (MoEngage)<span class="card-stamp">recomputes with date · S2 confirmed, S1 pending for Aug 14+</span></div><div id="sys-cmp"></div><div class="note">Consistent 63–66% pipeline loss every day.</div></div>
   </div>
   <div class="sec">Cohort matrix — why "6.1 msgs/person" is wrong</div>
   <div class="card">
@@ -282,7 +282,7 @@ canvas{max-height:160px}
     <div class="alert in" style="margin-top:12px"><span class="alert-ic">ℹ</span><div>On Aug 10: P1 to today's 1,657 new entrants; P2+WA to Aug 9's 1,966; FP to Aug 7's 939. Total 10,071 across 3 overlapping cohorts. 10,071 ÷ 1,657 = 6.1 — a meaningless cross-batch ratio. Each user always gets exactly 4 messages.</div></div>
   </div>
   <div class="sec">City × funnel — Aug 1–13</div>
-  <div class="card"><div class="card-hd">Flow entries, clicks, city views, bookings by nearestTeaCity<span class="card-stamp">MoEngage + DB · loose attribution</span></div><div style="overflow-x:auto"><table class="tbl"><thead><tr><th style="text-align:left">#</th><th style="text-align:left">City</th><th>Entries</th><th>Clicks</th><th>City view</th><th>Bookings</th><th>CTR</th></tr></thead><tbody id="cityFunnelBody"></tbody><tfoot><tr><td colspan="2"><b>Total</b></td><td id="cf-te" class="n"></td><td id="cf-tc" class="n"></td><td id="cf-tv" class="n"></td><td id="cf-tb" class="n"></td><td></td></tr></tfoot></table></div></div>
+  <div class="card"><div class="card-hd">Flow entries, clicks, city views, bookings by nearestTeaCity<span class="card-stamp">MoEngage + DB · rolling aggregate (per-day CRM funnel ≈0 due to deep-link P0)</span></div><div style="overflow-x:auto"><table class="tbl"><thead><tr><th style="text-align:left">#</th><th style="text-align:left">City</th><th>Entries</th><th>Clicks</th><th>City view</th><th>Bookings</th><th>CTR</th></tr></thead><tbody id="cityFunnelBody"></tbody><tfoot><tr><td colspan="2"><b>Total</b></td><td id="cf-te" class="n"></td><td id="cf-tc" class="n"></td><td id="cf-tv" class="n"></td><td id="cf-tb" class="n"></td><td></td></tr></tfoot></table></div></div>
   <div class="sec">Slot broadcasts — 10 blasts since Jun 2026</div>
   <div class="alert am"><span class="alert-ic">⚠</span><div>TINA blast (Jul 31) reached <b>2,11,172 people</b> → ~3 bookings. Targeted segments (Cohort 1–3) hit 0.81–0.91% CTR vs 0.51% for blasts.</div></div>
   <div class="card"><div style="overflow-x:auto"><table class="tbl"><thead><tr><th style="text-align:left">Date</th><th style="text-align:left">Segment</th><th>Reach</th><th>Clicks</th><th>CTR</th><th>Bookings</th><th style="text-align:left">Note</th></tr></thead><tbody id="slotBody"></tbody><tfoot><tr><td colspan="2"><b>Total</b></td><td id="sl-r" class="n"></td><td id="sl-c" class="n"></td><td id="sl-ctr" class="n"></td><td id="sl-b" class="n"></td><td></td></tr></tfoot></table></div><div class="note">MoEngage export + DB orders. Loose attribution.</div></div>
@@ -778,6 +778,22 @@ const D = {
   aug16:{l:'Aug 16',p1:2387, p2:0, wa:1225, fp:0, cl:[25,0,25,0], ppl:875, gcg:19,db:null},
 };
 const CHART_DATA = {aug01:7763,aug02:8328,aug03:8154,aug04:7976,aug05:7826,aug06:8237,aug07:9008,aug08:10275,aug09:10582,aug10:10071,aug11:14431,aug12:3321,aug13:1743,aug14:2628,aug15:3223,aug16:3612};
+const VIGNES = {
+  aug10:{q1u:357,q1c:1,q1p:0.3,q3o:11,q3g:111517},
+  aug11:{q1u:363,q1c:1,q1p:0.3,q3o:12,q3g:104859},
+  aug12:{q1u:380,q1c:0,q1p:0.0,q3o:16,q3g:237251},
+  aug13:{q1u:352,q1c:2,q1p:0.6,q3o:13,q3g:315544},
+  aug14:{q1u:343,q1c:1,q1p:0.3,q3o:14,q3g:293342},
+  aug15:{q1u:390,q1c:12,q1p:3.1,q3o:19,q3g:371378},
+  aug16:{q1u:428,q1c:3,q1p:0.7,q3o:19,q3g:246355}
+};
+const SRC_BY_DAY = {
+  aug14:[{l:'Merchandising',n:140,c:'#1f6feb'},{l:'Home page entry',n:122,c:'#0b7a39'},{l:'Direct / untagged',n:58,c:'#6e7781'},{l:'Travel page icon',n:43,c:'#8250df'},{l:'CRM / Push',n:1,c:'#cf222e'}],
+  aug15:[{l:'Merchandising',n:145,c:'#1f6feb'},{l:'Home page entry',n:139,c:'#0b7a39'},{l:'Direct / untagged',n:64,c:'#6e7781'},{l:'Travel page icon',n:48,c:'#8250df'},{l:'CRM / Push',n:12,c:'#cf222e'}],
+  aug16:[{l:'Merchandising',n:172,c:'#1f6feb'},{l:'Home page entry',n:155,c:'#0b7a39'},{l:'Direct / untagged',n:73,c:'#6e7781'},{l:'Travel page icon',n:47,c:'#8250df'},{l:'CRM / Push',n:3,c:'#cf222e'}]
+};
+
+
 const SYS = [
   {d:'Aug 10',s1:1866,s2:682},{d:'Aug 11',s1:1716,s2:582},
   {d:'Aug 12',s1:1717,s2:588},{d:'Aug 13',s1:1686,s2:570},
@@ -839,11 +855,31 @@ function setDay(k) {
   buildDayBar();
   document.getElementById('today14-banner').style.display = 'none';
   renderDay();
+  renderVignes();
+  buildSrc();
 }
 function crm_pickDate(v) {
   const k = 'aug' + String(parseInt(v.split('-')[2])).padStart(2,'0');
   if (D[k]) setDay(k);
   else { document.getElementById('today14-banner').style.display = 'block'; setDay('aug16'); }
+}
+
+function renderVignes() {
+  const v = VIGNES[cur];
+  const d = D[cur];
+  if (!v) return;
+  const lbl = d ? d.l : cur;
+  const dayEl = document.getElementById('vignes-day'); if (dayEl) dayEl.textContent = lbl;
+  // Q1
+  document.getElementById('v-q1').textContent = v.q1p + '%';
+  document.getElementById('v-q1-sub').textContent = v.q1c + ' of ' + v.q1u + ' organic city-view users also had a CRM touch. ' + (100 - v.q1p).toFixed(1) + '% of CRM reach is incremental.';
+  // Q2 — S2 entrants confirmed; S1 pending exact definition
+  const s2 = d ? d.ppl : null;
+  document.getElementById('v-q2').textContent = s2 ? (s2.toLocaleString() + ' in') : '—';
+  document.getElementById('v-q2-sub').textContent = s2 ? (s2.toLocaleString() + ' users entered the MoEngage flow (System 2). System-1 qualifying count pending exact definition — leak % will compute once set.') : 'MoEngage entrants for this day not available.';
+  // Q3
+  document.getElementById('v-q3').textContent = v.q3o + ' orders';
+  document.getElementById('v-q3-sub').textContent = '₹' + (v.q3g/1000).toFixed(0) + 'k GMV booked ' + lbl + ' by users in the CRM pool. Loose attribution.';
 }
 
 function renderDay() {
@@ -913,8 +949,11 @@ function renderDay() {
 
 /* source breakdown */
 function buildSrc() {
-  const tot = 357;
-  document.getElementById('src-bkdn').innerHTML = SRCS.map(s =>
+  const rows = (typeof SRC_BY_DAY !== 'undefined' && SRC_BY_DAY[cur]) ? SRC_BY_DAY[cur] : SRCS;
+  const tot = rows.reduce((a,b)=>a+b.n,0) || 1;
+  const hd = document.querySelector('#src-bkdn').closest('.card').querySelector('.card-hd');
+  if (hd && D[cur]) hd.childNodes[0].nodeValue = 'tea_city_view source — ' + D[cur].l + ' · ' + tot + ' users';
+  document.getElementById('src-bkdn').innerHTML = rows.map(s =>
     `<div class="src-row">
       <span class="src-dot" style="background:${s.c}"></span>
       <span class="src-lbl">${s.l}${s.bad ? '<span class="badge badge-r">broken</span>' : ''}</span>
@@ -1067,7 +1106,7 @@ function initCollapsibleTables() {
 }
 
 /* ── INIT ── */
-buildDayBar(); renderDay(); buildSrc(); buildSys(); buildCities(); buildSlot(); buildChart();
+buildDayBar(); renderDay(); renderVignes(); buildSrc(); buildSys(); buildCities(); buildSlot(); buildChart();
 /* ═══════════════════════════════════════════════════════════════
    SECTION 16 — LIVE TEA FUNNEL TRACKER
    Data from Experiences (TEA) Funnel dashboard
