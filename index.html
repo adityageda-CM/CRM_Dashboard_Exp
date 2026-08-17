@@ -231,10 +231,10 @@ canvas{max-height:160px}
 <div id="tab-crm" class="tp on">
 <div class="pg">
   <div class="pg-hd">
-    <div><div class="pg-title" id="crm-slbl">CRM delivery — Aug 13</div><div class="pg-sub">MoEngage flow v11 ACTIVE &nbsp;·&nbsp; Location-based trigger</div></div>
+    <div><div class="pg-title" id="crm-slbl">CRM delivery — Aug 16</div><div class="pg-sub">MoEngage flow v11 ACTIVE &nbsp;·&nbsp; Location-based trigger</div></div>
     <div class="ctrl-bar">
       <div class="day-picker" id="dayBar"></div>
-      <input type="date" id="dp" min="2026-08-01" max="2026-08-14" value="2026-08-13" onchange="crm_pickDate(this.value)" style="font-size:12px;padding:6px 10px;border:1px solid var(--b0);border-radius:var(--r2);background:var(--s0);color:var(--t0);cursor:pointer;font-family:var(--font)">
+      <input type="date" id="dp" min="2026-08-01" max="2026-08-16" value="2026-08-16" onchange="crm_pickDate(this.value)" style="font-size:12px;padding:6px 10px;border:1px solid var(--b0);border-radius:var(--r2);background:var(--s0);color:var(--t0);cursor:pointer;font-family:var(--font)">
     </div>
   </div>
   <div id="today14-banner" class="alert in" style="display:none"><span class="alert-ic">ℹ</span><div><b>Today Aug 17</b> — MoEngage delivery for today not yet in analytics. Showing Aug 16 (last confirmed). Live DB: 10 bookings · ₹1.06L today.</div></div>
@@ -773,12 +773,16 @@ const D = {
   aug11:{l:'Aug 11',p1:5465,p2:4237,wa:3117,fp:1612,cl:[58,39,35,13],ppl:5465,gcg:15,db:{app:1379,home:997,trav:264,tea:22,city:1,pdp:1},spike:true},
   aug12:{l:'Aug 12',p1:1310,p2:931, wa:716, fp:364, cl:[17,10,8,2],  ppl:1310,gcg:17,db:{app:1302,home:1033,trav:227,tea:25,city:0,pdp:1}},
   aug13:{l:'Aug 13',p1:717, p2:520, wa:362, fp:144, cl:[9,7,5,1],    ppl:454, gcg:12,db:null},
+  aug14:{l:'Aug 14',p1:1837, p2:0, wa:791, fp:0, cl:[25,0,14,0], ppl:690, gcg:17,db:null},
+  aug15:{l:'Aug 15',p1:2277, p2:0, wa:946, fp:0, cl:[23,0,14,0], ppl:801, gcg:24,db:null},
+  aug16:{l:'Aug 16',p1:2387, p2:0, wa:1225, fp:0, cl:[25,0,25,0], ppl:875, gcg:19,db:null},
 };
-const CHART_DATA = {aug01:7763,aug02:8328,aug03:8154,aug04:7976,aug05:7826,aug06:8237,aug07:9008,aug08:10275,aug09:10582,aug10:10071,aug11:14431,aug12:3321};
+const CHART_DATA = {aug01:7763,aug02:8328,aug03:8154,aug04:7976,aug05:7826,aug06:8237,aug07:9008,aug08:10275,aug09:10582,aug10:10071,aug11:14431,aug12:3321,aug13:1743,aug14:2628,aug15:3223,aug16:3612};
 const SYS = [
-  {d:'Aug 8',s1:2103,s2:782},{d:'Aug 9',s1:2143,s2:773},
   {d:'Aug 10',s1:1866,s2:682},{d:'Aug 11',s1:1716,s2:582},
   {d:'Aug 12',s1:1717,s2:588},{d:'Aug 13',s1:1686,s2:570},
+  {d:'Aug 14',s1:null,s2:690},{d:'Aug 15',s1:null,s2:801},
+  {d:'Aug 16',s1:null,s2:875},
 ];
 const SRCS = [
   {l:'Home page entry',  n:135,c:'#0b7a39'},{l:'Merchandising',    n:133,c:'#0b7a39'},
@@ -811,14 +815,14 @@ const SLOTS = [
   {dt:'Jun 8', seg:'Travel actives',          r:41200, cl:212, b:0, note:''},
 ];
 
-let cur = 'aug13';
+let cur = 'aug16';
 const N = v => typeof v === 'number' ? v.toLocaleString() : v;
 const P = (a, b) => b > 0 ? (a / b * 100).toFixed(1) + '%' : '—';
 
 /* day bar */
 function buildDayBar() {
   const el = document.getElementById('dayBar');
-  const keys = ['aug08','aug09','aug10','aug11','aug12','aug13'];
+  const keys = ['aug10','aug11','aug12','aug13','aug14','aug15','aug16'];
   el.innerHTML = keys.map(k =>
     `<button class="dpill${k === cur ? ' active' : ''}" onclick="setDay('${k}')">${D[k].l}${D[k].spike ? ' ⚡' : ''}</button>`
   ).join('') + `<button class="dpill today-pill" onclick="goToday()">Today (Aug 17)</button>`;
@@ -839,7 +843,7 @@ function setDay(k) {
 function crm_pickDate(v) {
   const k = 'aug' + String(parseInt(v.split('-')[2])).padStart(2,'0');
   if (D[k]) setDay(k);
-  else { document.getElementById('today14-banner').style.display = 'block'; setDay('aug13'); }
+  else { document.getElementById('today14-banner').style.display = 'block'; setDay('aug16'); }
 }
 
 function renderDay() {
@@ -924,15 +928,15 @@ function buildSrc() {
 /* system 1 vs 2 */
 function buildSys() {
   document.getElementById('sys-cmp').innerHTML = SYS.map(r => {
-    const leak = Math.round((1 - r.s2/r.s1)*100);
+    const leak = r.s1 ? Math.round((1 - r.s2/r.s1)*100) : null;
     return `<div class="sys-row">
       <span style="width:40px;color:var(--muted)">${r.d}</span>
       <span style="flex:1">
-        <strong>${N(r.s1)}</strong>
+        <strong>${r.s1==null?'—':N(r.s1)}</strong>
         <span style="color:var(--muted);margin:0 5px">→</span>
         <strong style="color:var(--amber)">${N(r.s2)}</strong>
       </span>
-      <span class="badge badge-r">−${leak}%</span>
+      <span class="badge badge-r">${leak==null?'S1 pending':'−'+leak+'%'}</span>
     </div>`;
   }).join('');
 }
