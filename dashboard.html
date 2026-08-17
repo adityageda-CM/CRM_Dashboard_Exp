@@ -186,9 +186,9 @@ canvas{max-height:160px}
 <div class="topbar">
   <span class="tb-dot"></span><b>LIVE</b>
   <span class="tb-sep">|</span>
-  <span>Today Aug 17 &nbsp;·&nbsp; <b>15 bookings · ₹1.42L GMV</b> <small>(day running)</small></span>
+  <span>Today Aug 17 &nbsp;·&nbsp; <b>18 bookings · ₹3.22L GMV</b> <small>(day running)</small></span>
   <span class="tb-sep">|</span>
-  <span>Aug MTD <b>535 bookings · ₹72.60L GMV</b></span>
+  <span>Aug MTD <b>538 bookings · ₹74.41L GMV</b></span>
   <span class="tb-gap"></span>
   <button class="tb-refresh" id="rfBtn" onclick="doRefresh()">↻ Refresh</button>
 </div>
@@ -274,7 +274,7 @@ canvas{max-height:160px}
     </div>
   </div>
 
-  <div id="detail-scope-note" class="alert in" style="display:none"><span class="alert-ic">ℹ</span><div>The detailed daily breakdown below (channel funnel, System&nbsp;1&nbsp;vs&nbsp;2, Vignes questions, city funnel) is <b>August-only</b>. The month KPIs above are live for the selected month; per-day detail for earlier months isn't wired.</div></div>
+  <div id="detail-scope-note" class="alert in" style="display:none"><span class="alert-ic">ℹ</span><div>The detailed daily breakdown below (channel funnel, System&nbsp;1&nbsp;vs&nbsp;2, key CRM questions, city funnel) is <b>August-only</b>. The month KPIs above are live for the selected month; per-day detail for earlier months isn't wired.</div></div>
   <div class="alert rd"><span class="alert-ic">⚠</span><div><b>P0 — deep link broken.</b> Push click → mpin → home screen (not TEA city page). 1,467 opens on Aug 8 → 1 city view. CVR = 0%. Fix: persist destination across mpin auth.</div></div>
   <div class="sec">Flow performance</div>
   <div class="g4">
@@ -294,7 +294,7 @@ canvas{max-height:160px}
     <div class="card"><div class="card-hd">Channel breakdown — <span id="chan-lbl">Aug 13</span><span class="card-stamp">MoEngage v11</span></div><div id="chan-grid"></div></div>
     <div class="card"><div class="card-hd">Post-click DB funnel<span class="card-stamp" id="fnl-stamp">percept_event_all · push attr</span></div><div id="crm-fnl"></div><div id="fnl-day-lbl" class="note" style="margin-top:8px"></div></div>
   </div>
-  <div class="sec">Vignes's 3 questions — <span id="vignes-day">Aug 16</span> (DB confirmed, recomputes with date)</div>
+  <div class="sec">Three key CRM questions — <span id="vignes-day">Aug 16</span> (DB confirmed, recomputes with date)</div>
   <div class="g3">
     <div class="kstat grn"><div class="k-lbl">Q1 · CRM × organic overlap</div><div class="k-val grn" id="v-q1">—</div><div class="k-sub" id="v-q1-sub">—</div></div>
     <div class="kstat red"><div class="k-lbl">Q2 · System 2 pipeline leak</div><div class="k-val red" id="v-q2">—</div><div class="k-sub" id="v-q2-sub">—</div></div>
@@ -568,7 +568,7 @@ canvas{max-height:160px}
 </div>
 
 <div class="card" id="stagetime">
-  <h2>5b · Time between funnel stages &amp; time on page — median, live (Vignes ask) <span style="font-size:10px;font-weight:600;color:var(--t3);background:var(--s1);border:1px solid var(--b0);border-radius:10px;padding:2px 8px;vertical-align:middle;white-space:nowrap">📌 Aug 14–16 · fixed window</span></h2>
+  <h2>5b · Time between funnel stages &amp; time on page — median, live <span style="font-size:10px;font-weight:600;color:var(--t3);background:var(--s1);border:1px solid var(--b0);border-radius:10px;padding:2px 8px;vertical-align:middle;white-space:nowrap">📌 Aug 14–16 · fixed window</span></h2>
   <p class="note" style="margin-bottom:10px">Measured from <b>raw timestamped events</b> (<code>simple.custom.percept_event_all</code>, millisecond precision) over Aug 14–16 — not the daily-aggregated table, so these are real sub-minute durations. Each row is the median gap between a user first reaching one stage and first reaching the next. <b>DWELL</b> = time spent on a page before moving on; <b>TRANSITION</b> = time to move between screens. Gaps over 60 min are excluded as new sessions.</p>
   <div style="overflow-x:auto">
   <table class="tbl">
@@ -1705,7 +1705,7 @@ const PRESETS = [
 ];
 const sel = document.getElementById('rangePreset');
 PRESETS.forEach(p=>{ const o=document.createElement('option'); o.value=p.id; o.textContent=p.label; sel.appendChild(o); });
-sel.value='today'; // Default: yesterday = Aug 10 (last complete data day)
+sel.value='thismonth'; // Default: full current month so all sections populate
 
 function presetToRange(id){
   const max = parseISO(MAX_DATE);
