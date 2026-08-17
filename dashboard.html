@@ -180,6 +180,24 @@ canvas{max-height:160px}
 .mf-arrow{color:var(--t2);font-size:13px;margin:0 1px}
 .date-inp{font-family:var(--font);font-size:12px;padding:5px 9px;border:1px solid var(--b0);border-radius:7px;background:var(--s0);color:var(--t0);cursor:pointer}
 .date-inp:focus{outline:2px solid var(--ac);outline-offset:-1px}
+
+/* wide dynamic tables scroll instead of spilling outside the card */
+[id$="Wrap"]{overflow-x:auto;max-width:100%}
+[id$="Wrap"] table{min-width:100%}
+/* funnel tree — proper visual with proportional bars */
+#tab-tea #tree details{border-left:2px solid var(--b0);margin:3px 0 3px 4px;padding-left:12px}
+#tab-tea #tree>details{border-left:none;padding-left:0;margin:0}
+#tab-tea #tree summary{cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 10px;border-radius:var(--r2);font-weight:600;font-size:13px;color:var(--t0);list-style:none;background:var(--s1)}
+#tab-tea #tree>details>summary{background:var(--ac-bg);color:var(--ac)}
+#tab-tea #tree summary::-webkit-details-marker{display:none}
+#tab-tea #tree summary::marker{content:''}
+#tab-tea #tree summary:hover{filter:brightness(.98)}
+#tab-tea #tree .tree-body{padding:3px 0 6px 8px}
+#tab-tea #tree .tree-row{display:flex;align-items:center;gap:12px;padding:6px 10px;font-size:12.5px;color:var(--t1)}
+#tab-tea #tree .tree-row>span:first-child{flex:0 0 auto;min-width:230px}
+#tab-tea #tree .tree-barwrap{flex:1;height:8px;background:var(--s2);border-radius:4px;overflow:hidden;min-width:60px;max-width:320px}
+#tab-tea #tree .tree-bar{display:block;height:100%;background:var(--ac);border-radius:4px}
+#tab-tea #tree .tree-row b{white-space:nowrap;margin-left:auto}
 </style>
 </head>
 <body>
@@ -865,16 +883,16 @@ const CITIES = [
   {city:'Other cities',e:4215,cl:327,v:128,b:10},
 ];
 const SLOTS = [
-  {dt:'Jul 31',seg:'TINA — all users',       r:211172,cl:1077,b:3, note:'Largest blast'},
-  {dt:'Jul 30',seg:'TINA Prop (smaller)',     r:43200, cl:393, b:1, note:'Higher CTR'},
-  {dt:'Jul 25',seg:'Targeted C2',             r:28400, cl:246, b:2, note:'Best converter'},
-  {dt:'Jul 25',seg:'Targeted C1',             r:31200, cl:261, b:1, note:'Strong CTR'},
-  {dt:'Jun 27',seg:'Cohort 3',                r:18700, cl:142, b:2, note:'2 bookings'},
-  {dt:'Jun 27',seg:'Cohort 2',                r:22100, cl:179, b:1, note:'Solid engagement'},
-  {dt:'Jun 27',seg:'Cohort 1',                r:25800, cl:208, b:1, note:'Solid engagement'},
-  {dt:'Jun 21',seg:'Segment C1',              r:19400, cl:145, b:0, note:'No conversions'},
-  {dt:'Jun 14',seg:'60-day actives',          r:34500, cl:218, b:1, note:'Low CTR'},
-  {dt:'Jun 8', seg:'Travel actives',          r:41200, cl:212, b:0, note:'Weak — broad blast'},
+  {dt:'Jul 31',seg:'TINA — all users',       r:211172,cl:1077,b:3, note:'Widest reach, lowest CTR'},
+  {dt:'Jul 30',seg:'TINA Prop (smaller)',     r:43200, cl:393, b:1, note:'Best CTR — tighter targeting'},
+  {dt:'Jul 25',seg:'Targeted C2',             r:28400, cl:246, b:2, note:'Best converter — 2 bookings'},
+  {dt:'Jul 25',seg:'Targeted C1',             r:31200, cl:261, b:1, note:'Strong CTR, targeted'},
+  {dt:'Jun 27',seg:'Cohort 3',                r:18700, cl:142, b:2, note:'2 bookings from cohort'},
+  {dt:'Jun 27',seg:'Cohort 2',                r:22100, cl:179, b:1, note:'Solid cohort engagement'},
+  {dt:'Jun 27',seg:'Cohort 1',                r:25800, cl:208, b:1, note:'Solid cohort engagement'},
+  {dt:'Jun 21',seg:'Segment C1',              r:19400, cl:145, b:0, note:'Clicks but no bookings'},
+  {dt:'Jun 14',seg:'60-day actives',          r:34500, cl:218, b:1, note:'Low CTR — broad actives'},
+  {dt:'Jun 8', seg:'Travel actives',          r:41200, cl:212, b:0, note:'Weak — untargeted blast'},
 ];
 
 /* ── Message delivery per date (from confirmed daily delivery, Aug 1–13) ── */
@@ -1916,8 +1934,9 @@ function renderBuckets(cur){
 
 // ---------- Funnel tree ----------
 function treeRow(label, n, base){
+  const p = base>0 ? Math.min(1, n/base) : 0;
   const pct = base>0 ? fmtPct(n/base) : '—';
-  return `<div class="tree-row"><span>${label}</span><b class="num">${fmtN(n)} <span class="stat">(${pct})</span></b></div>`;
+  return `<div class="tree-row"><span>${label}</span><span class="tree-barwrap"><span class="tree-bar" style="width:${(p*100).toFixed(1)}%"></span></span><b class="num">${fmtN(n)} <span class="stat">(${pct})</span></b></div>`;
 }
 function renderTree(cur){
   const buckets = Object.keys(cur.byBucket).sort((a,b)=>cur.byBucket[b].entering-cur.byBucket[a].entering);
