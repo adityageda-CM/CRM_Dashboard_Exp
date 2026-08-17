@@ -167,6 +167,14 @@ canvas{max-height:160px}
 #crm-moved .tbl-exp-ft td{text-align:center!important;padding:7px!important;background:var(--s1);border-top:1px solid var(--b0)!important}
 #crm-moved .tbl-col.col tbody tr:nth-child(n+8){display:none}
 #crm-moved .tbl-exp-btn{color:var(--ac);background:none;border:none;font-family:var(--font);font-size:11px;font-weight:500;cursor:pointer;padding:2px 8px}
+
+/* Sticky CRM month-filter header */
+.pg-hd{position:sticky;top:0;z-index:100;background:var(--bg);padding:14px 0 12px;margin-bottom:14px;border-bottom:1px solid var(--b0)}
+.mf-lbl{font-size:11px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.04em;margin-right:2px}
+.month-filter{display:inline-flex;gap:4px;background:var(--s1);padding:3px;border-radius:9px;border:1px solid var(--b0)}
+.mpill{font-family:var(--font);font-size:12.5px;font-weight:600;color:var(--t1);background:transparent;border:none;border-radius:7px;padding:6px 16px;cursor:pointer;transition:all .12s}
+.mpill:hover{background:var(--s0);color:var(--t0)}
+.mpill.active{background:var(--ac);color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.15)}
 </style>
 </head>
 <body>
@@ -233,11 +241,29 @@ canvas{max-height:160px}
   <div class="pg-hd">
     <div><div class="pg-title" id="crm-slbl">CRM delivery — Aug 16</div><div class="pg-sub">MoEngage flow v11 ACTIVE &nbsp;·&nbsp; Location-based trigger</div></div>
     <div class="ctrl-bar">
-      <div class="day-picker" id="dayBar"></div>
-      <input type="date" id="dp" min="2026-08-01" max="2026-08-16" value="2026-08-16" onchange="crm_pickDate(this.value)" style="font-size:12px;padding:6px 10px;border:1px solid var(--b0);border-radius:var(--r2);background:var(--s0);color:var(--t0);cursor:pointer;font-family:var(--font)">
+      <span class="mf-lbl">Month</span>
+      <div class="month-filter" id="monthFilter">
+        <button class="mpill" data-m="apr" onclick="setMonth('apr',this)">Apr</button>
+        <button class="mpill" data-m="may" onclick="setMonth('may',this)">May</button>
+        <button class="mpill" data-m="jun" onclick="setMonth('jun',this)">Jun</button>
+        <button class="mpill" data-m="jul" onclick="setMonth('jul',this)">Jul</button>
+        <button class="mpill active" data-m="aug" onclick="setMonth('aug',this)">Aug</button>
+      </div>
     </div>
   </div>
   <div id="today14-banner" class="alert in" style="display:none"><span class="alert-ic">ℹ</span><div><b>Today Aug 17</b> — MoEngage delivery for today not yet in analytics. Showing Aug 16 (last confirmed). Live DB: 10 bookings · ₹1.06L today.</div></div>
+
+  <div class="card" id="month-summary" style="margin-bottom:16px">
+    <div class="card-hd"><span id="ms-title">August (MTD)</span> · CRM performance<span class="card-stamp">DB + MoEngage · live</span></div>
+    <div class="g4" style="margin-top:12px">
+      <div class="kstat"><div class="k-lbl">CRM-pool orders</div><div class="k-val" id="ms-orders">—</div><div class="k-sub">EXPERIENCE bookings by CRM-reached users</div></div>
+      <div class="kstat grn"><div class="k-lbl">CRM-pool GMV</div><div class="k-val grn" id="ms-gmv">—</div><div class="k-sub">Loose attribution</div></div>
+      <div class="kstat"><div class="k-lbl">CRM reach</div><div class="k-val" id="ms-reach">—</div><div class="k-sub">Unique users touched by push/WA</div></div>
+      <div class="kstat red"><div class="k-lbl">CRM city-views</div><div class="k-val red" id="ms-cv">—</div><div class="k-sub" id="ms-cv-sub">vs organic — deep-link P0</div></div>
+    </div>
+  </div>
+
+  <div id="detail-scope-note" class="alert in" style="display:none"><span class="alert-ic">ℹ</span><div>The detailed daily breakdown below (channel funnel, System&nbsp;1&nbsp;vs&nbsp;2, Vignes questions, city funnel) is <b>August-only</b>. The month KPIs above are live for the selected month; per-day detail for earlier months isn't wired.</div></div>
   <div class="alert rd"><span class="alert-ic">⚠</span><div><b>P0 — deep link broken.</b> Push click → mpin → home screen (not TEA city page). 1,467 opens on Aug 8 → 1 city view. CVR = 0%. Fix: persist destination across mpin auth.</div></div>
   <div class="sec">Flow performance</div>
   <div class="g4">
@@ -792,6 +818,15 @@ const SRC_BY_DAY = {
   aug15:[{l:'Merchandising',n:145,c:'#1f6feb'},{l:'Home page entry',n:139,c:'#0b7a39'},{l:'Direct / untagged',n:64,c:'#6e7781'},{l:'Travel page icon',n:48,c:'#8250df'},{l:'CRM / Push',n:12,c:'#cf222e'}],
   aug16:[{l:'Merchandising',n:172,c:'#1f6feb'},{l:'Home page entry',n:155,c:'#0b7a39'},{l:'Direct / untagged',n:73,c:'#6e7781'},{l:'Travel page icon',n:47,c:'#8250df'},{l:'CRM / Push',n:3,c:'#cf222e'}]
 };
+const MONTHS = {
+  apr:{l:'April',orders:46,gmv:432144,reach:33999,push:1185410,wa:0,crm_cv:2,all_cv:8191},
+  may:{l:'May',orders:70,gmv:1382859,reach:36751,push:1342971,wa:20768,crm_cv:42,all_cv:8303},
+  jun:{l:'June',orders:69,gmv:1212709,reach:48601,push:1590702,wa:80034,crm_cv:13,all_cv:7044},
+  jul:{l:'July',orders:241,gmv:2632428,reach:90653,push:3267345,wa:312432,crm_cv:32,all_cv:7342},
+  aug:{l:'August (MTD)',orders:260,gmv:3686722,reach:85818,push:2427461,wa:458493,crm_cv:28,all_cv:4951},
+};
+let curMonth = 'aug';
+
 
 
 const SYS = [
@@ -838,6 +873,7 @@ const P = (a, b) => b > 0 ? (a / b * 100).toFixed(1) + '%' : '—';
 /* day bar */
 function buildDayBar() {
   const el = document.getElementById('dayBar');
+  if (!el) return;
   const keys = ['aug10','aug11','aug12','aug13','aug14','aug15','aug16'];
   el.innerHTML = keys.map(k =>
     `<button class="dpill${k === cur ? ' active' : ''}" onclick="setDay('${k}')">${D[k].l}${D[k].spike ? ' ⚡' : ''}</button>`
@@ -862,6 +898,29 @@ function crm_pickDate(v) {
   const k = 'aug' + String(parseInt(v.split('-')[2])).padStart(2,'0');
   if (D[k]) setDay(k);
   else { document.getElementById('today14-banner').style.display = 'block'; setDay('aug16'); }
+}
+
+function fmtGmv(n){ return n>=100000 ? '₹'+(n/100000).toFixed(2)+'L' : '₹'+(n/1000).toFixed(0)+'k'; }
+function setMonth(m, btn){
+  curMonth = m;
+  const mo = MONTHS[m];
+  if(!mo) return;
+  // toggle active pill
+  document.querySelectorAll('#monthFilter .mpill').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  else { const b=document.querySelector('#monthFilter .mpill[data-m="'+m+'"]'); if(b) b.classList.add('active'); }
+  // title
+  document.getElementById('crm-slbl').textContent = 'CRM delivery — ' + mo.l;
+  document.getElementById('ms-title').textContent = mo.l;
+  // KPIs
+  document.getElementById('ms-orders').textContent = mo.orders;
+  document.getElementById('ms-gmv').textContent = fmtGmv(mo.gmv);
+  document.getElementById('ms-reach').textContent = mo.reach.toLocaleString();
+  document.getElementById('ms-cv').textContent = mo.crm_cv;
+  document.getElementById('ms-cv-sub').textContent = mo.crm_cv + ' CRM-attributed vs ' + mo.all_cv.toLocaleString() + ' total city-views — deep-link P0';
+  // Detailed daily sections below are August-only; flag when another month is picked
+  const note = document.getElementById('detail-scope-note');
+  if(note) note.style.display = (m==='aug') ? 'none' : 'block';
 }
 
 function renderVignes() {
@@ -1106,7 +1165,7 @@ function initCollapsibleTables() {
 }
 
 /* ── INIT ── */
-buildDayBar(); renderDay(); renderVignes(); buildSrc(); buildSys(); buildCities(); buildSlot(); buildChart();
+buildDayBar(); renderDay(); renderVignes(); buildSrc(); buildSys(); buildCities(); buildSlot(); buildChart(); setMonth('aug');
 /* ═══════════════════════════════════════════════════════════════
    SECTION 16 — LIVE TEA FUNNEL TRACKER
    Data from Experiences (TEA) Funnel dashboard
