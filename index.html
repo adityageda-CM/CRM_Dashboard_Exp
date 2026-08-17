@@ -577,7 +577,7 @@ canvas{max-height:160px}
 </div>
 
 <div class="card" id="mixpanel">
-  <h2>18 · Mixpanel cross-check</h2>
+  <h2>18 · Mixpanel cross-check (funnel events — not orders)</h2>
   <div id="mixpanelWrap"></div>
 </div>
 
@@ -2017,7 +2017,7 @@ function renderTrend(){
 function renderMerch(){
   const rows = MERCH_BY_DATE.rows.filter(r=> r.d>=state.start && r.d<=state.end);
   const wrap = document.getElementById('merchTableWrap');
-  if(!rows.length){ wrap.innerHTML = '<div class="note">No merchandising-attributed entries in this period.</div>'; return; }
+  if(!rows.length){ wrap.innerHTML = '<div class="note">No merchandising data for this range. Source data is current through <b>Aug 11</b> — dates after that show empty until the data is refreshed.</div>'; return; }
   const byTag = {};
   let totEnter=0;
   for(const r of rows){
@@ -2083,7 +2083,7 @@ function renderCampaigns(){
   let html = '<table><thead><tr><th>Channel</th><th>Campaign name</th><th>Title / copy</th><th>Entrants (entry date)</th></tr></thead><tbody>';
   list.forEach(r=>{ html += `<tr><td>${r.channel}</td><td>${r.campaign_id}</td><td>${r.title||'<span class="stat">not decoded</span>'}</td><td class="num">${fmtN(r.entrants)}</td></tr>`; });
   html += '</tbody></table>';
-  document.getElementById('campaignTableWrap').innerHTML = list.length ? html : '<div class="note">No campaign-attributed entrants in this period.</div>';
+  document.getElementById('campaignTableWrap').innerHTML = list.length ? html : '<div class="note">No campaign data for this range. Source data is current through <b>Aug 11</b> — dates after that show empty until the data is refreshed.</div>';
   {const _w=document.getElementById('campaignTableWrap');if(_w){const _t=_w.querySelector('table');if(_t)makeCollapsible(_t);}}
   document.getElementById('campaignNote').textContent = 'Decoded via simple.crud.crm_campaign_content joined on campaign_name = source_attribute_id; titles shown where a match exists, raw campaign name otherwise. No send/delivery log table exists in this warehouse, so this is entrants-who-engaged only, not a send→deliver→click funnel — a genuine data gap, not an oversight. Entrants are keyed by entry date and recompute with the controls above.';
 }
@@ -2125,6 +2125,8 @@ function renderPretrip(){
 function renderStageTiming(){
   const stAll = SUPP.stageTiming || {};
   const rows = STAGE_TIMING_BY_DATE.filter(r=> r.d>=state.start && r.d<=state.end);
+  const stW=document.getElementById('stageTimingWrap');
+  if(rows.length===0 && stW){ stW.innerHTML='<div class="note">No stage-timing data for this range. Source data is current through <b>Aug 11</b> — dates after that show empty until the data is refreshed.</div>'; return; }
   const isFullRange = (state.start===MIN_DATE && state.end===MAX_DATE);
   const sums = {n_e2b:0,sum_e2b:0,n_b2p:0,sum_b2p:0,n_p2c:0,sum_p2c:0,n_c2s:0,sum_c2s:0,n_s2k:0,sum_s2k:0,n_e2k:0,sum_e2k:0};
   rows.forEach(r=>{ for(const k in sums) sums[k]+=r[k]||0; });
@@ -2201,9 +2203,9 @@ function renderMixpanel(){
   html += '</tbody></table>';
   html += `<div class="note">Spot-checked for ${mc.date||'2026-08-11'} (single day, simple total unique users per event — not cohort-restricted): Databricks and Mixpanel agree within a few percent on every stage, confirming the raw event data itself was always correct — the discrepancy the previous build showed was purely a cohort-scoping bug, now fixed above.</div>
     <div class="note" style="margin-top:10px;background:#fff8e8;border:1px solid #e8c96b;border-radius:6px;padding:8px 10px">
-      <b>⚠ Aug 12 discrepancy — 34 (Mixpanel) vs 21 (this dashboard):</b><br>
-      This is not a data error — the two numbers measure different things.<br>
-      <b>This dashboard (21):</b> <code>rds_main.scapiadb.orders</code> filtered to <code>status='COMPLETE'</code> and <code>product_category='EXPERIENCE'</code>, booking_date = Aug 12 IST. These are confirmed, settled Experience orders only.<br>
+      <b>What this table checks (and what it does NOT):</b><br>
+      This is a cross-check of <b>funnel events</b> — module views, PDP views, checkout starts/submits — between Databricks and Mixpanel. It confirms the raw event tracking agrees across both tools. <b>It is not a count of orders or bookers.</b><br>
+      Orders vs bookers is a separate metric (shown in the headline): e.g. Aug 12 = <b>39 completed orders</b> placed by <b>32 bookers</b>; Aug 16 = <b>54 orders</b> by <b>37 bookers</b>. One person can place several orders, so orders &gt; bookers.<br>
       <b>Mixpanel (34):</b> Most likely counting <code>tea_checkout_detail_submit</code> events (order submission), which fires the moment a user submits checkout — <em>before</em> payment clears and before the order reaches COMPLETE status. The gap (13 orders) represents payment failures, supplier rejections, and orders still in PENDING/PROCESSING state as of the query time.<br>
       The Aug 11 cross-check above confirms DB and Mixpanel agree on <code>tea_checkout_detail_submit</code> (26 vs 26). If Mixpanel's Aug 12 "orders" metric is using a different event (e.g. <code>tea_order_updates</code>), it would fire multiple times per order on any status change, inflating the count further. Verify in Mixpanel which event they are actually tracking as "bookings".
     </div>`;
