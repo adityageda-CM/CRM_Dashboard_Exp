@@ -333,73 +333,7 @@ canvas{max-height:160px}
 </div></div>
 
 
-<div class="crm-label" style="margin-top:24px">CRM deep-dive sections (moved from TEA funnel tab)</div>
-<div id="crm-moved">
-<div class="card" id="deeplinksrc">
-  <h2>8b · Deep-link sources &amp; the CRM routing bug — raw-event evidence (P0)</h2>
-  <p class="note" style="margin-bottom:12px">You asked whether the untagged deep-link entries are actually your CRM links (push / WhatsApp / email). The raw log confirms it: every <code>dynamic_link_executed</code> event carries a <code>dynamic_link_source</code> and a <code>dynamic_link_type</code> (destination). Aug 16, app-wide.</p>
 
-  <h3>Deep links fired by CRM channel (all destinations, Aug 16)</h3>
-  <div class="src-row"><span class="src-dot" style="background:#dc2626"></span><span class="src-lbl">CRM</span><span class="src-bar-bg"><span class="src-bar-fill" style="width:100%;background:#dc2626"></span></span><span class="src-n">2,131</span></div><div class="src-row"><span class="src-dot" style="background:#d97706"></span><span class="src-lbl">Push</span><span class="src-bar-bg"><span class="src-bar-fill" style="width:47%;background:#d97706"></span></span><span class="src-n">991</span></div><div class="src-row"><span class="src-dot" style="background:#16a34a"></span><span class="src-lbl">WhatsApp</span><span class="src-bar-bg"><span class="src-bar-fill" style="width:44%;background:#16a34a"></span></span><span class="src-n">936</span></div><div class="src-row"><span class="src-dot" style="background:#7c3aed"></span><span class="src-lbl">CRM-PN</span><span class="src-bar-bg"><span class="src-bar-fill" style="width:27%;background:#7c3aed"></span></span><span class="src-n">585</span></div><div class="src-row"><span class="src-dot" style="background:#0ea5e9"></span><span class="src-lbl">PN</span><span class="src-bar-bg"><span class="src-bar-fill" style="width:6%;background:#0ea5e9"></span></span><span class="src-n">134</span></div><div class="src-row"><span class="src-dot" style="background:#6366f1"></span><span class="src-lbl">Email</span><span class="src-bar-bg"><span class="src-bar-fill" style="width:4%;background:#6366f1"></span></span><span class="src-n">87</span></div>
-  <p class="note">Yes — CRM, Push, WhatsApp, CRM-PN, PN and Email all generate deep links (~4,864 users/day combined). So the untagged Experiences entries genuinely include your CRM traffic; the app just fails to stamp the source onto the TEA event.</p>
-
-  <div class="flag bad" style="margin-top:14px"><span>🔴</span><div><b>The routing bug, proven end-to-end.</b> Of the CRM/Push/WhatsApp deep links that are <i>meant</i> for Experiences on Aug 16, the destination is almost always <code>tea/home</code> — the generic landing — not a city or product page: <b>Push→tea/home (33), CRM→tea/home (10), WhatsApp→tea/home (6)</b>, vs merch links which correctly target <code>tea/city-srp</code>, <code>tea/collection</code> and <code>tea/product-details</code>. Then tracing those 54 CRM-TEA deep-link users forward: <b>29 (54%) hit the mpin blocker screen</b>, only 28 reached the TEA module, <b>just 4 reached a city page and 12 a PDP</b>. This is the P0 you flagged from MoEngage, now confirmed in the app's own event stream: CRM links point at the Experiences <i>home</i> (not the specific city/product), and the mpin auth interrupts half of them before they arrive.</div></div>
-
-  <div class="g4" style="margin-top:12px">
-    <div class="kstat red"><div class="k-lbl">CRM→TEA deep-link users</div><div class="k-val red">54</div><div class="k-sub">Push + CRM + WhatsApp, Aug 16</div></div>
-    <div class="kstat red"><div class="k-lbl">Hit mpin blocker</div><div class="k-val red">29</div><div class="k-sub">54% interrupted by auth</div></div>
-    <div class="kstat amb"><div class="k-lbl">Reached a city page</div><div class="k-val amb">4</div><div class="k-sub">7% — links target tea/home not city</div></div>
-    <div class="kstat"><div class="k-lbl">Reached a PDP</div><div class="k-val">12</div><div class="k-sub">22% — most never see a product</div></div>
-  </div>
-  <p class="note"><b>Two fixes, both on the app/CRM side:</b> (1) construct CRM deep links to target the specific <code>tea/city-srp</code> or <code>tea/product-details</code> for the campaign, not the generic <code>tea/home</code>; (2) persist the deep-link destination across the mpin screen so auth doesn't drop the user on the home page. Until both ship, CRM's Experiences pushes can't convert regardless of copy or targeting.</p>
-</div>
-
-<div class="card" id="crm-deepdive">
-  <h2>15 · CRM location flow — deep-dive (Aug 1–13, all confirmed)</h2>
-  <div class="note">Flow: <strong>Experimental — Travel_Experiences_Location_based</strong> (ID: 6a295838b4cecb7392eeb7a5, Version 11 ACTIVE, event-triggered on USER_CITY_CHANGE_EVENT). Numbers from MoEngage API + Databricks percept_event_all. For the full interactive CRM dashboard see Tab 1.</div>
-
-  <div class="flag bad" style="margin:12px 0">🔴 <strong>Deep link broken — root cause of 0% CVR:</strong> Push click → app opens → mpin screen → post-auth routes to home, not TEA city page. Only 4 total city views from CRM over 5 days (Aug 8–12). Fix: persist deep link destination across mpin auth.</div>
-
-  <h3>15a · Daily delivery Aug 1–13</h3>
-  <div style="overflow-x:auto">
-  <table><thead><tr>
-    <th>Date</th><th>P1 Push</th><th>P2 Push</th><th>WhatsApp</th><th>Final Push</th><th>Total msgs</th><th>Clicks</th><th>CTR</th>
-  </tr></thead><tbody>
-    <tr><td>Aug 1</td><td class="num">3,485</td><td class="num">2,384</td><td class="num">1,490</td><td class="num">404</td><td class="num">7,763</td><td class="num">112</td><td class="num">1.4%</td></tr>
-    <tr><td>Aug 2</td><td class="num">3,454</td><td class="num">2,500</td><td class="num">1,709</td><td class="num">665</td><td class="num">8,328</td><td class="num">125</td><td class="num">1.5%</td></tr>
-    <tr><td>Aug 3</td><td class="num">3,245</td><td class="num">2,390</td><td class="num">1,708</td><td class="num">811</td><td class="num">8,154</td><td class="num">125</td><td class="num">1.5%</td></tr>
-    <tr><td>Aug 4</td><td class="num">3,151</td><td class="num">2,324</td><td class="num">1,672</td><td class="num">829</td><td class="num">7,976</td><td class="num">128</td><td class="num">1.6%</td></tr>
-    <tr><td>Aug 5</td><td class="num">3,138</td><td class="num">2,291</td><td class="num">1,616</td><td class="num">781</td><td class="num">7,826</td><td class="num">145</td><td class="num">1.9%</td></tr>
-    <tr><td>Aug 6</td><td class="num">3,326</td><td class="num">2,448</td><td class="num">1,670</td><td class="num">793</td><td class="num">8,237</td><td class="num">115</td><td class="num">1.4%</td></tr>
-    <tr><td>Aug 7</td><td class="num">3,748</td><td class="num">2,660</td><td class="num">1,791</td><td class="num">809</td><td class="num">9,008</td><td class="num">93</td><td class="num">1.0%</td></tr>
-    <tr><td>Aug 8</td><td class="num">4,277</td><td class="num">3,114</td><td class="num">2,048</td><td class="num">836</td><td class="num">10,275</td><td class="num">116</td><td class="num">1.1%</td></tr>
-    <tr><td>Aug 9</td><td class="num">4,255</td><td class="num">3,299</td><td class="num">2,165</td><td class="num">863</td><td class="num">10,582</td><td class="num">127</td><td class="num">1.2%</td></tr>
-    <tr><td>Aug 10</td><td class="num">3,841</td><td class="num">3,069</td><td class="num">2,138</td><td class="num">1,023</td><td class="num">10,071</td><td class="num">102</td><td class="num">1.0%</td></tr>
-    <tr><td>Aug 11 ⚡</td><td class="num">5,465</td><td class="num">4,237</td><td class="num">3,117</td><td class="num">1,612</td><td class="num" style="color:var(--warn);font-weight:700">14,431</td><td class="num">145</td><td class="num">1.0%</td></tr>
-    <tr><td>Aug 12</td><td class="num">1,310</td><td class="num">931</td><td class="num">716</td><td class="num">364</td><td class="num">3,321</td><td class="num">37</td><td class="num">1.1%</td></tr>
-    <tr><td>Aug 13</td><td class="num">717</td><td class="num">520</td><td class="num">362</td><td class="num">144</td><td class="num">1,743</td><td class="num">22</td><td class="num">1.3%</td></tr>
-  </tbody>
-  <tfoot><tr><td><strong>Total Aug 1–13</strong></td><td class="num"><strong>43,412</strong></td><td class="num"><strong>31,167</strong></td><td class="num"><strong>22,202</strong></td><td class="num"><strong>9,131</strong></td><td class="num"><strong>105,912</strong></td><td class="num"><strong>1,392</strong></td><td class="num"><strong>1.3%</strong></td></tr></tfoot>
-  </table>
-  </div>
-
-  <h3 style="margin-top:18px">15b · Post-click funnel — DB confirmed Aug 8–12 (source_attribute_type = 'Push')</h3>
-  <div style="overflow-x:auto">
-  <table><thead><tr>
-    <th>Stage</th><th>Aug 8</th><th>Aug 9</th><th>Aug 10</th><th>Aug 11</th><th>Aug 12</th>
-  </tr></thead><tbody>
-    <tr><td>App opens</td><td class="num">1,467</td><td class="num">1,399</td><td class="num">1,371</td><td class="num">1,379</td><td class="num">1,302</td></tr>
-    <tr><td>→ Home screen <span class="stat">(deep link fails here)</span></td><td class="num" style="color:var(--warn)">1,121</td><td class="num" style="color:var(--warn)">1,060</td><td class="num" style="color:var(--warn)">1,083</td><td class="num" style="color:var(--warn)">997</td><td class="num" style="color:var(--warn)">1,033</td></tr>
-    <tr><td>→ Travel tab</td><td class="num">276</td><td class="num">235</td><td class="num">241</td><td class="num">264</td><td class="num">227</td></tr>
-    <tr><td>→ TEA module</td><td class="num">27</td><td class="num">26</td><td class="num">31</td><td class="num">22</td><td class="num">25</td></tr>
-    <tr><td>→ tea_city_view <span class="stat">(conversion goal)</span></td><td class="num" style="color:var(--bad);font-weight:700">1</td><td class="num" style="color:var(--bad);font-weight:700">1</td><td class="num" style="color:var(--bad);font-weight:700">1</td><td class="num" style="color:var(--bad);font-weight:700">1</td><td class="num" style="color:var(--bad);font-weight:700">0</td></tr>
-    <tr><td>→ tea_pdp_view</td><td class="num">1</td><td class="num">1</td><td class="num">2</td><td class="num">1</td><td class="num">1</td></tr>
-    <tr><td>→ EXPERIENCE booking</td><td class="num" style="color:var(--bad)">0</td><td class="num" style="color:var(--bad)">0</td><td class="num" style="color:var(--bad)">0</td><td class="num" style="color:var(--bad)">0</td><td class="num" style="color:var(--bad)">0</td></tr>
-  </tbody></table>
-  </div>
-  <div class="note">⚡ = new-user spike day. Aug 1–7 and Aug 13: MoEngage delivery only, DB funnel not pulled. Aug 17 data not yet queried (partial day).</div>
-</div>
-</div>
 
 <div id="tab-tea" class="tp">
 <div class="pg" style="padding-top:20px">
@@ -620,6 +554,73 @@ canvas{max-height:160px}
 <div class="card" id="mixpanel">
   <h2>13 · Mixpanel cross-check</h2>
   <div id="mixpanelWrap"></div>
+</div>
+
+<div id="crm-moved">
+<div class="card" id="deeplinksrc">
+  <h2>8b · Deep-link sources &amp; the CRM routing bug — raw-event evidence (P0)</h2>
+  <p class="note" style="margin-bottom:12px">You asked whether the untagged deep-link entries are actually your CRM links (push / WhatsApp / email). The raw log confirms it: every <code>dynamic_link_executed</code> event carries a <code>dynamic_link_source</code> and a <code>dynamic_link_type</code> (destination). Aug 16, app-wide.</p>
+
+  <h3>Deep links fired by CRM channel (all destinations, Aug 16)</h3>
+  <div class="src-row"><span class="src-dot" style="background:#dc2626"></span><span class="src-lbl">CRM</span><span class="src-bar-bg"><span class="src-bar-fill" style="width:100%;background:#dc2626"></span></span><span class="src-n">2,131</span></div><div class="src-row"><span class="src-dot" style="background:#d97706"></span><span class="src-lbl">Push</span><span class="src-bar-bg"><span class="src-bar-fill" style="width:47%;background:#d97706"></span></span><span class="src-n">991</span></div><div class="src-row"><span class="src-dot" style="background:#16a34a"></span><span class="src-lbl">WhatsApp</span><span class="src-bar-bg"><span class="src-bar-fill" style="width:44%;background:#16a34a"></span></span><span class="src-n">936</span></div><div class="src-row"><span class="src-dot" style="background:#7c3aed"></span><span class="src-lbl">CRM-PN</span><span class="src-bar-bg"><span class="src-bar-fill" style="width:27%;background:#7c3aed"></span></span><span class="src-n">585</span></div><div class="src-row"><span class="src-dot" style="background:#0ea5e9"></span><span class="src-lbl">PN</span><span class="src-bar-bg"><span class="src-bar-fill" style="width:6%;background:#0ea5e9"></span></span><span class="src-n">134</span></div><div class="src-row"><span class="src-dot" style="background:#6366f1"></span><span class="src-lbl">Email</span><span class="src-bar-bg"><span class="src-bar-fill" style="width:4%;background:#6366f1"></span></span><span class="src-n">87</span></div>
+  <p class="note">Yes — CRM, Push, WhatsApp, CRM-PN, PN and Email all generate deep links (~4,864 users/day combined). So the untagged Experiences entries genuinely include your CRM traffic; the app just fails to stamp the source onto the TEA event.</p>
+
+  <div class="flag bad" style="margin-top:14px"><span>🔴</span><div><b>The routing bug, proven end-to-end.</b> Of the CRM/Push/WhatsApp deep links that are <i>meant</i> for Experiences on Aug 16, the destination is almost always <code>tea/home</code> — the generic landing — not a city or product page: <b>Push→tea/home (33), CRM→tea/home (10), WhatsApp→tea/home (6)</b>, vs merch links which correctly target <code>tea/city-srp</code>, <code>tea/collection</code> and <code>tea/product-details</code>. Then tracing those 54 CRM-TEA deep-link users forward: <b>29 (54%) hit the mpin blocker screen</b>, only 28 reached the TEA module, <b>just 4 reached a city page and 12 a PDP</b>. This is the P0 you flagged from MoEngage, now confirmed in the app's own event stream: CRM links point at the Experiences <i>home</i> (not the specific city/product), and the mpin auth interrupts half of them before they arrive.</div></div>
+
+  <div class="g4" style="margin-top:12px">
+    <div class="kstat red"><div class="k-lbl">CRM→TEA deep-link users</div><div class="k-val red">54</div><div class="k-sub">Push + CRM + WhatsApp, Aug 16</div></div>
+    <div class="kstat red"><div class="k-lbl">Hit mpin blocker</div><div class="k-val red">29</div><div class="k-sub">54% interrupted by auth</div></div>
+    <div class="kstat amb"><div class="k-lbl">Reached a city page</div><div class="k-val amb">4</div><div class="k-sub">7% — links target tea/home not city</div></div>
+    <div class="kstat"><div class="k-lbl">Reached a PDP</div><div class="k-val">12</div><div class="k-sub">22% — most never see a product</div></div>
+  </div>
+  <p class="note"><b>Two fixes, both on the app/CRM side:</b> (1) construct CRM deep links to target the specific <code>tea/city-srp</code> or <code>tea/product-details</code> for the campaign, not the generic <code>tea/home</code>; (2) persist the deep-link destination across the mpin screen so auth doesn't drop the user on the home page. Until both ship, CRM's Experiences pushes can't convert regardless of copy or targeting.</p>
+</div>
+
+<div class="card" id="crm-deepdive">
+  <h2>15 · CRM location flow — deep-dive (Aug 1–13, all confirmed)</h2>
+  <div class="note">Flow: <strong>Experimental — Travel_Experiences_Location_based</strong> (ID: 6a295838b4cecb7392eeb7a5, Version 11 ACTIVE, event-triggered on USER_CITY_CHANGE_EVENT). Numbers from MoEngage API + Databricks percept_event_all. For the full interactive CRM dashboard see Tab 1.</div>
+
+  <div class="flag bad" style="margin:12px 0">🔴 <strong>Deep link broken — root cause of 0% CVR:</strong> Push click → app opens → mpin screen → post-auth routes to home, not TEA city page. Only 4 total city views from CRM over 5 days (Aug 8–12). Fix: persist deep link destination across mpin auth.</div>
+
+  <h3>15a · Daily delivery Aug 1–13</h3>
+  <div style="overflow-x:auto">
+  <table><thead><tr>
+    <th>Date</th><th>P1 Push</th><th>P2 Push</th><th>WhatsApp</th><th>Final Push</th><th>Total msgs</th><th>Clicks</th><th>CTR</th>
+  </tr></thead><tbody>
+    <tr><td>Aug 1</td><td class="num">3,485</td><td class="num">2,384</td><td class="num">1,490</td><td class="num">404</td><td class="num">7,763</td><td class="num">112</td><td class="num">1.4%</td></tr>
+    <tr><td>Aug 2</td><td class="num">3,454</td><td class="num">2,500</td><td class="num">1,709</td><td class="num">665</td><td class="num">8,328</td><td class="num">125</td><td class="num">1.5%</td></tr>
+    <tr><td>Aug 3</td><td class="num">3,245</td><td class="num">2,390</td><td class="num">1,708</td><td class="num">811</td><td class="num">8,154</td><td class="num">125</td><td class="num">1.5%</td></tr>
+    <tr><td>Aug 4</td><td class="num">3,151</td><td class="num">2,324</td><td class="num">1,672</td><td class="num">829</td><td class="num">7,976</td><td class="num">128</td><td class="num">1.6%</td></tr>
+    <tr><td>Aug 5</td><td class="num">3,138</td><td class="num">2,291</td><td class="num">1,616</td><td class="num">781</td><td class="num">7,826</td><td class="num">145</td><td class="num">1.9%</td></tr>
+    <tr><td>Aug 6</td><td class="num">3,326</td><td class="num">2,448</td><td class="num">1,670</td><td class="num">793</td><td class="num">8,237</td><td class="num">115</td><td class="num">1.4%</td></tr>
+    <tr><td>Aug 7</td><td class="num">3,748</td><td class="num">2,660</td><td class="num">1,791</td><td class="num">809</td><td class="num">9,008</td><td class="num">93</td><td class="num">1.0%</td></tr>
+    <tr><td>Aug 8</td><td class="num">4,277</td><td class="num">3,114</td><td class="num">2,048</td><td class="num">836</td><td class="num">10,275</td><td class="num">116</td><td class="num">1.1%</td></tr>
+    <tr><td>Aug 9</td><td class="num">4,255</td><td class="num">3,299</td><td class="num">2,165</td><td class="num">863</td><td class="num">10,582</td><td class="num">127</td><td class="num">1.2%</td></tr>
+    <tr><td>Aug 10</td><td class="num">3,841</td><td class="num">3,069</td><td class="num">2,138</td><td class="num">1,023</td><td class="num">10,071</td><td class="num">102</td><td class="num">1.0%</td></tr>
+    <tr><td>Aug 11 ⚡</td><td class="num">5,465</td><td class="num">4,237</td><td class="num">3,117</td><td class="num">1,612</td><td class="num" style="color:var(--warn);font-weight:700">14,431</td><td class="num">145</td><td class="num">1.0%</td></tr>
+    <tr><td>Aug 12</td><td class="num">1,310</td><td class="num">931</td><td class="num">716</td><td class="num">364</td><td class="num">3,321</td><td class="num">37</td><td class="num">1.1%</td></tr>
+    <tr><td>Aug 13</td><td class="num">717</td><td class="num">520</td><td class="num">362</td><td class="num">144</td><td class="num">1,743</td><td class="num">22</td><td class="num">1.3%</td></tr>
+  </tbody>
+  <tfoot><tr><td><strong>Total Aug 1–13</strong></td><td class="num"><strong>43,412</strong></td><td class="num"><strong>31,167</strong></td><td class="num"><strong>22,202</strong></td><td class="num"><strong>9,131</strong></td><td class="num"><strong>105,912</strong></td><td class="num"><strong>1,392</strong></td><td class="num"><strong>1.3%</strong></td></tr></tfoot>
+  </table>
+  </div>
+
+  <h3 style="margin-top:18px">15b · Post-click funnel — DB confirmed Aug 8–12 (source_attribute_type = 'Push')</h3>
+  <div style="overflow-x:auto">
+  <table><thead><tr>
+    <th>Stage</th><th>Aug 8</th><th>Aug 9</th><th>Aug 10</th><th>Aug 11</th><th>Aug 12</th>
+  </tr></thead><tbody>
+    <tr><td>App opens</td><td class="num">1,467</td><td class="num">1,399</td><td class="num">1,371</td><td class="num">1,379</td><td class="num">1,302</td></tr>
+    <tr><td>→ Home screen <span class="stat">(deep link fails here)</span></td><td class="num" style="color:var(--warn)">1,121</td><td class="num" style="color:var(--warn)">1,060</td><td class="num" style="color:var(--warn)">1,083</td><td class="num" style="color:var(--warn)">997</td><td class="num" style="color:var(--warn)">1,033</td></tr>
+    <tr><td>→ Travel tab</td><td class="num">276</td><td class="num">235</td><td class="num">241</td><td class="num">264</td><td class="num">227</td></tr>
+    <tr><td>→ TEA module</td><td class="num">27</td><td class="num">26</td><td class="num">31</td><td class="num">22</td><td class="num">25</td></tr>
+    <tr><td>→ tea_city_view <span class="stat">(conversion goal)</span></td><td class="num" style="color:var(--bad);font-weight:700">1</td><td class="num" style="color:var(--bad);font-weight:700">1</td><td class="num" style="color:var(--bad);font-weight:700">1</td><td class="num" style="color:var(--bad);font-weight:700">1</td><td class="num" style="color:var(--bad);font-weight:700">0</td></tr>
+    <tr><td>→ tea_pdp_view</td><td class="num">1</td><td class="num">1</td><td class="num">2</td><td class="num">1</td><td class="num">1</td></tr>
+    <tr><td>→ EXPERIENCE booking</td><td class="num" style="color:var(--bad)">0</td><td class="num" style="color:var(--bad)">0</td><td class="num" style="color:var(--bad)">0</td><td class="num" style="color:var(--bad)">0</td><td class="num" style="color:var(--bad)">0</td></tr>
+  </tbody></table>
+  </div>
+  <div class="note">⚡ = new-user spike day. Aug 1–7 and Aug 13: MoEngage delivery only, DB funnel not pulled. Aug 17 data not yet queried (partial day).</div>
+</div>
 </div>
 
 <div class="card" id="methodology">
