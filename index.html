@@ -305,18 +305,10 @@ canvas{max-height:160px}
     <div class="card"><div class="card-hd">tea_city_view source — Aug 10 · 357 users<span class="card-stamp">DB confirmed</span></div><div id="src-bkdn"></div><div class="note">372 events → 357 users. 15 in both organic + CRM — reconciles exactly.</div></div>
     <div class="card"><div class="card-hd">System 1 (DB) vs System 2 (MoEngage)<span class="card-stamp">recomputes with date · S2 confirmed, S1 pending for Aug 14+</span></div><div id="sys-cmp"></div><div class="note">Consistent 63–66% pipeline loss every day.</div></div>
   </div>
-  <div class="sec">Cohort matrix — why "6.1 msgs/person" is wrong</div>
+  <div class="sec">Message delivery — 3-day send window</div>
   <div class="card">
-    <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Message</th><th>Day 0</th><th>Day 1</th><th>Day 1+30min</th><th>Day 3</th><th>Per user</th></tr></thead>
-    <tbody>
-      <tr><td>P1 Push (80% Pers / 20% Simple)</td><td class="g">✓ T+20min</td><td>—</td><td>—</td><td>—</td><td class="n">1</td></tr>
-      <tr><td>P2 Push (80% Pers / 20% Simple)</td><td>—</td><td class="g">✓ 24h after P1</td><td>—</td><td>—</td><td class="n">1</td></tr>
-      <tr><td>WhatsApp (50% Pers / 50% Simple)</td><td>—</td><td>—</td><td class="g">✓ 30min after P2</td><td>—</td><td class="n">1</td></tr>
-      <tr><td>Final Push (80% Pers / 20% Simple)</td><td>—</td><td>—</td><td>—</td><td style="color:#7c3aed">✓ 48h after WA</td><td class="n">1</td></tr>
-    </tbody>
-    <tfoot><tr><td><b>Total per user</b></td><td class="n">1</td><td class="n">1</td><td class="n">1</td><td class="n">1</td><td class="n g">4</td></tr></tfoot>
-    </table></div>
-    <div class="alert in" style="margin-top:12px"><span class="alert-ic">ℹ</span><div>On Aug 10: P1 to today's 1,657 new entrants; P2+WA to Aug 9's 1,966; FP to Aug 7's 939. Total 10,071 across 3 overlapping cohorts. 10,071 ÷ 1,657 = 6.1 — a meaningless cross-batch ratio. Each user always gets exactly 4 messages.</div></div>
+    <div id="cohortMatrixWrap" style="overflow-x:auto"></div>
+    <div class="note">Each user in the location flow receives 4 messages across their 3-day trip window (P1 push → P2 push → WhatsApp → Final push). Cells show messages sent that day. Window slides with the selected month / date range.</div>
   </div>
   <div class="sec">City × funnel — Aug 1–13</div>
   <div class="card"><div class="card-hd">Flow entries, clicks, city views, bookings by nearestTeaCity<span class="card-stamp">MoEngage + DB · rolling aggregate (per-day CRM funnel ≈0 due to deep-link P0)</span></div><div style="overflow-x:auto"><table class="tbl"><thead><tr><th style="text-align:left">#</th><th style="text-align:left">City</th><th>Entries</th><th>Clicks</th><th>City view</th><th>Bookings</th><th>CTR</th></tr></thead><tbody id="cityFunnelBody"></tbody><tfoot><tr><td colspan="2"><b>Total</b></td><td id="cf-te" class="n"></td><td id="cf-tc" class="n"></td><td id="cf-tv" class="n"></td><td id="cf-tb" class="n"></td><td></td></tr></tfoot></table></div></div>
@@ -492,7 +484,7 @@ canvas{max-height:160px}
 </div>
 
 <div class="card" id="momfunnel">
-  <h2>1b · Month-over-month entry funnel — Apr → Aug (Anand call ask) <span style="font-size:10px;font-weight:600;color:var(--t3);background:var(--s1);border:1px solid var(--b0);border-radius:10px;padding:2px 8px;vertical-align:middle;white-space:nowrap">📌 Apr–Aug · fixed window</span></h2>
+  <h2>1b · Month-over-month entry funnel — Apr → Aug <span style="font-size:10px;font-weight:600;color:var(--t3);background:var(--s1);border:1px solid var(--b0);border-radius:10px;padding:2px 8px;vertical-align:middle;white-space:nowrap">📌 Apr–Aug · fixed window</span></h2>
   <p class="note" style="margin-bottom:10px">Users bucketed by <b>entry month</b> (first-ever TEA touchpoint). Each stage = distinct users from that entry cohort who reached that step, ever. Orders/GMV = all bookings ever placed by that cohort. Aug is month-to-date (Aug 1–16 funnel, orders to Aug 17).</p>
   <div style="overflow-x:auto">
   <table class="tbl">
@@ -504,17 +496,17 @@ canvas{max-height:160px}
 </div>
 
 <div class="card" id="trafficsrc">
-  <h2>1c · Traffic sources into Experiences — Aug MTD (Anand call ask) <span style="font-size:10px;font-weight:600;color:var(--t3);background:var(--s1);border:1px solid var(--b0);border-radius:10px;padding:2px 8px;vertical-align:middle;white-space:nowrap">📌 Aug MTD · fixed window</span></h2>
+  <h2>1c · Traffic sources into Experiences — Aug MTD <span style="font-size:10px;font-weight:600;color:var(--t3);background:var(--s1);border:1px solid var(--b0);border-radius:10px;padding:2px 8px;vertical-align:middle;white-space:nowrap">📌 Aug MTD · fixed window</span></h2>
   <p class="note" style="margin-bottom:12px">Unique users whose <code>tea_module_view</code> carried each source (Aug 1–16). Rows marked <span style="color:var(--gr);font-weight:600">RECOVERED</span> had a blank <code>source_attribute_type</code> but a usable <code>source_attribute_page</code> — recovering them cuts the true-untagged gap from ~4,490 users to <b>1,604</b>.</p>
   <div class="src-row"><span class="src-dot" style="background:#4f46e5"></span><span class="src-lbl">Home page icon <span style="color:var(--t3);font-size:10px">(HomePageEntry)</span></span><span class="src-bar-bg"><span class="src-bar-fill" style="width:100%;background:#4f46e5"></span></span><span class="src-n">11,660</span><span class="src-pct">50%</span></div><div class="src-row"><span class="src-dot" style="background:#0ea5e9"></span><span class="src-lbl">Travel page icon <span style="color:var(--t3);font-size:10px">(TravelHomeIcon)</span></span><span class="src-bar-bg"><span class="src-bar-fill" style="width:28%;background:#0ea5e9"></span></span><span class="src-n">3,227</span><span class="src-pct">14%</span></div><div class="src-row"><span class="src-dot" style="background:#059669"></span><span class="src-lbl">Merchandising <span style="color:var(--t3);font-size:10px">(merch)</span></span><span class="src-bar-bg"><span class="src-bar-fill" style="width:23%;background:#059669"></span></span><span class="src-n">2,739</span><span class="src-pct">12%</span></div><div class="src-row"><span class="src-dot" style="background:#8b5cf6"></span><span class="src-lbl">Coins / explore page <span style="color:var(--t3);font-size:10px">(COINS_PAGE)</span> <span style="font-size:9px;color:var(--gr);font-weight:600">RECOVERED</span></span><span class="src-bar-bg"><span class="src-bar-fill" style="width:10%;background:#8b5cf6"></span></span><span class="src-n">1,194</span><span class="src-pct">5%</span></div><div class="src-row"><span class="src-dot" style="background:#f59e0b"></span><span class="src-lbl">Paid advertising <span style="color:var(--t3);font-size:10px">(paid advertising)</span> <span style="font-size:9px;color:var(--gr);font-weight:600">RECOVERED</span></span><span class="src-bar-bg"><span class="src-bar-fill" style="width:10%;background:#f59e0b"></span></span><span class="src-n">1,155</span><span class="src-pct">5%</span></div><div class="src-row"><span class="src-dot" style="background:#6366f1"></span><span class="src-lbl">Home page (untyped) <span style="color:var(--t3);font-size:10px">(SCAPIA_HOME)</span> <span style="font-size:9px;color:var(--gr);font-weight:600">RECOVERED</span></span><span class="src-bar-bg"><span class="src-bar-fill" style="width:5%;background:#6366f1"></span></span><span class="src-n">628</span><span class="src-pct">3%</span></div><div class="src-row"><span class="src-dot" style="background:#d97706"></span><span class="src-lbl">Push <span style="color:var(--t3);font-size:10px">(Push)</span></span><span class="src-bar-bg"><span class="src-bar-fill" style="width:4%;background:#d97706"></span></span><span class="src-n">425</span><span class="src-pct">2%</span></div><div class="src-row"><span class="src-dot" style="background:#dc2626"></span><span class="src-lbl">CRM <span style="color:var(--t3);font-size:10px">(CRM)</span></span><span class="src-bar-bg"><span class="src-bar-fill" style="width:3%;background:#dc2626"></span></span><span class="src-n">325</span><span class="src-pct">1%</span></div><div class="src-row"><span class="src-dot" style="background:#16a34a"></span><span class="src-lbl">WhatsApp <span style="color:var(--t3);font-size:10px">(Whatsapp)</span></span><span class="src-bar-bg"><span class="src-bar-fill" style="width:1%;background:#16a34a"></span></span><span class="src-n">138</span><span class="src-pct">1%</span></div><div class="src-row"><span class="src-dot" style="background:#7c3aed"></span><span class="src-lbl">CRM-PN <span style="color:var(--t3);font-size:10px">(CRM-PN)</span></span><span class="src-bar-bg"><span class="src-bar-fill" style="width:0%;background:#7c3aed"></span></span><span class="src-n">10</span><span class="src-pct">0%</span></div><div class="src-row"><span class="src-dot" style="background:#9ca3af"></span><span class="src-lbl">Truly untagged <span style="color:var(--t3);font-size:10px">((blank))</span></span><span class="src-bar-bg"><span class="src-bar-fill" style="width:14%;background:#9ca3af"></span></span><span class="src-n">1,604</span><span class="src-pct">7%</span></div>
   <div class="flag warn" style="margin-top:12px"><span>⚠</span><div><b>Untagged is largely recoverable.</b> Of the ~4,490 "direct/untagged" module views, only 1,604 (36%) are genuinely untagged. The rest carry a page signal: <b>1,194 from the coins/explore page</b>, <b>1,155 from paid advertising</b> (external acquisition landing in Experiences — previously invisible), and 628 from the home page without a type tag. The <code>deeplink</code>, <code>widget_id</code> and <code>page_id</code> fields are 100% empty on every untagged row, so page is the only recovery lever — a clean fix would be to have the app always stamp <code>source_attribute_type</code>, not just <code>source_attribute_page</code>.</div></div>
   <div class="flag bad" style="margin-top:10px"><span>🔍</span><div><b>What the 1,604 truly-untagged users actually did (raw-event probe):</b> they're not mysterious — traced through the raw timestamped log, the event firing immediately before their untagged entry is <b><code>dynamic_link_executed</code> for 704 of them</b> (a deep link — shared link, notification, or external URL), plus 517 cold-booting straight into <code>scapia_experiences_initialised</code>, 109 via a home category CTA, and 81 via the home icon itself. <b>Root cause:</b> when Experiences opens from a deep-link cold-start, the app doesn't stamp <code>source_attribute_type</code> on the TEA event. So "untagged" ≈ "deep-link entry." Business impact is tiny (the untagged-everywhere core produced 1 booking / ₹12.6k in August), but the fix is clear: propagate the deep-link source into the TEA attribution context.</div></div>
-<p class="note"><b>Home page icon dominates</b> (~46% of tagged views). The recovered <b>paid advertising</b> stream (1,155 users) is a genuine new insight — it was hidden in the untagged bucket and shows external spend is driving Experiences entries that weren't being credited. Coins page (1,194) confirms the carousel Anand wanted sized is a real entry channel.</p>
+<p class="note"><b>Home page icon dominates</b> (~46% of tagged views). The recovered <b>paid advertising</b> stream (1,155 users) is a genuine new insight — it was hidden in the untagged bucket and shows external spend is driving Experiences entries that weren't being credited. Coins page (1,194) confirms the carousel is a real entry channel.</p>
 </div>
 
 <div class="card" id="homeicon">
-  <h2>1d · Home icon performance — Jun 1 → Aug 16 (Anand call ask) <span style="font-size:10px;font-weight:600;color:var(--t3);background:var(--s1);border:1px solid var(--b0);border-radius:10px;padding:2px 8px;vertical-align:middle;white-space:nowrap">📌 Jun–Aug · fixed window</span></h2>
-  <p class="note" style="margin-bottom:12px">The home-page Experiences icon is the single biggest entry point. Anand's call referenced ~450 bookings from icon clickers over a 70-day window — refreshed live below.</p>
+  <h2>1d · Home icon performance — Jun 1 → Aug 16 <span style="font-size:10px;font-weight:600;color:var(--t3);background:var(--s1);border:1px solid var(--b0);border-radius:10px;padding:2px 8px;vertical-align:middle;white-space:nowrap">📌 Jun–Aug · fixed window</span></h2>
+  <p class="note" style="margin-bottom:12px">The home-page Experiences icon is the single biggest entry point. prior analysis referenced ~450 bookings from icon clickers over a 70-day window — refreshed live below.</p>
   <div class="g4">
     <div class="kstat ind"><div class="k-lbl">Unique icon clickers</div><div class="k-val ind">13,068</div><div class="k-sub">tea_icon_clicked · 77-day window</div></div>
     <div class="kstat grn"><div class="k-lbl">Clickers who booked</div><div class="k-val grn">498</div><div class="k-sub">3.8% of icon clickers</div></div>
@@ -877,6 +869,39 @@ const SLOTS = [
   {dt:'Jun 8', seg:'Travel actives',          r:41200, cl:212, b:0, note:'Weak — broad blast'},
 ];
 
+/* ── Message delivery per date (from confirmed daily delivery, Aug 1–13) ── */
+const DELIVERY_BY_DATE = {
+ '2026-08-01':{p1:3485,p2:2384,wa:1490,fp:404},
+ '2026-08-02':{p1:3454,p2:2500,wa:1709,fp:665},
+ '2026-08-03':{p1:3245,p2:2390,wa:1708,fp:811},
+ '2026-08-04':{p1:3151,p2:2324,wa:1672,fp:829},
+ '2026-08-05':{p1:3138,p2:2291,wa:1616,fp:781},
+ '2026-08-06':{p1:3326,p2:2448,wa:1670,fp:793},
+ '2026-08-07':{p1:3748,p2:2660,wa:1791,fp:809},
+ '2026-08-08':{p1:4277,p2:3114,wa:2048,fp:836},
+ '2026-08-09':{p1:4255,p2:3299,wa:2165,fp:863},
+ '2026-08-10':{p1:3841,p2:3069,wa:2138,fp:1023},
+ '2026-08-11':{p1:5465,p2:4237,wa:3117,fp:1612},
+ '2026-08-12':{p1:1310,p2:931,wa:716,fp:364},
+ '2026-08-13':{p1:717,p2:520,wa:362,fp:144}
+};
+function renderCohortMatrix(endISO){
+  const wrap=document.getElementById('cohortMatrixWrap');
+  if(!wrap) return;
+  const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const fmtD=iso=>{const p=iso.split('-');return MN[(+p[1])-1]+' '+(+p[2]);};
+  const keys=Object.keys(DELIVERY_BY_DATE).filter(k=>k<=endISO).sort();
+  const win=keys.slice(-3);
+  if(!win.length){ wrap.innerHTML='<div class="note">No message-level delivery data for this period — the location flow has per-message daily data for August only.</div>'; return; }
+  const rows=[['P1 push','p1'],['P2 push','p2'],['WhatsApp','wa'],['Final push','fp']];
+  let h='<table class="tbl"><thead><tr><th>Message</th>'+win.map(k=>'<th class="num">'+fmtD(k)+'</th>').join('')+'</tr></thead><tbody>';
+  rows.forEach(([lab,key])=>{ h+='<tr><td>'+lab+'</td>'+win.map(k=>{const v=DELIVERY_BY_DATE[k][key];return '<td class="num">'+(v!=null?v.toLocaleString():'—')+'</td>';}).join('')+'</tr>'; });
+  h+='<tr><td><b>Total sent</b></td>'+win.map(k=>{const t=DELIVERY_BY_DATE[k];const s=t.p1+t.p2+t.wa+t.fp;return '<td class="num"><b>'+s.toLocaleString()+'</b></td>';}).join('')+'</tr>';
+  h+='</tbody></table>';
+  wrap.innerHTML=h;
+}
+
+
 let cur = 'aug16';
 const N = v => typeof v === 'number' ? v.toLocaleString() : v;
 const P = (a, b) => b > 0 ? (a / b * 100).toFixed(1) + '%' : '—';
@@ -930,7 +955,7 @@ function applyRange(){
   // clear month active state (we're in custom mode now)
   document.querySelectorAll('#monthFilter .mpill').forEach(b=>b.classList.remove('active'));
   // stash and render via a temporary override of D[cur]
-  D.__range = agg; cur = '__range'; renderDay();
+  D.__range = agg; cur = '__range'; renderDay(); renderCohortMatrix(to);
   // also refresh the month-summary title to reflect the range
   const t=document.getElementById('ms-title'); if(t) t.textContent = agg.l;
   const note=document.getElementById('detail-scope-note'); if(note) note.style.display='none';
@@ -954,6 +979,7 @@ function setMonth(m, btn){
   document.getElementById('ms-cv').textContent = mo.crm_cv;
   document.getElementById('ms-cv-sub').textContent = mo.crm_cv + ' CRM-attributed vs ' + mo.all_cv.toLocaleString() + ' total city-views — deep-link P0';
   // Detailed daily sections below are August-only; flag when another month is picked
+  const _mEnd={apr:'2026-04-30',may:'2026-05-31',jun:'2026-06-30',jul:'2026-07-31',aug:'2026-08-31'}[m]||'2026-08-31'; renderCohortMatrix(_mEnd);
   const note = document.getElementById('detail-scope-note');
   if(note) note.style.display = (m==='aug') ? 'none' : 'block';
   // If August, make sure the daily detail shows a real day (not a stale custom range)
@@ -1128,6 +1154,7 @@ function buildSlot() {
 
 /* bar chart */
 function buildChart() {
+  if(typeof Chart==='undefined'){ return; }  /* CDN not loaded — don't halt the page */
   const ks = Object.keys(CHART_DATA);
   new Chart(document.getElementById('crmChart'), {
     type: 'bar',
