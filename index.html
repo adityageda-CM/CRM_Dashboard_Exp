@@ -195,11 +195,13 @@ canvas{max-height:160px}
     <a href="#buckets" class="sb-link"><span class="sb-n">2</span>Attribution</a>
     <a href="#tree" class="sb-link"><span class="sb-n">3</span>Funnel tree</a>
     <a href="#trend" class="sb-link"><span class="sb-n">4</span>Trend</a>
+    <a href="#reengagement" class="sb-link"><span class="sb-n">4b</span>Return behaviour</a>
     <a href="#stagetiming" class="sb-link"><span class="sb-n">5</span>Stage timing</a>
     <a href="#stagetime" class="sb-link"><span class="sb-n">5b</span>Time matrix</a>
     <a href="#merch" class="sb-link"><span class="sb-n">6</span>Merch</a>
     <a href="#unattributed" class="sb-link"><span class="sb-n">7</span>Unattributed</a>
     <a href="#campaigns" class="sb-link"><span class="sb-n">8</span>CRM / Push</a>
+    <a href="#deeplinksrc" class="sb-link"><span class="sb-n">8b</span>Deep-link bug</a>
     <a href="#intrip" class="sb-link"><span class="sb-n">9</span>In-trip</a>
     <a href="#pretrip" class="sb-link"><span class="sb-n">10</span>Pre-trip</a>
     <a href="#cities" class="sb-link"><span class="sb-n">11</span>Cities</a>
@@ -425,6 +427,24 @@ canvas{max-height:160px}
   <div class="note">Period length follows the Grain control above. Δ column compares each period to the comparison rule selected above, evaluated for that period specifically.</div>
 </div>
 
+<div class="card" id="reengagement">
+  <h2>4b · Drop-off &amp; return behaviour — do users come back? (30-day window)</h2>
+  <p class="note" style="margin-bottom:12px">A user rarely books in one sitting — they browse, close the app, and return later. This tracks the <b>same user across multiple days</b> (Jul 16 – Aug 16) to size how many re-engage after dropping off, and how long the gap is. Measured on the daily-aggregated table, so "return" = active on a later calendar day.</p>
+  <div class="g4">
+    <div class="kstat ind"><div class="k-lbl">Users active in window</div><div class="k-val ind">45,140</div><div class="k-sub">fired any TEA event</div></div>
+    <div class="kstat grn"><div class="k-lbl">Returned on 2+ days</div><div class="k-val grn">8,252</div><div class="k-sub">18.3% come back at least once</div></div>
+    <div class="kstat"><div class="k-lbl">PDP viewers who returned</div><div class="k-val">5,291</div><div class="k-sub">looked at a product, left, came back</div></div>
+    <div class="kstat amb"><div class="k-lbl">Viewed PDP on 2+ days</div><div class="k-val amb">2,931</div><div class="k-sub">re-opened product pages across sessions</div></div>
+  </div>
+  <h3 style="margin-top:16px">How long before they come back? (gap between PDP visits)</h3>
+  <div class="g3">
+    <div class="kstat"><div class="k-lbl">Next day</div><div class="k-val" style="font-size:22px">1,841</div><div class="k-sub">returned within 1 day</div></div>
+    <div class="kstat"><div class="k-lbl">Within a week (2–7 days)</div><div class="k-val" style="font-size:22px">2,693</div><div class="k-sub">the largest return window</div></div>
+    <div class="kstat"><div class="k-lbl">After a week (8+ days)</div><div class="k-val" style="font-size:22px">1,142</div><div class="k-sub">long-consideration returners</div></div>
+  </div>
+  <div class="flag good" style="margin-top:12px"><span>💡</span><div><b>Median return gap is 3 days (avg 4.8).</b> Nearly 1 in 5 users come back after leaving — and 2,931 re-open product pages on a different day, meaning they're actively deliberating, not lost. This is the exact audience a retargeting push/WhatsApp should hit: a user who viewed a PDP and left has a 2–7 day consideration window. A "still thinking about [city]?" nudge timed to day 2–3 is squarely aligned with observed behaviour. The catch: that nudge only works once the deep-link P0 below is fixed, otherwise the return click lands on the wrong page.</div></div>
+</div>
+
 <div class="card" id="stagetiming">
   <h2>5 · Time between funnel stages (average by selected range; median all-time — see note)</h2>
   <div id="stageTimingWrap"></div>
@@ -466,7 +486,26 @@ canvas{max-height:160px}
 </div>
 
 <div class="grid2">
-  <div class="card" id="intrip">
+  <div class="card" id="deeplinksrc">
+  <h2>8b · Deep-link sources &amp; the CRM routing bug — raw-event evidence (P0)</h2>
+  <p class="note" style="margin-bottom:12px">You asked whether the untagged deep-link entries are actually your CRM links (push / WhatsApp / email). The raw log confirms it: every <code>dynamic_link_executed</code> event carries a <code>dynamic_link_source</code> and a <code>dynamic_link_type</code> (destination). Aug 16, app-wide.</p>
+
+  <h3>Deep links fired by CRM channel (all destinations, Aug 16)</h3>
+  <div class="src-row"><span class="src-dot" style="background:#dc2626"></span><span class="src-lbl">CRM</span><span class="src-bar-bg"><span class="src-bar-fill" style="width:100%;background:#dc2626"></span></span><span class="src-n">2,131</span></div><div class="src-row"><span class="src-dot" style="background:#d97706"></span><span class="src-lbl">Push</span><span class="src-bar-bg"><span class="src-bar-fill" style="width:47%;background:#d97706"></span></span><span class="src-n">991</span></div><div class="src-row"><span class="src-dot" style="background:#16a34a"></span><span class="src-lbl">WhatsApp</span><span class="src-bar-bg"><span class="src-bar-fill" style="width:44%;background:#16a34a"></span></span><span class="src-n">936</span></div><div class="src-row"><span class="src-dot" style="background:#7c3aed"></span><span class="src-lbl">CRM-PN</span><span class="src-bar-bg"><span class="src-bar-fill" style="width:27%;background:#7c3aed"></span></span><span class="src-n">585</span></div><div class="src-row"><span class="src-dot" style="background:#0ea5e9"></span><span class="src-lbl">PN</span><span class="src-bar-bg"><span class="src-bar-fill" style="width:6%;background:#0ea5e9"></span></span><span class="src-n">134</span></div><div class="src-row"><span class="src-dot" style="background:#6366f1"></span><span class="src-lbl">Email</span><span class="src-bar-bg"><span class="src-bar-fill" style="width:4%;background:#6366f1"></span></span><span class="src-n">87</span></div>
+  <p class="note">Yes — CRM, Push, WhatsApp, CRM-PN, PN and Email all generate deep links (~4,864 users/day combined). So the untagged Experiences entries genuinely include your CRM traffic; the app just fails to stamp the source onto the TEA event.</p>
+
+  <div class="flag bad" style="margin-top:14px"><span>🔴</span><div><b>The routing bug, proven end-to-end.</b> Of the CRM/Push/WhatsApp deep links that are <i>meant</i> for Experiences on Aug 16, the destination is almost always <code>tea/home</code> — the generic landing — not a city or product page: <b>Push→tea/home (33), CRM→tea/home (10), WhatsApp→tea/home (6)</b>, vs merch links which correctly target <code>tea/city-srp</code>, <code>tea/collection</code> and <code>tea/product-details</code>. Then tracing those 54 CRM-TEA deep-link users forward: <b>29 (54%) hit the mpin blocker screen</b>, only 28 reached the TEA module, <b>just 4 reached a city page and 12 a PDP</b>. This is the P0 you flagged from MoEngage, now confirmed in the app's own event stream: CRM links point at the Experiences <i>home</i> (not the specific city/product), and the mpin auth interrupts half of them before they arrive.</div></div>
+
+  <div class="g4" style="margin-top:12px">
+    <div class="kstat red"><div class="k-lbl">CRM→TEA deep-link users</div><div class="k-val red">54</div><div class="k-sub">Push + CRM + WhatsApp, Aug 16</div></div>
+    <div class="kstat red"><div class="k-lbl">Hit mpin blocker</div><div class="k-val red">29</div><div class="k-sub">54% interrupted by auth</div></div>
+    <div class="kstat amb"><div class="k-lbl">Reached a city page</div><div class="k-val amb">4</div><div class="k-sub">7% — links target tea/home not city</div></div>
+    <div class="kstat"><div class="k-lbl">Reached a PDP</div><div class="k-val">12</div><div class="k-sub">22% — most never see a product</div></div>
+  </div>
+  <p class="note"><b>Two fixes, both on the app/CRM side:</b> (1) construct CRM deep links to target the specific <code>tea/city-srp</code> or <code>tea/product-details</code> for the campaign, not the generic <code>tea/home</code>; (2) persist the deep-link destination across the mpin screen so auth doesn't drop the user on the home page. Until both ship, CRM's Experiences pushes can't convert regardless of copy or targeting.</p>
+</div>
+
+<div class="card" id="intrip">
     <h2>9 · In-trip behavior (users abroad who opened TEA)</h2>
     <div id="intripWrap"></div>
   </div>
