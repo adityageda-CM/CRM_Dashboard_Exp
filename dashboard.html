@@ -204,9 +204,9 @@ canvas{max-height:160px}
 <div class="topbar">
   <span class="tb-dot"></span><b>LIVE</b>
   <span class="tb-sep">|</span>
-  <span>Today Aug 17 &nbsp;·&nbsp; <b>18 bookings · ₹3.22L GMV</b> <small>(day running)</small></span>
+  <span>Today Aug 17 &nbsp;·&nbsp; <b>28 orders · 28 bookers · ₹4.67L GMV</b> <small>(day running)</small></span>
   <span class="tb-sep">|</span>
-  <span>Aug MTD <b>538 bookings · ₹74.41L GMV</b></span>
+  <span>Aug MTD <b>547 orders · 383 bookers (1.43 per person) · ₹75.5L GMV</b></span>
   <span class="tb-gap"></span>
   <button class="tb-refresh" id="rfBtn" onclick="doRefresh()">↻ Refresh</button>
 </div>
@@ -320,8 +320,8 @@ canvas{max-height:160px}
   </div>
   <div class="sec">Attribution &amp; pipeline</div>
   <div class="g2">
-    <div class="card"><div class="card-hd">tea_city_view source — Aug 10 · 357 users<span class="card-stamp">DB confirmed</span></div><div id="src-bkdn"></div><div class="note">372 events → 357 users. 15 in both organic + CRM — reconciles exactly.</div></div>
-    <div class="card"><div class="card-hd">System 1 (DB) vs System 2 (MoEngage)<span class="card-stamp">recomputes with date · S2 confirmed, S1 pending for Aug 14+</span></div><div id="sys-cmp"></div><div class="note">Consistent 63–66% pipeline loss every day.</div></div>
+    <div class="card"><div class="card-hd">tea_city_view source — Aug 10 · 357 users<span class="card-stamp">DB confirmed</span></div><div id="src-bkdn"></div><div class="note">608 city-view events → 450 users summed by source (a user using two sources is counted in each). CRM + Push together = 3 users (0.7%) — the deep-link P0 keeps CRM share near zero.</div></div>
+    <div class="card"><div class="card-hd">System 1 (DB) vs System 2 (MoEngage)<span class="card-stamp">System 1 = users who changed city (DB) · System 2 = entered the flow (MoEngage)</span></div><div id="sys-cmp"></div><div class="note">56–64% of city-change users never reach the flow (System 1 → System 2). Recent days improving.</div></div>
   </div>
   <div class="sec">Message delivery — 3-day send window</div>
   <div class="card">
@@ -834,13 +834,13 @@ const D = {
 };
 const CHART_DATA = {aug01:7763,aug02:8328,aug03:8154,aug04:7976,aug05:7826,aug06:8237,aug07:9008,aug08:10275,aug09:10582,aug10:10071,aug11:14431,aug12:3321,aug13:1743,aug14:2628,aug15:3223,aug16:3612};
 const VIGNES = {
-  aug10:{q1u:357,q1c:1,q1p:0.3,q3o:11,q3g:111517},
-  aug11:{q1u:363,q1c:1,q1p:0.3,q3o:12,q3g:104859},
-  aug12:{q1u:380,q1c:0,q1p:0.0,q3o:16,q3g:237251},
-  aug13:{q1u:352,q1c:2,q1p:0.6,q3o:13,q3g:315544},
-  aug14:{q1u:343,q1c:1,q1p:0.3,q3o:14,q3g:293342},
-  aug15:{q1u:390,q1c:12,q1p:3.1,q3o:19,q3g:371378},
-  aug16:{q1u:428,q1c:3,q1p:0.7,q3o:19,q3g:246355}
+  aug10:{s1:1906,q1u:357,q1c:1,q1p:0.3,q3o:11,q3g:111517},
+  aug11:{s1:1618,q1u:363,q1c:1,q1p:0.3,q3o:12,q3g:104859},
+  aug12:{s1:1619,q1u:380,q1c:0,q1p:0.0,q3o:16,q3g:237251},
+  aug13:{s1:1567,q1u:352,q1c:2,q1p:0.6,q3o:13,q3g:315544},
+  aug14:{s1:1614,q1u:343,q1c:1,q1p:0.3,q3o:14,q3g:293342},
+  aug15:{s1:2018,q1u:390,q1c:12,q1p:3.1,q3o:19,q3g:371378},
+  aug16:{s1:1994,q1u:428,q1c:3,q1p:0.7,q3o:19,q3g:246355}
 };
 const SRC_BY_DAY = {
   aug14:[{l:'Merchandising',n:140,c:'#1f6feb'},{l:'Home page entry',n:122,c:'#0b7a39'},{l:'Direct / untagged',n:58,c:'#6e7781'},{l:'Travel page icon',n:43,c:'#8250df'},{l:'CRM / Push',n:1,c:'#cf222e'}],
@@ -859,10 +859,10 @@ let curMonth = 'aug';
 
 
 const SYS = [
-  {d:'Aug 10',s1:1866,s2:682},{d:'Aug 11',s1:1716,s2:582},
-  {d:'Aug 12',s1:1717,s2:588},{d:'Aug 13',s1:1686,s2:570},
-  {d:'Aug 14',s1:null,s2:690},{d:'Aug 15',s1:null,s2:801},
-  {d:'Aug 16',s1:null,s2:875},
+  {d:'Aug 10',s1:1906,s2:682},{d:'Aug 11',s1:1618,s2:582},
+  {d:'Aug 12',s1:1619,s2:588},{d:'Aug 13',s1:1567,s2:570},
+  {d:'Aug 14',s1:1614,s2:690},{d:'Aug 15',s1:2018,s2:801},
+  {d:'Aug 16',s1:1994,s2:875},
 ];
 const SRCS = [
   {l:'Home page entry',  n:135,c:'#0b7a39'},{l:'Merchandising',    n:133,c:'#0b7a39'},
@@ -1026,8 +1026,15 @@ function renderVignes() {
   document.getElementById('v-q1-sub').textContent = v.q1c + ' of ' + v.q1u + ' organic city-view users also had a CRM touch. ' + (100 - v.q1p).toFixed(1) + '% of CRM reach is incremental.';
   // Q2 — S2 entrants confirmed; S1 pending exact definition
   const s2 = d ? d.ppl : null;
-  document.getElementById('v-q2').textContent = s2 ? (s2.toLocaleString() + ' in') : '—';
-  document.getElementById('v-q2-sub').textContent = s2 ? (s2.toLocaleString() + ' users entered the MoEngage flow (System 2). System-1 qualifying count pending exact definition — leak % will compute once set.') : 'MoEngage entrants for this day not available.';
+  const s1 = v.s1 || null;
+  if(s1 && s2){
+    const leak = Math.round((1 - s2/s1)*100);
+    document.getElementById('v-q2').textContent = leak + '% leak';
+    document.getElementById('v-q2-sub').textContent = s2.toLocaleString() + ' of ' + s1.toLocaleString() + ' city-change users entered the flow — ' + leak + '% never reach MoEngage (System 1 → System 2).';
+  } else {
+    document.getElementById('v-q2').textContent = s2 ? (s2.toLocaleString() + ' in') : '—';
+    document.getElementById('v-q2-sub').textContent = s2 ? (s2.toLocaleString() + ' entered the flow; System 1 count unavailable for this day.') : 'MoEngage entrants for this day not available.';
+  }
   // Q3
   document.getElementById('v-q3').textContent = v.q3o + ' orders';
   document.getElementById('v-q3-sub').textContent = '₹' + (v.q3g/1000).toFixed(0) + 'k GMV booked ' + lbl + ' by users in the CRM pool. Loose attribution.';
