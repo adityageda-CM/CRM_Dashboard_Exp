@@ -274,16 +274,16 @@ canvas{max-height:160px}
       </div>
       <span class="mf-div"></span>
       <span class="mf-lbl">Custom range</span>
-      <input type="date" id="dpFrom" min="2026-08-08" max="2026-08-16" value="2026-08-08" class="date-inp">
+      <input type="date" id="dpFrom" min="2026-08-08" max="2026-08-17" value="2026-08-15" class="date-inp">
       <span class="mf-arrow">→</span>
-      <input type="date" id="dpTo" min="2026-08-08" max="2026-08-16" value="2026-08-16" class="date-inp">
+      <input type="date" id="dpTo" min="2026-08-08" max="2026-08-17" value="2026-08-17" class="date-inp">
       <button class="mpill" id="applyRange" onclick="applyRange()">Apply</button>
     </div>
   </div>
   <div id="today14-banner" class="alert in" style="display:none"><span class="alert-ic">ℹ</span><div><b>Today Aug 17</b> — MoEngage delivery for today not yet in analytics. Showing Aug 16 (last confirmed). Live DB: 10 bookings · ₹1.06L today.</div></div>
 
   <div class="card" id="month-summary" style="margin-bottom:16px">
-    <div class="card-hd"><span id="ms-title">August (MTD)</span> · CRM performance<span class="card-stamp">DB + MoEngage · live</span></div>
+    <div class="card-hd"><span id="ms-title">August (MTD)</span> · CRM performance<span class="card-stamp">DB + MoEngage · monthly totals (use month pills) · custom range drives the flow &amp; delivery sections below</span></div>
     <div class="g4" style="margin-top:12px">
       <div class="kstat"><div class="k-lbl">CRM-pool orders</div><div class="k-val" id="ms-orders">—</div><div class="k-sub">EXPERIENCE bookings by CRM-reached users</div></div>
       <div class="kstat grn"><div class="k-lbl">CRM-pool GMV</div><div class="k-val grn" id="ms-gmv">—</div><div class="k-sub">Loose attribution</div></div>
@@ -326,7 +326,7 @@ canvas{max-height:160px}
   <div class="sec">Message delivery — 3-day send window</div>
   <div class="card">
     <div id="cohortMatrixWrap" style="overflow-x:auto"></div>
-    <div class="note">Each user in the location flow receives 4 messages across their 3-day trip window (P1 push → P2 push → WhatsApp → Final push). Cells show messages sent that day. Window slides with the selected month / date range.</div>
+    <div class="note">Each user in the location flow receives 4 messages across their 3-day trip window (P1 push → P2 push → WhatsApp → Final push). Cells show messages sent that day. Window slides with the selected month / date range. Per-message data is exact through Aug 13; for Aug 14–17 the daily push+WhatsApp totals are actual MoEngage sends, and the P1/P2/Final split is apportioned by the flow's fixed 4-message cadence (~50/38/12).</div>
   </div>
   <div class="sec">City × funnel — Aug 1–13</div>
   <div class="card"><div class="card-hd">Flow entries, clicks, city views, bookings by nearestTeaCity<span class="card-stamp">MoEngage + DB · rolling aggregate (per-day CRM funnel ≈0 due to deep-link P0)</span></div><div style="overflow-x:auto"><table class="tbl"><thead><tr><th style="text-align:left">#</th><th style="text-align:left">City</th><th>Entries</th><th>Clicks</th><th>City view</th><th>Bookings</th><th>CTR</th></tr></thead><tbody id="cityFunnelBody"></tbody><tfoot><tr><td colspan="2"><b>Total</b></td><td id="cf-te" class="n"></td><td id="cf-tc" class="n"></td><td id="cf-tv" class="n"></td><td id="cf-tb" class="n"></td><td></td></tr></tfoot></table></div></div>
@@ -930,7 +930,11 @@ const DELIVERY_BY_DATE = {
  '2026-08-10':{p1:3841,p2:3069,wa:2138,fp:1023},
  '2026-08-11':{p1:5465,p2:4237,wa:3117,fp:1612},
  '2026-08-12':{p1:1310,p2:931,wa:716,fp:364},
- '2026-08-13':{p1:717,p2:520,wa:362,fp:144}
+ '2026-08-13':{p1:717,p2:520,wa:362,fp:144},
+ '2026-08-14':{p1:918,p2:698,wa:791,fp:221},
+ '2026-08-15':{p1:1139,p2:865,wa:946,fp:273},
+ '2026-08-16':{p1:1194,p2:907,wa:1225,fp:286},
+ '2026-08-17':{p1:1419,p2:1078,wa:1375,fp:340}
 };
 function renderCohortMatrix(endISO){
   const wrap=document.getElementById('cohortMatrixWrap');
@@ -992,7 +996,7 @@ function applyRange(){
   // gather in-range daily keys that exist in D
   const keys = [];
   for(let d=fd; d<=td; d++){ const k='aug'+String(d).padStart(2,'0'); if(D[k]) keys.push(k); }
-  if(!keys.length){ alert('No daily data in that range (daily detail exists for Aug 8–16).'); return; }
+  if(!keys.length){ alert('No daily data in that range (daily detail exists for Aug 8–17).'); return; }
   // aggregate
   const agg = {l:'Aug '+fd+'–'+td, p1:0,p2:0,wa:0,fp:0, cl:[0,0,0,0], ppl:0, gcg:0, db:null};
   keys.forEach(k=>{ const d=D[k]; agg.p1+=d.p1; agg.p2+=d.p2; agg.wa+=d.wa; agg.fp+=d.fp;
