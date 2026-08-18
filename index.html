@@ -588,7 +588,7 @@ canvas{max-height:160px}
 
   <div style="background:var(--am-bg);border:1px solid var(--am);border-radius:8px;padding:12px 14px;margin:12px 0">
     <b>Aug 15 slot-PN test — did the deep-link get fixed?</b><br>
-    <b>No, not for CRM/Push broadcasts.</b> The Aug 15 Independence-Day slot PN (24,904 sent, 90 clicks, 243 TEA entries) produced <b>0 bookings</b> — its Branch deep-links still resolved to <code>tea/home</code> (CRM → tea/home: 243, Push → tea/home: 26), not the city or product page.<br>
+    <b>No, not for CRM/Push broadcasts.</b> The Aug 15 Independence-Day slot PN (24,904 sent, 90 clicks, 243 TEA entries) produced <b>0 bookings</b> — its Branch deep-links still resolved to <code>tea/home</code> (CRM → tea/home: 243, Push → tea/home: 26), not the city or product page. <b>MoEngage's own conversion attribution agrees</b> — Goal 1 (tea_order_updates COMPLETE) = 0 bookings, ₹0 revenue; so both DB and MoEngage independently show zero conversions.<br>
     <b>What HAS started working:</b> in-app <b>merch</b> deep-links now route correctly — merch → <code>tea/collection</code> (160), <code>tea/city-srp</code> (129), <code>tea/product-family</code> (58), <code>tea/product-details</code> (57). So the routing fix landed for merchandising placements, but <b>not</b> for CRM push / WhatsApp / broadcast links. The P0 is still open for CRM.
   </div>
   <h3>Deep links fired by CRM channel (all destinations, Aug 16)</h3>
