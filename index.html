@@ -588,7 +588,7 @@ canvas{max-height:160px}
 
   <div style="background:var(--am-bg);border:1px solid var(--am);border-radius:8px;padding:12px 14px;margin:12px 0">
     <b>Aug 15 slot-PN test — did the deep-link get fixed?</b><br>
-    <b>No, not for CRM/Push broadcasts.</b> The Aug 15 Independence-Day slot PN (24,904 sent, 90 clicks, 243 TEA entries) produced <b>0 bookings</b> — its Branch deep-links still resolved to <code>tea/home</code> (CRM → tea/home: 243, Push → tea/home: 26), not the city or product page. <b>MoEngage's own conversion attribution agrees</b> — Goal 1 (tea_order_updates COMPLETE) = 0 bookings, ₹0 revenue; so both DB and MoEngage independently show zero conversions.<br>
+    <b>No, not for CRM/Push broadcasts.</b> The Aug 15 Independence-Day slot PN (3 push campaigns: 41,273 sent, 164 clicks, 243 TEA entries) produced <b>0 bookings</b> — its Branch deep-links still resolved to <code>tea/home</code> (CRM → tea/home: 243, Push → tea/home: 26), not the city or product page. <b>MoEngage's own conversion attribution agrees</b> — Goal 1 (tea_order_updates COMPLETE) = 0 bookings, ₹0 revenue; so both DB and MoEngage independently show zero conversions.<br>
     <b>What HAS started working:</b> in-app <b>merch</b> deep-links now route correctly — merch → <code>tea/collection</code> (160), <code>tea/city-srp</code> (129), <code>tea/product-family</code> (58), <code>tea/product-details</code> (57). So the routing fix landed for merchandising placements, but <b>not</b> for CRM push / WhatsApp / broadcast links. The P0 is still open for CRM.
   </div>
   <h3>Deep links fired by CRM channel (all destinations, Aug 16)</h3>
@@ -891,7 +891,7 @@ const CITIES = [
   {city:'Other cities',e:4215,cl:327,v:128,b:10},
 ];
 const SLOTS = [
-  {dt:'Aug 15',seg:'Slot PN — Intl pre-trip (Indep. Day, C2+C3)', r:24904, cl:90, b:0, note:'243 TEA entries → 0 bookings. Deep-link still → tea/home (P0 not fixed)'},
+  {dt:'Aug 15',seg:'Slot PN — Intl pre-trip (Indep. Day, C2+C3+IntlLoc)', r:41273, cl:164, b:0, note:'3 push campaigns. 243 TEA entries → 0 bookings. Deep-link still → tea/home (P0 not fixed)'},
   {dt:'Jul 31',seg:'TINA — all users',       r:211172,cl:1077,b:3, note:'Widest reach, lowest CTR'},
   {dt:'Jul 30',seg:'TINA Prop (smaller)',     r:43200, cl:393, b:1, note:'Best CTR — tighter targeting'},
   {dt:'Jul 25',seg:'Targeted C2',             r:28400, cl:246, b:2, note:'Best converter — 2 bookings'},
