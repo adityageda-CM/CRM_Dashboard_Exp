@@ -204,9 +204,9 @@ canvas{max-height:160px}
 <div class="topbar">
   <span class="tb-dot"></span><b>LIVE</b>
   <span class="tb-sep">|</span>
-  <span>Today Aug 18 &nbsp;·&nbsp; <b>16 orders · 14 bookers · ₹1.76L GMV</b> <small>(day running)</small></span>
+  <span>Today Aug 18 &nbsp;·&nbsp; <b>21 orders · 18 bookers · ₹2.48L GMV</b> <small>(day running)</small></span>
   <span class="tb-sep">|</span>
-  <span>Aug MTD <b>580 orders · 405 bookers (1.43 per person) · ₹79.2L GMV</b></span>
+  <span>Aug MTD <b>585 orders · 408 bookers (1.43 per person) · ₹80.0L GMV</b></span>
   <span class="tb-gap"></span>
   <button class="tb-refresh" id="rfBtn" onclick="doRefresh()">↻ Refresh</button>
 </div>
@@ -333,6 +333,18 @@ canvas{max-height:160px}
   <div class="sec">Slot broadcasts — 10 blasts since Jun 2026</div>
   <div class="alert am"><span class="alert-ic">⚠</span><div>TINA blast (Jul 31) reached <b>2,11,172 people</b> → ~3 bookings. Targeted segments (Cohort 1–3) hit 0.81–0.91% CTR vs 0.51% for blasts.</div></div>
   <div class="card"><div style="overflow-x:auto"><table class="tbl"><thead><tr><th style="text-align:left">Date</th><th style="text-align:left">Segment</th><th>Reach</th><th>Clicks</th><th>CTR</th><th>Bookings</th><th style="text-align:left">Note</th></tr></thead><tbody id="slotBody"></tbody><tfoot><tr><td colspan="2"><b>Total</b></td><td id="sl-r" class="n"></td><td id="sl-c" class="n"></td><td id="sl-ctr" class="n"></td><td id="sl-b" class="n"></td><td></td></tr></tfoot></table></div><div class="note">MoEngage export + DB orders. Loose attribution.</div></div>
+  <div class="sec">Recent slot PN — per-cohort funnel (Aug 15, Independence Day)<span class="card-stamp">fixed snapshot · MoEngage + DB, live-pulled</span></div>
+  <div class="alert am"><span class="alert-ic">⚠</span><div>3 push cohorts — <b>41,273 sent → 164 clicks → 243 entered Experiences → 0 bookings</b>. Every cohort dies after the product page because the deep-link lands on <code>tea/home</code>, not the experience. iOS renders and clicks normally; Android impressions are largely <b>untracked</b> (push-amp disabled), so blended CTR is understated.</div></div>
+  <div class="card"><div style="overflow-x:auto"><table class="tbl">
+  <thead><tr><th style="text-align:left">Cohort</th><th>Sent</th><th>Rendered</th><th>Clicks</th><th>CTR*</th><th>Entered TEA</th><th>Product</th><th>Checkout</th><th>Booked</th></tr></thead>
+  <tbody>
+  <tr><td style="text-align:left">C3 · pre-trip intent<br><span style="color:var(--t3);font-size:11px">searched intl flights/stays/visa (60d)</span></td><td class="n">21,792</td><td class="n">9,900</td><td class="n">70</td><td class="n">0.71%</td><td class="n">82</td><td class="n">3</td><td class="n">0</td><td class="n">0</td></tr>
+  <tr><td style="text-align:left">C2 · pre-trip booked<br><span style="color:var(--t3);font-size:11px">Intl_PreTrip segment</span></td><td class="n">3,112</td><td class="n">1,463</td><td class="n">20</td><td class="n">1.37%</td><td class="n">36</td><td class="n">9</td><td class="n">2</td><td class="n">0</td></tr>
+  <tr><td style="text-align:left">IntlLoc · in-trip abroad<br><span style="color:var(--t3);font-size:11px">"you came all the way to {city}"</span></td><td class="n">16,369</td><td class="n">6,423</td><td class="n">74</td><td class="n">1.15%</td><td class="n">122</td><td class="n">22</td><td class="n">2</td><td class="n">0</td></tr>
+  </tbody>
+  <tfoot><tr><td style="text-align:left"><b>Total</b></td><td class="n"><b>41,273</b></td><td class="n"><b>17,786</b></td><td class="n"><b>164</b></td><td class="n"><b>0.92%</b></td><td class="n"><b>240</b></td><td class="n"><b>34</b></td><td class="n"><b>4</b></td><td class="n"><b>0</b></td></tr></tfoot>
+  </table></div>
+  <div class="note">*CTR = clicks ÷ rendered (impressions), not ÷ sent. Rendered undercounts on Android (push-amp disabled): C3 rendered 8,847 on iOS vs only 1,053 on Android for near-equal sends — most Android users received it but it wasn\'t counted. Best cohort = in-trip abroad (highest product-page reach). Deep-link verified Aug 15: all 243 entrants resolved to tea/home. Source: MoEngage campaign stats + Databricks percept/orders, pulled live.</div></div>
   <div class="sec">Daily volume — Aug 1–13</div>
   <div class="card"><div class="card-hd">Messages sent per day<span class="card-stamp">⚡ Aug 11 spike: 5,465 new entrants</span></div><div style="position:relative;height:155px"><canvas id="crmChart"></canvas></div></div>
   <div class="sec">A/B — Personalised vs Simple copy</div>
