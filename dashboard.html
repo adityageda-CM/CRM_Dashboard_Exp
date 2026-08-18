@@ -586,6 +586,11 @@ canvas{max-height:160px}
   <h2>19 · Deep-link sources &amp; the CRM routing bug — raw-event evidence (P0)</h2>
   <p class="note" style="margin-bottom:12px">You asked whether the untagged deep-link entries are actually your CRM links (push / WhatsApp / email). The raw log confirms it: every <code>dynamic_link_executed</code> event carries a <code>dynamic_link_source</code> and a <code>dynamic_link_type</code> (destination). Aug 16, app-wide.</p>
 
+  <div style="background:var(--am-bg);border:1px solid var(--am);border-radius:8px;padding:12px 14px;margin:12px 0">
+    <b>Aug 15 slot-PN test — did the deep-link get fixed?</b><br>
+    <b>No, not for CRM/Push broadcasts.</b> The Aug 15 Independence-Day slot PN (24,904 sent, 90 clicks, 243 TEA entries) produced <b>0 bookings</b> — its Branch deep-links still resolved to <code>tea/home</code> (CRM → tea/home: 243, Push → tea/home: 26), not the city or product page.<br>
+    <b>What HAS started working:</b> in-app <b>merch</b> deep-links now route correctly — merch → <code>tea/collection</code> (160), <code>tea/city-srp</code> (129), <code>tea/product-family</code> (58), <code>tea/product-details</code> (57). So the routing fix landed for merchandising placements, but <b>not</b> for CRM push / WhatsApp / broadcast links. The P0 is still open for CRM.
+  </div>
   <h3>Deep links fired by CRM channel (all destinations, Aug 16)</h3>
   <div class="src-row"><span class="src-dot" style="background:#dc2626"></span><span class="src-lbl">CRM</span><span class="src-bar-bg"><span class="src-bar-fill" style="width:100%;background:#dc2626"></span></span><span class="src-n">2,131</span></div><div class="src-row"><span class="src-dot" style="background:#d97706"></span><span class="src-lbl">Push</span><span class="src-bar-bg"><span class="src-bar-fill" style="width:47%;background:#d97706"></span></span><span class="src-n">991</span></div><div class="src-row"><span class="src-dot" style="background:#16a34a"></span><span class="src-lbl">WhatsApp</span><span class="src-bar-bg"><span class="src-bar-fill" style="width:44%;background:#16a34a"></span></span><span class="src-n">936</span></div><div class="src-row"><span class="src-dot" style="background:#7c3aed"></span><span class="src-lbl">CRM-PN</span><span class="src-bar-bg"><span class="src-bar-fill" style="width:27%;background:#7c3aed"></span></span><span class="src-n">585</span></div><div class="src-row"><span class="src-dot" style="background:#0ea5e9"></span><span class="src-lbl">PN</span><span class="src-bar-bg"><span class="src-bar-fill" style="width:6%;background:#0ea5e9"></span></span><span class="src-n">134</span></div><div class="src-row"><span class="src-dot" style="background:#6366f1"></span><span class="src-lbl">Email</span><span class="src-bar-bg"><span class="src-bar-fill" style="width:4%;background:#6366f1"></span></span><span class="src-n">87</span></div>
   <p class="note">Yes — CRM, Push, WhatsApp, CRM-PN, PN and Email all generate deep links (~4,864 users/day combined). So the untagged Experiences entries genuinely include your CRM traffic; the app just fails to stamp the source onto the TEA event.</p>
@@ -886,6 +891,7 @@ const CITIES = [
   {city:'Other cities',e:4215,cl:327,v:128,b:10},
 ];
 const SLOTS = [
+  {dt:'Aug 15',seg:'Slot PN — Intl pre-trip (Indep. Day, C2+C3)', r:24904, cl:90, b:0, note:'243 TEA entries → 0 bookings. Deep-link still → tea/home (P0 not fixed)'},
   {dt:'Jul 31',seg:'TINA — all users',       r:211172,cl:1077,b:3, note:'Widest reach, lowest CTR'},
   {dt:'Jul 30',seg:'TINA Prop (smaller)',     r:43200, cl:393, b:1, note:'Best CTR — tighter targeting'},
   {dt:'Jul 25',seg:'Targeted C2',             r:28400, cl:246, b:2, note:'Best converter — 2 bookings'},
